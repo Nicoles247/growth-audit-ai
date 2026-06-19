@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Growth Audit AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root{--bg:#09090f;--surface:#111118;--card:#16161f;--border:rgba(255,255,255,0.07);--gold:#d4a853;--gold-dim:rgba(212,168,83,0.15);--green:#34d399;--red:#f87171;--blue:#60a5fa;--blue-dim:rgba(96,165,250,0.12);--purple:#a78bfa;--text:#e8e4dc;--muted:#7a7570}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+header{position:sticky;top:0;z-index:100;background:rgba(9,9,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:14px 28px;gap:16px}
+.logo{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:var(--text)}.logo span{color:var(--gold)}
+.badge{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,83,0.4);border-radius:20px;padding:4px 12px;background:var(--gold-dim)}
+.api-status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:#3a3830;transition:background 0.3s}.dot.live{background:var(--green);box-shadow:0 0 8px var(--green)}
+.app{display:grid;grid-template-columns:400px 1fr;min-height:calc(100vh - 57px)}
+@media(max-width:860px){.app{grid-template-columns:1fr}}
+.left{border-right:1px solid var(--border);padding:28px 24px;overflow-y:auto}
+.right{padding:28px 32px;overflow-y:auto}
+h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px}h2 em{font-style:normal;color:var(--gold)}
+.sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+.slabel{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
+.kbox{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:22px}
+.klabel{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.krow{display:flex;gap:8px}
+input,textarea,select{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:10px 13px;outline:none;transition:border-color 0.2s;width:100%}
+input:focus,textarea:focus,select:focus{border-color:rgba(212,168,83,0.5);box-shadow:0 0 0 3px rgba(212,168,83,0.08)}
+textarea{resize:vertical;min-height:70px}select option{background:#1a1a24}
+.vbtn{background:var(--gold-dim);border:1px solid rgba(212,168,83,0.35);color:var(--gold);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;white-space:nowrap;transition:all 0.2s;flex-shrink:0}.vbtn:hover{background:rgba(212,168,83,0.25)}
+.khint{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.5}.khint a{color:var(--gold);text-decoration:none}
+.fs{margin-bottom:16px}.fs label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.15s;user-select:none}
+.tag.on{background:var(--gold-dim);border-color:rgba(212,168,83,0.45);color:var(--gold)}
+.gbtn{width:100%;padding:15px;background:linear-gradient(135deg,#c9922a,#d4a853);border:none;border-radius:12px;color:#0a0804;font-size:16px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;transition:all 0.2s;margin-top:20px}
+.gbtn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,168,83,0.35)}.gbtn:disabled{opacity:0.45;cursor:not-allowed;transform:none}
+.errbox{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:10px;padding:13px 16px;color:var(--red);font-size:13px;line-height:1.6;display:none;margin-top:14px}.errbox.show{display:block}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;gap:14px}
+.orb{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(212,168,83,0.22),rgba(212,168,83,0.03) 70%);border:1px solid rgba(212,168,83,0.2);display:flex;align-items:center;justify-content:center;font-size:44px}
+.empty h3{font-family:'Syne',sans-serif;font-size:20px}.empty p{color:var(--muted);max-width:340px;font-size:13.5px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.chip{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--muted);text-align:center}.chip span{display:block;color:var(--text);margin-top:2px}
+.loading{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;gap:18px;text-align:center}.loading.show{display:flex}
+.ring{width:56px;height:56px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lmsg{font-family:'Syne',sans-serif;font-size:17px;color:var(--text)}
+.lprog{width:260px;height:6px;background:var(--surface);border-radius:3px;overflow:hidden;margin-top:4px}
+.lprogbar{height:100%;background:var(--gold);border-radius:3px;width:0%;transition:width 0.8s ease}
+.lsub{font-size:13px;color:var(--muted);margin-top:4px}
+.result{display:none}.result.show{display:block}
+.rhead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.rname{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1.1;margin-bottom:4px}.rname span{color:var(--gold)}
+.rmeta{color:var(--muted);font-size:12.5px}
+.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:640px){.scores{grid-template-columns:repeat(2,1fr)}}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.snum{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1;margin-bottom:4px}
+.slb{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.sec{margin-bottom:24px}
+.sectitle{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:9px}.sectitle::after{content:'';flex:1;height:1px;background:var(--border)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:10px;font-size:14px;line-height:1.75}
+.card p{margin-bottom:8px}.card p:last-child{margin-bottom:0}
+.hl{color:var(--gold);font-weight:600}.gd{color:var(--green)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.cgrid{grid-template-columns:1fr}}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px}
+.cnum{font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:7px}
+.ctitle{font-weight:600;font-size:14px;margin-bottom:5px}
+.cbody{font-size:12.5px;color:var(--muted);line-height:1.6}
+.cpill{display:inline-block;margin-top:8px;background:var(--blue-dim);border:1px solid rgba(96,165,250,0.2);color:var(--blue);border-radius:20px;padding:3px 9px;font-size:10.5px}
+.alist{display:flex;flex-direction:column;gap:9px}
+.aitem{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;gap:12px;align-items:flex-start}
+.awk{background:var(--gold-dim);border:1px solid rgba(212,168,83,0.3);color:var(--gold);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.atxt{font-size:13.5px;line-height:1.6}
+.atxt strong{display:block;margin-bottom:3px}
+.atxt small{color:var(--muted);font-size:12px}
+.cblock{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:9px;position:relative}
+.cblabel{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:7px}
+.cbtext{font-size:13.5px;color:var(--text);line-height:1.7;white-space:pre-wrap}
+.copybtn{position:absolute;top:11px;right:11px;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.copybtn:hover{color:var(--text)}.copybtn.ok{color:var(--green);border-color:rgba(52,211,153,0.3)}
+.urgent{background:rgba(212,168,83,0.06);border:1px solid rgba(212,168,83,0.3);border-radius:12px;padding:18px;font-size:15px;font-weight:600;color:var(--gold)}
+.powrow{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted);margin-top:28px;padding-top:18px;border-top:1px solid var(--border)}
+.gbadge{background:linear-gradient(135deg,#4285f4,#34a853,#fbbc04,#ea4335);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="logo">Growth<span>Audit</span> AI</div>
+    <div class="badge">XPRIZE · Gemini</div>
+  </div>
+  <div class="api-status"><div class="dot" id="dot"></div><span id="stxt">Sin conectar</span></div>
+</header>
+
+<div class="app">
+<aside class="left">
+  <h2>Auditoria de marketing<br/><em>en 60 segundos.</em></h2>
+  <p class="sub">Completa los datos del negocio y Gemini genera el plan completo.</p>
+
+  <div class="slabel">Paso 1 — Gemini API Key</div>
+  <div class="kbox">
+    <div class="klabel">API Key</div>
+    <div class="krow">
+      <input type="password" id="apiKey" placeholder="AIza..."/>
+      <button class="vbtn" onclick="verifyKey()">Verificar</button>
+    </div>
+    <div class="khint">Obtén tu key gratis en <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a></div>
+  </div>
+
+  <div class="slabel">Paso 2 — Datos del negocio</div>
+  <div class="fs"><label>Nombre del negocio</label><input type="text" id="bizName" placeholder="Ej: Salon Bella Hispana"/></div>
+  <div class="fs"><div class="fg">
+    <div><label>Industria</label>
+    <select id="industry">
+      <option value="">Seleccionar...</option>
+      <option>Restaurante / Cafeteria</option><option>Salon de Belleza / Spa</option>
+      <option>Tienda Retail</option><option>Servicios de Limpieza</option>
+      <option>Construccion / Remodelacion</option><option>Transporte / Delivery</option>
+      <option>Clinica / Salud</option><option>Contabilidad / Legal</option>
+      <option>Gym / Fitness</option><option>Panaderia / Reposteria</option>
+      <option>Otro servicio local</option>
+    </select></div>
+    <div><label>Ciudad</label><input type="text" id="location" value="Columbus, Ohio"/></div>
+  </div></div>
+  <div class="fs"><label>Anos en operacion</label>
+  <select id="years"><option>Menos de 1 ano</option><option>1-2 anos</option><option selected>3-5 anos</option><option>Mas de 5 anos</option></select></div>
+  <div class="fs"><label>Redes sociales activas</label>
+  <div class="tags" id="tSocials">
+    <div class="tag" onclick="this.classList.toggle('on')">Instagram</div>
+    <div class="tag" onclick="this.classList.toggle('on')">Facebook</div>
+    <div class="tag" onclick="this.classList.toggle('on')">TikTok</div>
+    <div class="tag" onclick="this.classList.toggle('on')">Google Business</div>
+    <div class="tag" onclick="this.classList.toggle('on')">WhatsApp Business</div>
+    <div class="tag on" onclick="this.classList.toggle('on')">Sin presencia digital</div>
+  </div></div>
+  <div class="fs"><label>Mayor reto actual</label><textarea id="challenge" placeholder="Ej: No llegan clientes nuevos, publicamos en redes pero no da resultado..."></textarea></div>
+  <div class="fs"><label>Que ya intentaron sin exito</label><textarea id="tried" placeholder="Ej: Pagamos publicidad en Facebook, pusimos carteles..."></textarea></div>
+  <div class="fs"><label>Metas principales (90 dias)</label>
+  <div class="tags" id="tGoals">
+    <div class="tag on" onclick="this.classList.toggle('on')">Mas clientes nuevos</div>
+    <div class="tag" onclick="this.classList.toggle('on')">Mas ventas por cliente</div>
+    <div class="tag" onclick="this.classList.toggle('on')">Presencia en Google</div>
+    <div class="tag" onclick="this.classList.toggle('on')">Automatizar WhatsApp</div>
+    <div class="tag" onclick="this.classList.toggle('on')">Redes sociales activas</div>
+  </div></div>
+  <div class="fs"><label>Presupuesto mensual para marketing</label>
+  <select id="budget">
+    <option>$0 sin presupuesto</option><option>$50-$150 al mes</option>
+    <option selected>$150-$400 al mes</option><option>$400-$1000 al mes</option><option>Mas de $1000 al mes</option>
+  </select></div>
+
+  <button class="gbtn" id="gbtn" onclick="runAudit()">Generar Auditoria Completa</button>
+  <div class="errbox" id="errbox"></div>
+</aside>
+
+<main class="right">
+  <div class="empty" id="empty">
+    <div class="orb">✦</div>
+    <h3>Tu auditoria aparecera aqui</h3>
+    <p>Completa el formulario con los datos del negocio de tu cliente y presiona Generar.</p>
+    <div class="chips">
+      <div class="chip">Diagnostico<span>9 areas</span></div>
+      <div class="chip">Plan de accion<span>30 dias</span></div>
+      <div class="chip">5 ideas<span>de contenido</span></div>
+      <div class="chip">Copy listo<span>para publicar</span></div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="ring"></div>
+    <div class="lmsg" id="lmsg">Analizando tu negocio...</div>
+    <div class="lprog"><div class="lprogbar" id="lprogbar"></div></div>
+    <div class="lsub" id="lsub">Conectando con Gemini...</div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="rhead">
+      <div><div class="rname" id="rname">Negocio <span>Cliente</span></div><div class="rmeta" id="rmeta"></div></div>
+    </div>
+    <div class="scores" id="scores"></div>
+    <div id="content"></div>
+    <div class="powrow">Powered by <span class="gbadge">Gemini API</span> · Google Cloud · XPRIZE Small Business Services · Nicole Serrano — Growth Partner AI</div>
+  </div>
+</main>
+</div>
+
+<script>
+var apiKey = '';
+var verified = false;
+
+/* ── MODELS ── */
+var MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+
+/* ── SINGLE GEMINI CALL ── */
+async function callModel(promptText, modelIdx) {
+  if (modelIdx === undefined) modelIdx = 0;
+  if (modelIdx >= MODELS.length) throw new Error('Todos los modelos estan ocupados. Espera 2 minutos e intenta de nuevo.');
+  var model = MODELS[modelIdx];
+  var res;
+  try {
+    res = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          contents: [{parts: [{text: promptText}]}],
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 1536,
+            responseMimeType: 'application/json',
+            thinkingConfig: { thinkingBudget: 0 }
+          }
+        })
+      }
+    );
+  } catch(e) { return callModel(promptText, modelIdx + 1); }
+
+  if (res.status === 429 || res.status === 503 || res.status === 404) return callModel(promptText, modelIdx + 1);
+  if (!res.ok) {
+    var ej = {};
+    try { ej = await res.json(); } catch(x) {}
+    var em = (ej.error && ej.error.message) ? ej.error.message : '';
+    // Any quota/availability/not-found issue -> try next model in chain
+    if (em.indexOf('limit: 0') !== -1 || em.indexOf('quota') !== -1 || em.indexOf('high demand') !== -1 ||
+        em.indexOf('not found') !== -1 || em.indexOf('NOT_FOUND') !== -1 || em.indexOf('not supported') !== -1) {
+      return callModel(promptText, modelIdx + 1);
+    }
+    // Unknown failure on this model: still try the next one rather than dying immediately
+    if (modelIdx + 1 < MODELS.length) return callModel(promptText, modelIdx + 1);
+    throw new Error(em || 'Error HTTP ' + res.status);
+  }
+  var data;
+  try { data = await res.json(); } catch(x) { return callModel(promptText, modelIdx + 1); }
+  var txt = '';
+  try { txt = data.candidates[0].content.parts[0].text; } catch(x) {}
+  if (!txt || txt.trim() === '') {
+    if (modelIdx + 1 < MODELS.length) return callModel(promptText, modelIdx + 1);
+    throw new Error('Respuesta vacia de todos los modelos. Intenta de nuevo en 1 minuto.');
+  }
+  return txt;
+}
+
+/* ── PARSE JSON SAFELY ── */
+function parseJ(raw) {
+  var original = raw;
+  // Remove BOM
+  raw = raw.replace(/^\uFEFF/, '');
+  // Strip markdown fences
+  raw = raw.replace(/^```(?:json)?[\r\n]*/i, '').replace(/[\r\n]*```\s*$/i, '').trim();
+  // Find outermost { }
+  var s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+  if (s !== -1 && e !== -1) raw = raw.slice(s, e + 1);
+  // Fix trailing commas
+  raw = raw.replace(/,(\s*[}\]])/g, '$1');
+  // Fix smart/curly quotes -> straight
+  raw = raw.replace(/[\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'");
+  // Remove literal control chars that break JSON strings
+  raw = raw.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+  try {
+    return JSON.parse(raw);
+  } catch(err) {
+    console.error('JSON parse failed. Raw text was:', original);
+    var snippet = original.length > 300 ? original.slice(0, 300) + '...[cortado, ' + original.length + ' caracteres totales]' : original;
+    var e2 = new Error(err.message + ' | Respuesta cruda de Gemini: ' + snippet);
+    throw e2;
+  }
+}
+
+/* ── PROGRESS BAR ── */
+function setProgress(pct, msg, sub) {
+  document.getElementById('lprogbar').style.width = pct + '%';
+  if (msg) document.getElementById('lmsg').textContent = msg;
+  if (sub) document.getElementById('lsub').textContent = sub;
+}
+
+/* ── VERIFY KEY ── */
+async function verifyKey() {
+  apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) { showErr('Ingresa tu API key primero.'); return; }
+  document.getElementById('stxt').textContent = 'Verificando...';
+  try {
+    await callModel('{"ok":true}', 0);
+    document.getElementById('dot').classList.add('live');
+    document.getElementById('stxt').textContent = 'Gemini conectado';
+    verified = true;
+    hideErr();
+  } catch(e) {
+    document.getElementById('dot').classList.remove('live');
+    document.getElementById('stxt').textContent = 'Error';
+    showErr('No se pudo conectar: ' + e.message);
+  }
+}
+
+/* ── MAIN AUDIT: 4 SMALL CALLS ── */
+async function runAudit() {
+  if (!verified || !apiKey) { showErr('Primero verifica tu API Key.'); return; }
+
+  var biz      = document.getElementById('bizName').value.trim() || 'El negocio';
+  var industry = document.getElementById('industry').value || 'negocio local';
+  var loc      = document.getElementById('location').value.trim() || 'Columbus Ohio';
+  var years    = document.getElementById('years').value;
+  var chal     = document.getElementById('challenge').value.trim() || 'No especificado';
+  var tried    = document.getElementById('tried').value.trim() || 'No especificado';
+  var budget   = document.getElementById('budget').value;
+  var socials  = getTags('tSocials');
+  var goals    = getTags('tGoals');
+
+  // Base context — NO special characters, NO accented letters in keys
+  var ctx = 'Business name: ' + biz
+    + '. Industry: ' + industry
+    + '. Location: ' + loc
+    + '. Years operating: ' + years
+    + '. Active social media: ' + (socials || 'none')
+    + '. Main challenge: ' + chal
+    + '. What they tried that failed: ' + tried
+    + '. Marketing budget: ' + budget
+    + '. Goals for next 90 days: ' + (goals || 'not specified');
+
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('gbtn').disabled = true;
+  hideErr();
+
+  var A = {}, B = {}, C = {}, D = {};
+
+  try {
+    /* ── CALL 1: Scores + Diagnosis (tiny) ── */
+    setProgress(10, 'Analizando tu negocio...', 'Calculando puntajes...');
+    var p1 = 'You are a marketing expert for Hispanic small businesses in the US. '
+      + 'Analyze this business and respond with ONLY valid JSON, no extra text, no markdown, no special characters outside of string values. '
+      + 'Use only straight ASCII double quotes. Context: ' + ctx
+      + ' Respond with exactly this JSON:\n'
+      + '{"digital":50,"reputation":40,"content":30,"acquisition":35,'
+      + '"diagnosis":"2 sentences about current situation",'
+      + '"opportunity":"biggest opportunity they are missing",'
+      + '"risk":"biggest risk if they do not act",'
+      + '"value_prop":"one sentence unique value proposition",'
+      + '"urgent_action":"the single most important action in next 24 hours"}';
+    var r1 = await callModel(p1, 0);
+    A = parseJ(r1);
+
+    /* ── CALL 2: Action Plan (5 items) ── */
+    setProgress(35, 'Analizando tu negocio...', 'Creando plan de accion...');
+    var p2 = 'Marketing expert for Hispanic SMBs. Context: ' + ctx
+      + ' Respond ONLY with valid JSON, straight ASCII quotes, no markdown. Format:\n'
+      + '{"actions":[{"week":"Week 1","action":"specific action","result":"expected result"},'
+      + '{"week":"Week 2","action":"specific action","result":"expected result"},'
+      + '{"week":"Week 3-4","action":"specific action","result":"expected result"},'
+      + '{"week":"Month 2","action":"specific action","result":"expected result"},'
+      + '{"week":"Month 3","action":"specific action","result":"expected result"}]}';
+    var r2 = await callModel(p2, 0);
+    B = parseJ(r2);
+
+    /* ── CALL 3: Content Ideas (5 items) ── */
+    setProgress(60, 'Analizando tu negocio...', 'Generando ideas de contenido...');
+    var p3 = 'Social media content expert for Hispanic SMBs. Context: ' + ctx
+      + ' Respond ONLY with valid JSON, straight ASCII quotes, no markdown. Format:\n'
+      + '{"content":[{"title":"post title","description":"what to show or say","platform":"Instagram","format":"Reel"},'
+      + '{"title":"post title","description":"what to show or say","platform":"Facebook","format":"Post"},'
+      + '{"title":"post title","description":"what to show or say","platform":"TikTok","format":"Video"},'
+      + '{"title":"post title","description":"what to show or say","platform":"Instagram","format":"Story"},'
+      + '{"title":"post title","description":"what to show or say","platform":"Google","format":"Photo"}]}';
+    var r3 = await callModel(p3, 0);
+    C = parseJ(r3);
+
+    /* ── CALL 4: Copy (Instagram + WhatsApp) ── */
+    setProgress(82, 'Analizando tu negocio...', 'Escribiendo copy listo para usar...');
+    var p4 = 'Copywriter for Hispanic SMBs. Write in Spanish. Context: ' + ctx
+      + ' Respond ONLY with valid JSON, straight ASCII quotes, no markdown. Keep copy texts SHORT (under 100 words each). Format:\n'
+      + '{"ig_caption":"instagram caption with emojis and hashtags in Spanish, max 80 words",'
+      + '"wa_message":"whatsapp message to current customers, warm tone, max 60 words"}';
+    var r4 = await callModel(p4, 0);
+    D = parseJ(r4);
+
+    setProgress(100, 'Listo', 'Generando reporte...');
+    setTimeout(function() { renderResult(A, B, C, D, biz, industry, loc); }, 400);
+
+  } catch(e) {
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('empty').style.display = 'flex';
+    document.getElementById('gbtn').disabled = false;
+    showErr('Error: ' + e.message);
+  }
+}
+
+/* ── RENDER ── */
+function renderResult(A, B, C, D, biz, industry, loc) {
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('gbtn').disabled = false;
+
+  var words = biz.trim().split(' ');
+  var last = words.pop();
+  document.getElementById('rname').innerHTML = (words.length ? words.join(' ') + ' ' : '') + '<span>' + esc(last) + '</span>';
+  document.getElementById('rmeta').textContent = industry + ' · ' + loc + ' · ' + new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+
+  // Scores
+  var scData = [
+    [A.digital || 0,    'Presencia Digital'],
+    [A.reputation || 0, 'Reputacion Online'],
+    [A.content || 0,    'Contenido'],
+    [A.acquisition || 0,'Captacion']
+  ];
+  var scHtml = '';
+  scData.forEach(function(sd) {
+    var v = sd[0], lbl = sd[1];
+    var c = v >= 65 ? '#34d399' : v >= 40 ? '#fbbf24' : '#f87171';
+    scHtml += '<div class="sc"><div class="snum" style="color:'+c+'">' + v + '</div><div class="slb">' + lbl + '</div></div>';
+  });
+  document.getElementById('scores').innerHTML = scHtml;
+
+  var html = '';
+
+  // Diagnosis
+  html += '<div class="sec"><div class="sectitle">Diagnostico Actual</div><div class="card">';
+  html += '<p>' + esc(A.diagnosis) + '</p>';
+  html += '<p><span class="hl">Mayor Oportunidad:</span> ' + esc(A.opportunity) + '</p>';
+  html += '<p><span style="color:var(--red)">Riesgo si no actuan:</span> ' + esc(A.risk) + '</p>';
+  html += '<p style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)"><span class="gd">Propuesta de valor unica:</span> "' + esc(A.value_prop) + '"</p>';
+  html += '</div></div>';
+
+  // Action plan
+  html += '<div class="sec"><div class="sectitle">Plan de Accion 90 Dias</div><div class="alist">';
+  var actions = B.actions || [];
+  actions.forEach(function(item) {
+    html += '<div class="aitem"><div class="awk">' + esc(item.week) + '</div>';
+    html += '<div class="atxt"><strong>' + esc(item.action) + '</strong><small>Resultado esperado: ' + esc(item.result) + '</small></div></div>';
+  });
+  html += '</div></div>';
+
+  // Content ideas
+  html += '<div class="sec"><div class="sectitle">5 Ideas de Contenido Listas</div><div class="cgrid">';
+  var content = C.content || [];
+  content.forEach(function(item, i) {
+    html += '<div class="ccard"><div class="cnum">IDEA ' + (i+1) + ' - ' + esc(item.format) + '</div>';
+    html += '<div class="ctitle">' + esc(item.title) + '</div>';
+    html += '<div class="cbody">' + esc(item.description) + '</div>';
+    html += '<span class="cpill">' + esc(item.platform) + '</span></div>';
+  });
+  html += '</div></div>';
+
+  // Copy
+  html += '<div class="sec"><div class="sectitle">Copy Listo para Publicar</div>';
+  html += '<div class="cblock" id="b1"><div class="cblabel">Instagram Caption</div><div class="cbtext">' + esc(D.ig_caption) + '</div><button class="copybtn" onclick="cp(\'b1\')">Copiar</button></div>';
+  html += '<div class="cblock" id="b2"><div class="cblabel">Mensaje de WhatsApp</div><div class="cbtext">' + esc(D.wa_message) + '</div><button class="copybtn" onclick="cp(\'b2\')">Copiar</button></div>';
+  html += '</div>';
+
+  // Urgent
+  html += '<div class="sec"><div class="sectitle">Hacer HOY</div><div class="urgent">' + esc(A.urgent_action) + '</div></div>';
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ── HELPERS ── */
+function getTags(id) {
+  var tags = [];
+  document.getElementById(id).querySelectorAll('.tag.on').forEach(function(t){ tags.push(t.textContent.trim()); });
+  return tags.join(', ');
+}
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function cp(id) {
+  var txt = document.getElementById(id).querySelector('.cbtext').textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn = document.getElementById(id).querySelector('.copybtn');
+    btn.textContent = 'Copiado'; btn.classList.add('ok');
+    setTimeout(function(){ btn.textContent='Copiar'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+function showErr(m){ var b=document.getElementById('errbox'); b.textContent='Error: '+m; b.classList.add('show'); }
+function hideErr(){ document.getElementById('errbox').classList.remove('show'); }
+</script>
+</body>
+</html>
