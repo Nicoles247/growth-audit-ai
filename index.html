@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Audita Conmigo · Growth Partner AI</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -112,6 +111,33 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 @media(max-width:520px){
   .form-row,.check-grid,.meta-grid{grid-template-columns:1fr;}
 }
+
+@media print {
+  body { background: #fff !important; }
+  .header { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 20px 24px !important; }
+  .api-bar, .form-card, .loading-msg, .action-btns, .setup-screen { display: none !important; }
+  .main { padding: 16px 24px !important; }
+  .results { display: block !important; }
+  .diag-card { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 12px; padding: 20px !important; margin-bottom: 14px !important; }
+  .diag-label { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .diag-text { color: #EFE3D3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 12px !important; }
+  .score-circle { border-color: #D9651A !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .score-label { color: #C9B8A6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tag { background: rgba(217,101,26,0.2) !important; color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .quick-win { background: #FFF3E5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px !important; margin-bottom: 14px !important; break-inside: avoid; }
+  .qw-label { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .result-title { font-size: 16px !important; margin: 12px 0 10px !important; }
+  .plan-item { padding: 10px 14px !important; margin-bottom: 8px !important; break-inside: avoid; }
+  .plan-num { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .plan-week { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .plan-action { font-size: 11px !important; }
+  .content-item { padding: 10px 14px !important; margin-bottom: 6px !important; font-size: 11px !important; break-inside: avoid; }
+  .promo-box { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px !important; font-size: 12px !important; margin-bottom: 14px !important; }
+  .cta-box { border: 1px dashed #E8D4BC !important; padding: 14px !important; font-size: 11px !important; }
+  .header-glow { display: none; }
+  @page { margin: 10mm; size: A4; }
+}
+
 </style>
 </head>
 <body>
@@ -166,7 +192,7 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
         <div class="form-row">
           <div>
             <label class="field-label">Industria <span class="field-req">*</span></label>
-            <select id="industria" class="field field-select">
+            <select id="industria" class="field field-select" onchange="toggleOtroIndustria()">
               <option value="">Selecciona...</option>
               <option>Restaurante / Comida</option>
               <option>Salón de belleza / Spa</option>
@@ -180,6 +206,9 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
               <option>Limpieza</option>
               <option>Otro</option>
             </select>
+            <div id="otroIndustriaField" style="display:none;margin-top:8px;">
+              <input id="otroIndustria" class="field" placeholder="Especifica tu industria..." />
+            </div>
           </div>
           <div>
             <label class="field-label">Años en operación <span class="field-req">*</span></label>
@@ -346,7 +375,7 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
       </div>
       <div class="action-btns">
         <button class="btn-nueva" onclick="nuevaAuditoria()">🔄 Nueva Auditoría</button>
-        <button class="btn-pdf" id="btnPdf" onclick="descargarPDF()">⬇️ Descargar PDF</button>
+        <button class="btn-pdf" id="btnPdf" onclick="descargarPDF()">⬇️ Guardar como PDF</button>
       </div>
     </div>
   </div>
@@ -403,7 +432,9 @@ function hideError(){document.getElementById('errorBox').style.display='none';}
 
 async function generar(){
   const nombre=document.getElementById('nombre').value.trim();
-  const industria=document.getElementById('industria').value;
+  const industriaRaw=document.getElementById('industria').value;
+  const otroIndustriaVal=document.getElementById('otroIndustria').value.trim();
+  const industria=industriaRaw==='Otro'&&otroIndustriaVal?otroIndustriaVal:industriaRaw;
   const anos=document.getElementById('anos').value;
   const ciudad=document.getElementById('ciudad').value.trim();
   const problema=document.getElementById('problema').value.trim();
@@ -506,6 +537,14 @@ Responde ÚNICAMENTE en formato JSON válido (sin markdown, sin backticks, sin t
   }
 }
 
+// ── Otro industria ──
+function toggleOtroIndustria(){
+  const v=document.getElementById('industria').value;
+  const f=document.getElementById('otroIndustriaField');
+  f.style.display=(v==='Otro')?'block':'none';
+  if(v!=='Otro')document.getElementById('otroIndustria').value='';
+}
+
 // ── Nueva Auditoría ──
 function nuevaAuditoria(){
   document.getElementById('nombre').value='';
@@ -517,6 +556,8 @@ function nuevaAuditoria(){
   document.getElementById('otrasMetas').value='';
   document.getElementById('presupuesto').value='';
   document.getElementById('otroRedes').value='';
+  document.getElementById('otroIndustria').value='';
+  document.getElementById('otroIndustriaField').style.display='none';
   document.getElementById('otroRedesField').style.display='none';
   document.querySelectorAll('.check-item input,.meta-item input,#checkNinguna input').forEach(cb=>{
     cb.checked=false;
@@ -535,126 +576,128 @@ async function descargarPDF(){
   try{
     const {jsPDF}=window.jspdf;
     const doc=new jsPDF({unit:'mm',format:'a4'});
-    const W=210,M=18,TW=W-M*2;
-    let y=20;
+    const PW=210,M=16,TW=178;
+    let y=0;
 
-    const addText=(text,size,color,bold,maxW,lineH)=>{
-      doc.setFontSize(size);
-      doc.setTextColor(...color);
+    function checkPage(needed){if(y+(needed||10)>282){doc.addPage();y=16;}}
+
+    function addBlock(text,size,color,bold,indentX,lh){
+      doc.setFontSize(size);doc.setTextColor(...color);
       doc.setFont('helvetica',bold?'bold':'normal');
-      const lines=doc.splitTextToSize(String(text||''),maxW||TW);
-      lines.forEach(line=>{
-        if(y>275){doc.addPage();y=20;}
-        doc.text(line,M,y);
-        y+=(lineH||size*0.45);
-      });
-    };
-    const addRect=(fillR,fillG,fillB,h)=>{
-      doc.setFillColor(fillR,fillG,fillB);
-      doc.rect(0,y-6,W,h||12,'F');
-    };
+      const lines=doc.splitTextToSize(String(text||''),TW-(indentX||0));
+      lines.forEach(l=>{checkPage(size*0.5+2);doc.text(l,M+(indentX||0),y);y+=lh||(size*0.45);});
+    }
 
     // HEADER
-    doc.setFillColor(43,33,24);
-    doc.rect(0,0,W,36,'F');
-    doc.setFontSize(10);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-    doc.text('POWERED BY GEMINI AI  ·  GROWTH PARTNER AI',M,12);
-    doc.setFontSize(22);doc.setTextColor(253,246,236);doc.setFont('helvetica','bold');
-    doc.text('Audita Conmigo',M,26);
-    y=48;
+    doc.setFillColor(43,33,24);doc.rect(0,0,PW,40,'F');
+    doc.setFillColor(217,101,26);doc.rect(0,0,PW,3,'F');
+    doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+    doc.text('POWERED BY GEMINI AI  ·  GROWTH PARTNER AI',M,13);
+    doc.setFontSize(24);doc.setTextColor(253,246,236);doc.setFont('helvetica','bold');
+    doc.text('Audita Conmigo',M,28);
+    y=50;
 
-    // Business name
     const nombre=document.getElementById('nombre').value||'Negocio';
-    addText(nombre,16,[43,33,24],true,TW,8);
-    addText(new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'}),10,[138,117,96],false,TW,8);
-    y+=6;
+    addBlock(nombre,17,[43,33,24],true,0,9);
+    addBlock(new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'}),9,[138,117,96],false,0,8);
+    y+=5;
 
-    // Score
-    const scoreEl=document.getElementById('rScore');
-    if(scoreEl&&scoreEl.textContent){
-      doc.setFillColor(43,33,24);doc.rect(M,y,TW,28,'F');
-      doc.setFontSize(10);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-      doc.text('DIAGNÓSTICO',M+4,y+8);
-      const diagText=document.getElementById('rDiag')?.textContent||'';
-      doc.setFontSize(9);doc.setTextColor(239,227,211);doc.setFont('helvetica','normal');
-      const dLines=doc.splitTextToSize(diagText,TW-8);
-      let dy=y+14;
-      dLines.slice(0,3).forEach(l=>{doc.text(l,M+4,dy);dy+=4.5;});
-      doc.setFontSize(14);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-      doc.text('Presencia digital: '+scoreEl.textContent,M+4,y+24);
-      y+=34;
+    // DIAGNÓSTICO
+    const diagText=document.getElementById('rDiag')?.textContent||'';
+    const scoreText=document.getElementById('rScore')?.textContent||'';
+    const tagsArr=[...document.querySelectorAll('#rTags .tag')].map(t=>t.textContent);
+
+    doc.setFontSize(9);doc.setFont('helvetica','normal');
+    const dLines=doc.splitTextToSize(diagText,TW-10);
+    const dH=dLines.length*5.5+30;
+    checkPage(dH);
+    const dY=y;
+    doc.setFillColor(43,33,24);doc.rect(M,y,TW,dH,'F');
+    y+=8;
+    doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+    doc.text('DIAGNÓSTICO',M+5,y);y+=7;
+    doc.setFontSize(9);doc.setTextColor(239,227,211);doc.setFont('helvetica','normal');
+    dLines.forEach(l=>{doc.text(l,M+5,y);y+=5.5;});
+    y+=4;
+    doc.setFontSize(11);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+    doc.text('Presencia digital: '+scoreText,M+5,y);y+=6;
+    if(tagsArr.length){
+      const tLines=doc.splitTextToSize(tagsArr.join(' · '),TW-10);
+      doc.setFontSize(8.5);doc.setTextColor(201,184,166);doc.setFont('helvetica','normal');
+      tLines.forEach(l=>{doc.text(l,M+5,y);y+=5;});
     }
+    y=dY+dH+6;
 
-    // Tags
-    const tags=[...document.querySelectorAll('#rTags .tag')].map(t=>t.textContent);
-    if(tags.length){
-      addText('Áreas críticas: '+tags.join(' · '),10,[138,117,96],false,TW,7);
-      y+=4;
-    }
-
-    // Quick win
-    const qw=document.getElementById('rQuickWin')?.textContent;
-    if(qw){
-      doc.setFillColor(255,243,229);doc.rect(M,y,TW,24,'F');
-      doc.setFillColor(217,101,26);doc.rect(M,y,3,24,'F');
+    // QUICK WIN
+    const qwText=document.getElementById('rQuickWin')?.textContent||'';
+    if(qwText){
+      const qwLines=doc.splitTextToSize(qwText,TW-10);
+      const qwH=qwLines.length*5.5+18;
+      checkPage(qwH+4);
+      doc.setFillColor(255,243,229);doc.rect(M,y,TW,qwH,'F');
+      doc.setFillColor(217,101,26);doc.rect(M,y,3,qwH,'F');
+      const qY=y;y+=8;
       doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-      doc.text('⚡ HAZ ESTO HOY MISMO — GRATIS',M+6,y+7);
+      doc.text('HAZ ESTO HOY MISMO - GRATIS',M+7,y);y+=7;
       doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
-      const qwLines=doc.splitTextToSize(qw,TW-10);
-      let qy=y+13;qwLines.slice(0,2).forEach(l=>{doc.text(l,M+6,qy);qy+=4.5;});
-      y+=30;
+      qwLines.forEach(l=>{doc.text(l,M+7,y);y+=5.5;});
+      y=qY+qwH+6;
     }
 
-    // Plan
-    addText('Plan de 30 días',14,[43,33,24],true,TW,10);
-    const planItems=document.querySelectorAll('#rPlan .plan-item');
-    planItems.forEach((item,i)=>{
-      const week=item.querySelector('.plan-week')?.textContent||'';
+    // PLAN
+    y+=2;checkPage(20);
+    addBlock('Plan de 30 dias',13,[43,33,24],true,0,9);
+    document.querySelectorAll('#rPlan .plan-item').forEach((item,i)=>{
+      const week=(item.querySelector('.plan-week')?.textContent||'').toUpperCase();
       const action=item.querySelector('.plan-action')?.textContent||'';
-      if(y>260){doc.addPage();y=20;}
-      doc.setFillColor(253,246,236);doc.rect(M,y,TW,18,'F');
-      doc.setFillColor(217,101,26);doc.rect(M,y,2,18,'F');
+      doc.setFontSize(9);doc.setFont('helvetica','normal');
+      const aLines=doc.splitTextToSize(action,TW-14);
+      const iH=aLines.length*5+18;
+      checkPage(iH+2);
+      doc.setFillColor(253,246,236);doc.rect(M,y,TW,iH,'F');
+      doc.setFillColor(217,101,26);doc.rect(M,y,3,iH,'F');
+      y+=7;
       doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-      doc.text(String(i+1).padStart(2,'0')+'  '+week,M+5,y+7);
-      doc.setFontSize(8.5);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
-      const aLines=doc.splitTextToSize(action,TW-10);
-      let ay=y+12;aLines.slice(0,1).forEach(l=>{doc.text(l,M+5,ay);ay+=4;});
-      y+=22;
-    });
-    y+=4;
-
-    // Contenido
-    if(y>240){doc.addPage();y=20;}
-    addText('Ideas de contenido',14,[43,33,24],true,TW,10);
-    const contentItems=document.querySelectorAll('#rContenido .content-item span:last-child');
-    contentItems.forEach((item,i)=>{
-      if(y>270){doc.addPage();y=20;}
-      const lines=doc.splitTextToSize((i+1)+'. '+item.textContent,TW-4);
+      doc.text(String(i+1).padStart(2,'0')+'  '+week,M+6,y);y+=6;
       doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
-      lines.slice(0,2).forEach(l=>{doc.text(l,M,y);y+=4.5;});
-      y+=2;
+      aLines.forEach(l=>{doc.text(l,M+6,y);y+=5;});
+      y+=5;
     });
-    y+=4;
 
-    // Promo
-    if(y>250){doc.addPage();y=20;}
-    addText('Mensaje promocional',14,[43,33,24],true,TW,10);
+    // IDEAS
+    y+=4;checkPage(16);
+    addBlock('Ideas de contenido',13,[43,33,24],true,0,9);
+    document.querySelectorAll('#rContenido .content-item span:last-child').forEach((item,i)=>{
+      const cLines=doc.splitTextToSize((i+1)+'. '+item.textContent,TW-4);
+      checkPage(cLines.length*5+6);
+      doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
+      cLines.forEach(l=>{doc.text(l,M,y);y+=5;});
+      y+=3;
+    });
+
+    // PROMO
+    y+=4;checkPage(20);
+    addBlock('Mensaje promocional listo para usar',13,[43,33,24],true,0,9);
     const promo=document.getElementById('rPromo')?.textContent||'';
-    doc.setFillColor(43,33,24);doc.rect(M,y,TW,20,'F');
+    const pLines=doc.splitTextToSize(promo,TW-10);
+    const pH=pLines.length*5.5+16;
+    checkPage(pH);
+    doc.setFillColor(43,33,24);doc.rect(M,y,TW,pH,'F');
+    const pY=y;y+=8;
     doc.setFontSize(9);doc.setTextColor(253,246,236);doc.setFont('helvetica','italic');
-    const pLines=doc.splitTextToSize(promo,TW-8);
-    let py=y+8;pLines.slice(0,3).forEach(l=>{doc.text(l,M+4,py);py+=4.5;});
-    y+=26;
+    pLines.forEach(l=>{doc.text(l,M+5,y);y+=5.5;});
+    y=pY+pH+8;
 
-    // Footer
-    if(y>260){doc.addPage();y=20;}
-    doc.setFontSize(8);doc.setTextColor(184,168,144);doc.setFont('helvetica','normal');
-    doc.text('Generado por Growth Partner AI · Powered by Gemini AI · growthpartnerai.com',M,y+10);
+    // FOOTER
+    checkPage(14);
+    doc.setFillColor(43,33,24);doc.rect(0,y,PW,12,'F');
+    doc.setFontSize(8);doc.setTextColor(217,101,26);doc.setFont('helvetica','normal');
+    doc.text('Growth Partner AI  ·  Powered by Gemini AI  ·  growthpartnerai.com',M,y+7);
 
-    doc.save('Auditoria-'+nombre.replace(/\s+/g,'-')+'.pdf');
-  }catch(e){alert('Error al generar PDF: '+e.message);}
+    doc.save('Auditoria-'+nombre.replace(/[^a-zA-Z0-9]/g,'-')+'.pdf');
+
+  }catch(e){alert('Error generando PDF: '+e.message);}
   finally{btn.disabled=false;btn.textContent='⬇️ Descargar PDF';}
-}
-</script>
+}</script>
 </body>
 </html>
