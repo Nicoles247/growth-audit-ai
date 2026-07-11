@@ -572,131 +572,108 @@ function nuevaAuditoria(){
 // ── Descargar PDF ──
 async function descargarPDF(){
   const btn=document.getElementById('btnPdf');
-  btn.disabled=true;btn.textContent='Generando PDF...';
+  btn.disabled=true;btn.textContent='Preparando PDF...';
   try{
-    const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({unit:'mm',format:'a4'});
-    const PW=210,M=16,TW=178;
-    let y=0;
-
-    function checkPage(needed){if(y+(needed||10)>282){doc.addPage();y=16;}}
-
-    function addBlock(text,size,color,bold,indentX,lh){
-      doc.setFontSize(size);doc.setTextColor(...color);
-      doc.setFont('helvetica',bold?'bold':'normal');
-      const lines=doc.splitTextToSize(String(text||''),TW-(indentX||0));
-      lines.forEach(l=>{checkPage(size*0.5+2);doc.text(l,M+(indentX||0),y);y+=lh||(size*0.45);});
-    }
-
-    // HEADER
-    doc.setFillColor(43,33,24);doc.rect(0,0,PW,40,'F');
-    doc.setFillColor(217,101,26);doc.rect(0,0,PW,3,'F');
-    doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-    doc.text('POWERED BY GEMINI AI  ·  GROWTH PARTNER AI',M,13);
-    doc.setFontSize(24);doc.setTextColor(253,246,236);doc.setFont('helvetica','bold');
-    doc.text('Audita Conmigo',M,28);
-    y=50;
-
     const nombre=document.getElementById('nombre').value||'Negocio';
-    addBlock(nombre,17,[43,33,24],true,0,9);
-    addBlock(new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'}),9,[138,117,96],false,0,8);
-    y+=5;
-
-    // DIAGNÓSTICO
-    const diagText=document.getElementById('rDiag')?.textContent||'';
-    const scoreText=document.getElementById('rScore')?.textContent||'';
-    const tagsArr=[...document.querySelectorAll('#rTags .tag')].map(t=>t.textContent);
-
-    doc.setFontSize(9);doc.setFont('helvetica','normal');
-    const dLines=doc.splitTextToSize(diagText,TW-10);
-    const dH=dLines.length*5.5+30;
-    checkPage(dH);
-    const dY=y;
-    doc.setFillColor(43,33,24);doc.rect(M,y,TW,dH,'F');
-    y+=8;
-    doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-    doc.text('DIAGNÓSTICO',M+5,y);y+=7;
-    doc.setFontSize(9);doc.setTextColor(239,227,211);doc.setFont('helvetica','normal');
-    dLines.forEach(l=>{doc.text(l,M+5,y);y+=5.5;});
-    y+=4;
-    doc.setFontSize(11);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-    doc.text('Presencia digital: '+scoreText,M+5,y);y+=6;
-    if(tagsArr.length){
-      const tLines=doc.splitTextToSize(tagsArr.join(' · '),TW-10);
-      doc.setFontSize(8.5);doc.setTextColor(201,184,166);doc.setFont('helvetica','normal');
-      tLines.forEach(l=>{doc.text(l,M+5,y);y+=5;});
-    }
-    y=dY+dH+6;
-
-    // QUICK WIN
-    const qwText=document.getElementById('rQuickWin')?.textContent||'';
-    if(qwText){
-      const qwLines=doc.splitTextToSize(qwText,TW-10);
-      const qwH=qwLines.length*5.5+18;
-      checkPage(qwH+4);
-      doc.setFillColor(255,243,229);doc.rect(M,y,TW,qwH,'F');
-      doc.setFillColor(217,101,26);doc.rect(M,y,3,qwH,'F');
-      const qY=y;y+=8;
-      doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-      doc.text('HAZ ESTO HOY MISMO - GRATIS',M+7,y);y+=7;
-      doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
-      qwLines.forEach(l=>{doc.text(l,M+7,y);y+=5.5;});
-      y=qY+qwH+6;
-    }
-
-    // PLAN
-    y+=2;checkPage(20);
-    addBlock('Plan de 30 dias',13,[43,33,24],true,0,9);
-    document.querySelectorAll('#rPlan .plan-item').forEach((item,i)=>{
-      const week=(item.querySelector('.plan-week')?.textContent||'').toUpperCase();
-      const action=item.querySelector('.plan-action')?.textContent||'';
-      doc.setFontSize(9);doc.setFont('helvetica','normal');
-      const aLines=doc.splitTextToSize(action,TW-14);
-      const iH=aLines.length*5+18;
-      checkPage(iH+2);
-      doc.setFillColor(253,246,236);doc.rect(M,y,TW,iH,'F');
-      doc.setFillColor(217,101,26);doc.rect(M,y,3,iH,'F');
-      y+=7;
-      doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
-      doc.text(String(i+1).padStart(2,'0')+'  '+week,M+6,y);y+=6;
-      doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
-      aLines.forEach(l=>{doc.text(l,M+6,y);y+=5;});
-      y+=5;
-    });
-
-    // IDEAS
-    y+=4;checkPage(16);
-    addBlock('Ideas de contenido',13,[43,33,24],true,0,9);
-    document.querySelectorAll('#rContenido .content-item span:last-child').forEach((item,i)=>{
-      const cLines=doc.splitTextToSize((i+1)+'. '+item.textContent,TW-4);
-      checkPage(cLines.length*5+6);
-      doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
-      cLines.forEach(l=>{doc.text(l,M,y);y+=5;});
-      y+=3;
-    });
-
-    // PROMO
-    y+=4;checkPage(20);
-    addBlock('Mensaje promocional listo para usar',13,[43,33,24],true,0,9);
+    const diag=document.getElementById('rDiag')?.textContent||'';
+    const score=document.getElementById('rScore')?.textContent||'';
+    const tags=[...document.querySelectorAll('#rTags .tag')].map(t=>t.textContent);
+    const qw=document.getElementById('rQuickWin')?.textContent||'';
+    const planItems=[...document.querySelectorAll('#rPlan .plan-item')].map(item=>({
+      week:item.querySelector('.plan-week')?.textContent||'',
+      action:item.querySelector('.plan-action')?.textContent||''
+    }));
+    const ideas=[...document.querySelectorAll('#rContenido .content-item span:last-child')].map(s=>s.textContent);
     const promo=document.getElementById('rPromo')?.textContent||'';
-    const pLines=doc.splitTextToSize(promo,TW-10);
-    const pH=pLines.length*5.5+16;
-    checkPage(pH);
-    doc.setFillColor(43,33,24);doc.rect(M,y,TW,pH,'F');
-    const pY=y;y+=8;
-    doc.setFontSize(9);doc.setTextColor(253,246,236);doc.setFont('helvetica','italic');
-    pLines.forEach(l=>{doc.text(l,M+5,y);y+=5.5;});
-    y=pY+pH+8;
+    const fecha=new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'});
 
-    // FOOTER
-    checkPage(14);
-    doc.setFillColor(43,33,24);doc.rect(0,y,PW,12,'F');
-    doc.setFontSize(8);doc.setTextColor(217,101,26);doc.setFont('helvetica','normal');
-    doc.text('Growth Partner AI  ·  Powered by Gemini AI  ·  growthpartnerai.com',M,y+7);
+    const planHTML=planItems.map((p,i)=>`
+      <div class="plan-item">
+        <div class="plan-num">${String(i+1).padStart(2,'0')}</div>
+        <div><div class="plan-week">${p.week.toUpperCase()}</div><div class="plan-action">${p.action}</div></div>
+      </div>`).join('');
 
-    doc.save('Auditoria-'+nombre.replace(/[^a-zA-Z0-9]/g,'-')+'.pdf');
+    const ideasHTML=ideas.map((idea,i)=>`
+      <div class="idea-item"><span class="idea-num">${i+1}.</span><span>${idea}</span></div>`).join('');
 
-  }catch(e){alert('Error generando PDF: '+e.message);}
+    const tagsHTML=tags.map(t=>`<span class="tag">${t}</span>`).join('');
+
+    const win=window.open('','_blank');
+    win.document.write(`<!DOCTYPE html><html lang="es"><head>
+<meta charset="UTF-8">
+<title>Auditoría — ${nombre}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Arial',sans-serif;background:#fff;color:#2B2118;font-size:11pt;}
+  @media print{
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .no-print{display:none!important;}
+    @page{margin:15mm;}
+  }
+  .print-btn{position:fixed;top:16px;right:16px;padding:12px 24px;background:#D9651A;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;z-index:999;font-family:Arial;}
+  .header{background:#2B2118;color:#fff;padding:24px 28px 20px;margin-bottom:20px;}
+  .header-badge{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+  .header h1{font-size:22pt;margin-bottom:4px;}
+  .header-sub{font-size:10pt;color:#C9B8A6;}
+  .biz-name{font-size:16pt;font-weight:700;color:#2B2118;margin-bottom:2px;}
+  .fecha{font-size:9pt;color:#8A7560;margin-bottom:16px;}
+  .section{margin:0 28px 16px;}
+  .diag-box{background:#2B2118;color:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;}
+  .diag-label{font-size:8pt;letter-spacing:2px;color:#D9651A;font-weight:700;margin-bottom:6px;text-transform:uppercase;}
+  .diag-text{font-size:10pt;line-height:1.7;color:#EFE3D3;margin-bottom:12px;}
+  .score-row{display:flex;align-items:center;gap:14px;}
+  .score-circle{width:52px;height:52px;border-radius:50%;border:2.5px solid #D9651A;display:flex;align-items:center;justify-content:center;font-size:13pt;font-weight:800;color:#fff;flex-shrink:0;}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{background:rgba(217,101,26,0.2);color:#D9651A;border-radius:20px;padding:2px 10px;font-size:8pt;}
+  .qw-box{background:#FFF3E5;border-left:3px solid #D9651A;border-radius:6px;padding:12px 16px;margin-bottom:14px;}
+  .qw-label{font-size:8pt;letter-spacing:2px;color:#D9651A;font-weight:700;margin-bottom:5px;text-transform:uppercase;}
+  .qw-text{font-size:10pt;color:#5C4630;line-height:1.6;}
+  .section-title{font-size:13pt;font-weight:700;color:#2B2118;margin-bottom:10px;padding-bottom:4px;border-bottom:2px solid #D9651A;}
+  .plan-item{display:flex;gap:12px;margin-bottom:8px;background:#FFF9F0;border-radius:8px;padding:10px 14px;}
+  .plan-num{font-size:14pt;font-weight:800;color:#D9651A;min-width:26px;flex-shrink:0;}
+  .plan-week{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:1px;margin-bottom:3px;}
+  .plan-action{font-size:9.5pt;color:#5C4630;line-height:1.5;}
+  .idea-item{display:flex;gap:8px;margin-bottom:6px;font-size:9.5pt;color:#5C4630;line-height:1.5;}
+  .idea-num{font-weight:700;color:#D9651A;flex-shrink:0;min-width:16px;}
+  .promo-box{background:#2B2118;color:#EFE3D3;border-radius:8px;padding:14px 18px;font-style:italic;font-size:10pt;line-height:1.7;}
+  .footer{background:#2B2118;color:#D9651A;text-align:center;padding:10px;font-size:8pt;margin-top:20px;font-weight:700;letter-spacing:1px;}
+</style>
+</head><body>
+<button class="print-btn no-print" onclick="window.print()">⬇️ Guardar como PDF</button>
+<div class="header">
+  <div class="header-badge">Powered by Gemini AI · Growth Partner AI</div>
+  <h1>Audita Conmigo</h1>
+</div>
+<div class="section">
+  <div class="biz-name">${nombre}</div>
+  <div class="fecha">${fecha}</div>
+  <div class="diag-box">
+    <div class="diag-label">Diagnóstico</div>
+    <div class="diag-text">${diag}</div>
+    <div class="score-row">
+      <div class="score-circle">${score}</div>
+      <div>
+        <div style="font-size:9pt;color:#C9B8A6;margin-bottom:4px;">Presencia digital actual</div>
+        <div class="tags">${tagsHTML}</div>
+      </div>
+    </div>
+  </div>
+  <div class="qw-box">
+    <div class="qw-label">⚡ Haz esto hoy mismo — gratis</div>
+    <div class="qw-text">${qw}</div>
+  </div>
+  <div class="section-title" style="margin-top:16px;">Plan de 30 días</div>
+  ${planHTML}
+  <div class="section-title" style="margin-top:16px;">Ideas de contenido</div>
+  ${ideasHTML}
+  <div class="section-title" style="margin-top:16px;">Mensaje promocional listo para usar</div>
+  <div class="promo-box">${promo}</div>
+</div>
+<div class="footer">Growth Partner AI · Powered by Gemini AI · growthpartnerai.com</div>
+</body></html>`);
+    win.document.close();
+    setTimeout(()=>{win.focus();},300);
+  }catch(e){alert('Error: '+e.message);}
   finally{btn.disabled=false;btn.textContent='⬇️ Descargar PDF';}
 }</script>
 </body>
