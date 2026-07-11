@@ -6,92 +6,113 @@
 <title>Audita Conmigo · Growth Partner AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Outfit',sans-serif;background:#FDF6EC;color:#2B2118;min-height:100vh;}
-  input,select,textarea{font-family:'Outfit',sans-serif;}
-  input::placeholder,textarea::placeholder{color:#B8A892;}
-  .field:focus{outline:none;border-color:#D9651A!important;box-shadow:0 0 0 3px rgba(217,101,26,0.12);}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
-  .reveal{animation:fadeUp 0.5s ease both;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Outfit',sans-serif;background:#FDF6EC;color:#2B2118;min-height:100vh;}
+input,select,textarea{font-family:'Outfit',sans-serif;}
+input::placeholder,textarea::placeholder{color:#B8A892;}
+.field:focus{outline:none;border-color:#D9651A!important;box-shadow:0 0 0 3px rgba(217,101,26,0.12);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.reveal{animation:fadeUp 0.5s ease both;}
 
-  /* SETUP SCREEN */
-  .setup-screen{max-width:480px;margin:60px auto;padding:0 24px;}
-  .setup-card{background:#fff;border:1px solid #EFE3D3;border-radius:24px;padding:36px 32px;box-shadow:0 4px 32px rgba(43,33,24,0.06);text-align:center;}
-  .setup-logo{width:64px;height:64px;background:#D9651A;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
-  .setup-badge{display:inline-block;background:#D9651A;color:#2B2118;font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
-  .setup-title{font-family:'Fraunces',serif;font-size:28px;font-weight:500;color:#2B2118;margin-bottom:8px;}
-  .setup-desc{font-size:14px;color:#8A7560;line-height:1.6;margin-bottom:24px;}
-  .setup-desc a{color:#D9651A;}
-  .setup-once{font-size:13px;font-weight:700;color:#D9651A;background:#FFF3E5;border-radius:8px;padding:8px 16px;display:inline-block;margin-bottom:20px;}
-  .setup-input{width:100%;padding:13px 16px;border:1.5px solid #EFE3D3;border-radius:12px;font-size:15px;color:#2B2118;margin-bottom:12px;}
-  .setup-input:focus{outline:none;border-color:#D9651A;}
-  .setup-btn{width:100%;padding:15px;background:#D9651A;color:#FFF9F0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
-  .setup-note{font-size:11px;color:#B8A892;margin-top:10px;}
+/* SETUP */
+.setup-screen{max-width:480px;margin:60px auto;padding:0 24px;}
+.setup-card{background:#fff;border:1px solid #EFE3D3;border-radius:24px;padding:36px 32px;box-shadow:0 4px 32px rgba(43,33,24,0.06);text-align:center;}
+.setup-badge{display:inline-block;background:#D9651A;color:#2B2118;font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
+.setup-title{font-family:'Fraunces',serif;font-size:28px;font-weight:500;color:#2B2118;margin-bottom:8px;}
+.setup-once{font-size:13px;font-weight:700;color:#D9651A;background:#FFF3E5;border-radius:8px;padding:8px 16px;display:inline-block;margin-bottom:16px;}
+.setup-desc{font-size:13px;color:#8A7560;line-height:1.6;margin-bottom:20px;}
+.setup-desc a{color:#D9651A;}
+.setup-input{width:100%;padding:13px 16px;border:1.5px solid #EFE3D3;border-radius:12px;font-size:15px;color:#2B2118;margin-bottom:12px;}
+.setup-input:focus{outline:none;border-color:#D9651A;}
+.setup-btn{width:100%;padding:15px;background:#D9651A;color:#FFF9F0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
+.setup-note{font-size:11px;color:#B8A892;margin-top:10px;}
 
-  /* MAIN APP */
-  .app{display:none;}
-  .header{background:#2B2118;padding:40px 24px 32px;position:relative;overflow:hidden;}
-  .header-glow{position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(217,101,26,0.25) 0%,transparent 70%);}
-  .header-inner{max-width:720px;margin:0 auto;position:relative;}
-  .header-badge{display:inline-block;background:#D9651A;color:#2B2118;font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
-  .header h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(28px,6vw,44px);color:#FDF6EC;margin:0 0 8px;line-height:1.1;}
-  .header p{color:#C9B8A6;font-size:15px;margin:0;max-width:480px;line-height:1.6;}
+/* APP */
+.app{display:none;}
+.header{background:#2B2118;padding:40px 24px 32px;position:relative;overflow:hidden;}
+.header-glow{position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(217,101,26,0.25) 0%,transparent 70%);}
+.header-inner{max-width:720px;margin:0 auto;position:relative;}
+.header-badge{display:inline-block;background:#D9651A;color:#2B2118;font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
+.header h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,5vw,42px);color:#FDF6EC;margin:0 0 8px;line-height:1.1;}
+.header p{color:#C9B8A6;font-size:15px;margin:0;max-width:480px;line-height:1.6;}
 
-  .main{max-width:720px;margin:0 auto;padding:32px 24px 80px;}
+.main{max-width:720px;margin:0 auto;padding:32px 24px 80px;}
 
-  /* API STATUS BAR */
-  .api-bar{display:flex;justify-content:space-between;align-items:center;background:#FFF9F0;border:1px solid #E8D4BC;border-radius:12px;padding:10px 16px;margin-bottom:24px;}
-  .api-bar-text{font-size:13px;font-weight:600;color:#5C4630;}
-  .api-change{background:none;border:none;color:#B8A892;cursor:pointer;font-size:12px;text-decoration:underline;font-family:'Outfit',sans-serif;}
+.api-bar{display:flex;justify-content:space-between;align-items:center;background:#FFF9F0;border:1px solid #E8D4BC;border-radius:12px;padding:10px 16px;margin-bottom:24px;}
+.api-bar-text{font-size:13px;font-weight:600;color:#5C4630;}
+.api-change{background:none;border:none;color:#B8A892;cursor:pointer;font-size:12px;text-decoration:underline;font-family:'Outfit',sans-serif;}
 
-  /* FORM */
-  .form-card{background:#fff;border:1px solid #EFE3D3;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(43,33,24,0.04);}
-  .form-title{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0 0 20px;color:#2B2118;}
-  .form-grid{display:grid;gap:16px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .field-label{display:block;font-size:12.5px;font-weight:600;color:#8A7560;margin-bottom:6px;letter-spacing:0.5px;}
-  .field{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;color:#2B2118;background:#fff;}
-  .field-select{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;background:#fff;}
-  .field-textarea{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;resize:vertical;color:#2B2118;}
-  .error-box{margin-top:16px;padding:12px 16px;background:#FDEDE8;border:1px solid #F0BFAF;border-radius:10px;color:#B5432B;font-size:13.5px;display:none;}
-  .submit-btn{margin-top:22px;width:100%;padding:16px;background:#D9651A;color:#FFF9F0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
-  .submit-btn:disabled{background:#E8D4BC;color:#8A7560;cursor:default;}
+.form-card{background:#fff;border:1px solid #EFE3D3;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(43,33,24,0.04);}
+.form-title{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0 0 6px;color:#2B2118;}
+.form-sub{font-size:13px;color:#8A7560;margin-bottom:24px;}
+.form-grid{display:grid;gap:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
-  .loading-msg{text-align:center;padding:40px 0;color:#B8A892;font-size:14px;display:none;}
+.field-label{display:block;font-size:12px;font-weight:700;color:#8A7560;margin-bottom:8px;letter-spacing:0.8px;text-transform:uppercase;}
+.field-req{color:#D9651A;}
+.field{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;color:#2B2118;background:#fff;transition:border-color 0.2s;}
+.field-select{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;background:#fff;color:#2B2118;transition:border-color 0.2s;}
+.field-textarea{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;resize:vertical;color:#2B2118;line-height:1.6;transition:border-color 0.2s;}
 
-  /* RESULTS */
-  .results{margin-top:32px;display:none;}
-  .diag-card{background:#2B2118;border-radius:20px;padding:28px;margin-bottom:20px;color:#FDF6EC;}
-  .diag-label{font-size:11px;letter-spacing:2px;color:#D9651A;margin-bottom:10px;font-weight:700;}
-  .diag-text{font-size:15px;line-height:1.8;margin:0 0 20px;color:#EFE3D3;}
-  .score-row{display:flex;align-items:center;gap:16px;}
-  .score-circle{width:64px;height:64px;border-radius:50%;border:3px solid #D9651A;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;}
-  .score-label{font-size:12px;color:#C9B8A6;margin-bottom:4px;}
-  .tags{display:flex;gap:6px;flex-wrap:wrap;}
-  .tag{background:rgba(217,101,26,0.18);color:#F0A878;border-radius:20px;padding:3px 12px;font-size:12px;}
-  .quick-win{background:#FFF3E5;border:1px solid #F4D9BC;border-radius:20px;padding:24px;margin-bottom:20px;display:flex;gap:12px;}
-  .qw-icon{font-size:28px;}
-  .qw-label{font-size:11px;letter-spacing:2px;color:#D9651A;margin-bottom:6px;font-weight:700;}
-  .qw-text{margin:0;font-size:15px;line-height:1.7;color:#5C4630;font-weight:500;}
-  .section-title{font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:0 0 16px;color:#2B2118;}
-  .plan-item{display:flex;gap:16px;margin-bottom:12px;background:#fff;border:1px solid #EFE3D3;border-radius:14px;padding:16px 18px;}
-  .plan-num{font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:#D9651A;min-width:32px;}
-  .plan-week{font-size:12px;font-weight:700;color:#D9651A;letter-spacing:1px;margin-bottom:4px;}
-  .plan-action{font-size:14px;color:#5C4630;line-height:1.6;}
-  .content-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #EFE3D3;border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:14px;color:#5C4630;line-height:1.6;}
-  .promo-box{background:linear-gradient(135deg,#2B2118,#4A382A);border-radius:16px;padding:22px;color:#FDF6EC;font-size:15px;line-height:1.8;font-family:'Fraunces',serif;font-style:italic;}
-  .cta-box{margin-top:32px;padding:20px;background:#FFF9F0;border:1px dashed #E8D4BC;border-radius:14px;text-align:center;font-size:13px;color:#8A7560;line-height:1.7;}
+/* CHECKBOXES */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.check-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #EFE3D3;border-radius:10px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.check-item:hover{border-color:#D9651A;background:#FFF9F5;}
+.check-item.checked{border-color:#D9651A;background:#FFF3E5;}
+.check-item input{width:16px;height:16px;accent-color:#D9651A;flex-shrink:0;}
+.check-item span{font-size:14px;color:#2B2118;}
+.other-field{margin-top:8px;display:none;}
 
-  @media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+/* METAS */
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.meta-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #EFE3D3;border-radius:10px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.meta-item:hover{border-color:#D9651A;background:#FFF9F5;}
+.meta-item.checked{border-color:#D9651A;background:#FFF3E5;}
+.meta-item input{width:16px;height:16px;accent-color:#D9651A;flex-shrink:0;}
+.meta-item span{font-size:14px;color:#2B2118;}
+
+.section-divider{height:1px;background:#EFE3D3;margin:4px 0;}
+
+.error-box{margin-top:16px;padding:12px 16px;background:#FDEDE8;border:1px solid #F0BFAF;border-radius:10px;color:#B5432B;font-size:13px;display:none;}
+.submit-btn{margin-top:24px;width:100%;padding:16px;background:#D9651A;color:#FFF9F0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
+.submit-btn:disabled{background:#E8D4BC;color:#8A7560;cursor:default;}
+
+.loading-msg{text-align:center;padding:40px 0;color:#B8A892;font-size:14px;display:none;animation:pulse 1.5s ease-in-out infinite;}
+
+/* RESULTS */
+.results{margin-top:32px;display:none;}
+.diag-card{background:#2B2118;border-radius:20px;padding:28px;margin-bottom:20px;color:#FDF6EC;}
+.diag-label{font-size:11px;letter-spacing:2px;color:#D9651A;margin-bottom:10px;font-weight:700;}
+.diag-text{font-size:15px;line-height:1.8;margin:0 0 20px;color:#EFE3D3;}
+.score-row{display:flex;align-items:center;gap:16px;}
+.score-circle{width:64px;height:64px;border-radius:50%;border:3px solid #D9651A;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:'Fraunces',serif;flex-shrink:0;}
+.score-label{font-size:12px;color:#C9B8A6;margin-bottom:4px;}
+.tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{background:rgba(217,101,26,0.18);color:#F0A878;border-radius:20px;padding:3px 12px;font-size:12px;}
+.quick-win{background:#FFF3E5;border:1px solid #F4D9BC;border-radius:20px;padding:24px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;}
+.qw-label{font-size:11px;letter-spacing:2px;color:#D9651A;margin-bottom:6px;font-weight:700;}
+.qw-text{margin:0;font-size:15px;line-height:1.7;color:#5C4630;font-weight:500;}
+.result-title{font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:0 0 16px;color:#2B2118;}
+.plan-item{display:flex;gap:16px;margin-bottom:12px;background:#fff;border:1px solid #EFE3D3;border-radius:14px;padding:16px 18px;}
+.plan-num{font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:#D9651A;min-width:32px;}
+.plan-week{font-size:12px;font-weight:700;color:#D9651A;letter-spacing:1px;margin-bottom:4px;}
+.plan-action{font-size:14px;color:#5C4630;line-height:1.6;}
+.content-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #EFE3D3;border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:14px;color:#5C4630;line-height:1.6;}
+.promo-box{background:linear-gradient(135deg,#2B2118,#4A382A);border-radius:16px;padding:22px;color:#FDF6EC;font-size:15px;line-height:1.8;font-family:'Fraunces',serif;font-style:italic;}
+.cta-box{margin-top:32px;padding:20px;background:#FFF9F0;border:1px dashed #E8D4BC;border-radius:14px;text-align:center;font-size:13px;color:#8A7560;line-height:1.7;}
+
+@media(max-width:520px){
+  .form-row,.check-grid,.meta-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
-<!-- SETUP SCREEN -->
+<!-- SETUP -->
 <div id="setupScreen" class="setup-screen">
   <div class="setup-card">
-    <div class="setup-logo">🔍</div>
+    <div style="font-size:48px;margin-bottom:16px;">🔍</div>
     <div class="setup-badge">Powered by Gemini AI</div>
     <div class="setup-title">Audita Conmigo</div>
     <div class="setup-once">🔑 Solo configuras esto una vez</div>
@@ -105,7 +126,7 @@
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="appScreen" class="app">
   <div class="header">
     <div class="header-glow"></div>
@@ -124,18 +145,26 @@
 
     <div class="form-card">
       <div class="form-title">Cuéntanos sobre el negocio</div>
+      <div class="form-sub">Los campos marcados con * son obligatorios</div>
+
       <div class="form-grid">
+
+        <!-- NOMBRE -->
         <div>
-          <label class="field-label">NOMBRE DEL NEGOCIO *</label>
-          <input id="nombre" class="field" placeholder="Ej: Pupusería Doña Carmen" />
+          <label class="field-label">Nombre del negocio <span class="field-req">*</span></label>
+          <input id="nombre" class="field" placeholder="Ej: Salón Bella by Carmen" />
         </div>
+
+        <!-- INDUSTRIA + AÑOS -->
         <div class="form-row">
           <div>
-            <label class="field-label">INDUSTRIA *</label>
+            <label class="field-label">Industria <span class="field-req">*</span></label>
             <select id="industria" class="field field-select">
               <option value="">Selecciona...</option>
               <option>Restaurante / Comida</option>
               <option>Salón de belleza / Spa</option>
+              <option>Pestañas / Cejas / Estética</option>
+              <option>Uñas / Nail Tech</option>
               <option>Lavandería</option>
               <option>Auto servicio / Taller</option>
               <option>Tienda / Retail</option>
@@ -146,23 +175,128 @@
             </select>
           </div>
           <div>
-            <label class="field-label">CIUDAD</label>
-            <input id="ciudad" class="field" placeholder="Ej: Columbus, OH" />
+            <label class="field-label">Años en operación <span class="field-req">*</span></label>
+            <select id="anos" class="field field-select">
+              <option value="">Selecciona...</option>
+              <option>Menos de 1 año</option>
+              <option>1 – 2 años</option>
+              <option>3 – 5 años</option>
+              <option>6 – 10 años</option>
+              <option>Más de 10 años</option>
+            </select>
           </div>
         </div>
+
+        <!-- CIUDAD -->
         <div>
-          <label class="field-label">REDES SOCIALES ACTUALES</label>
-          <input id="redes" class="field" placeholder="Ej: Solo Facebook, casi sin publicar / Ninguna" />
+          <label class="field-label">Ciudad</label>
+          <input id="ciudad" class="field" placeholder="Ej: Columbus, OH" />
         </div>
+
+        <div class="section-divider"></div>
+
+        <!-- REDES SOCIALES -->
         <div>
-          <label class="field-label">¿CUÁL ES EL PROBLEMA PRINCIPAL? *</label>
-          <textarea id="problema" class="field field-textarea" rows="3" placeholder="Ej: Tenemos buena comida pero casi nadie nuevo nos conoce, todo es por boca a boca"></textarea>
+          <label class="field-label">Redes sociales activas</label>
+          <div class="check-grid" id="redesGrid">
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="Instagram" onchange="event.stopPropagation()"> <span>📸 Instagram</span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="Facebook" onchange="event.stopPropagation()"> <span>👤 Facebook</span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="TikTok" onchange="event.stopPropagation()"> <span>🎵 TikTok</span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="WhatsApp Business" onchange="event.stopPropagation()"> <span>💬 WhatsApp Business</span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="Google Business" onchange="event.stopPropagation()"> <span>🔍 Google Business</span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="YouTube" onchange="event.stopPropagation()"> <span>▶️ YouTube</span>
+            </label>
+            <label class="check-item" onclick="toggleCheck(this)">
+              <input type="checkbox" value="Pinterest" onchange="event.stopPropagation()"> <span>📌 Pinterest</span>
+            </label>
+            <label class="check-item" id="checkOtroRedes" onclick="toggleCheck(this);toggleOtroRedes()">
+              <input type="checkbox" value="Otro" onchange="event.stopPropagation()"> <span>➕ Otro</span>
+            </label>
+          </div>
+          <div class="other-field" id="otroRedesField">
+            <input id="otroRedes" class="field" style="margin-top:0;" placeholder="¿Cuál otra red social?" />
+          </div>
+          <div style="margin-top:8px;">
+            <label class="check-item" id="checkNinguna" onclick="toggleNinguna(this)" style="display:inline-flex;width:auto;">
+              <input type="checkbox" value="Ninguna" onchange="event.stopPropagation()"> <span>🚫 Ninguna por ahora</span>
+            </label>
+          </div>
         </div>
+
+        <div class="section-divider"></div>
+
+        <!-- PROBLEMA PRINCIPAL -->
         <div>
-          <label class="field-label">¿QUÉ TE GUSTARÍA LOGRAR?</label>
-          <input id="objetivo" class="field" placeholder="Ej: Más clientes nuevos cada semana" />
+          <label class="field-label">¿Cuál es el mayor reto actual? <span class="field-req">*</span></label>
+          <textarea id="problema" class="field field-textarea" rows="3"
+            placeholder="Ej: Tenemos buena comida pero casi nadie nuevo nos conoce. Todo viene de recomendaciones boca a boca y necesitamos crecer."></textarea>
         </div>
+
+        <!-- QUÉ HAN INTENTADO -->
+        <div>
+          <label class="field-label">¿Qué han intentado que no funcionó?</label>
+          <textarea id="intentado" class="field field-textarea" rows="3"
+            placeholder="Ej: Probamos hacer publicidad en Facebook pero no conseguimos clientes. También intentamos publicar en Instagram pero no fuimos constantes."></textarea>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- METAS -->
+        <div>
+          <label class="field-label">Metas principales <span class="field-req">*</span></label>
+          <div class="meta-grid">
+            <label class="meta-item" onclick="toggleMeta(this)">
+              <input type="checkbox" value="Conseguir más clientes nuevos" onchange="event.stopPropagation()"> <span>👥 Más clientes nuevos</span>
+            </label>
+            <label class="meta-item" onclick="toggleMeta(this)">
+              <input type="checkbox" value="Mejorar presencia digital y redes" onchange="event.stopPropagation()"> <span>📱 Mejor presencia digital</span>
+            </label>
+            <label class="meta-item" onclick="toggleMeta(this)">
+              <input type="checkbox" value="Automatizar procesos y mensajes" onchange="event.stopPropagation()"> <span>⚡ Automatizar procesos</span>
+            </label>
+            <label class="meta-item" onclick="toggleMeta(this)">
+              <input type="checkbox" value="Aumentar ventas e ingresos" onchange="event.stopPropagation()"> <span>💰 Aumentar ventas</span>
+            </label>
+            <label class="meta-item" onclick="toggleMeta(this)">
+              <input type="checkbox" value="Aparecer en Google y Maps" onchange="event.stopPropagation()"> <span>🔍 Aparecer en Google</span>
+            </label>
+            <label class="meta-item" onclick="toggleMeta(this)">
+              <input type="checkbox" value="Crear contenido consistente" onchange="event.stopPropagation()"> <span>🎬 Contenido consistente</span>
+            </label>
+          </div>
+          <div style="margin-top:8px;">
+            <input id="otrasMetas" class="field" placeholder="Otras metas (opcional)..." />
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- PRESUPUESTO -->
+        <div>
+          <label class="field-label">Presupuesto mensual para marketing</label>
+          <select id="presupuesto" class="field field-select">
+            <option value="">Selecciona un rango...</option>
+            <option>Sin presupuesto por ahora</option>
+            <option>Menos de $100/mes</option>
+            <option>$100 – $300/mes</option>
+            <option>$300 – $500/mes</option>
+            <option>Más de $500/mes</option>
+          </select>
+        </div>
+
       </div>
+
       <div class="error-box" id="errorBox"></div>
       <button class="submit-btn" id="submitBtn" onclick="generar()">✨ Generar Auditoría Gratis</button>
     </div>
@@ -183,21 +317,21 @@
       </div>
 
       <div class="quick-win">
-        <div class="qw-icon">⚡</div>
+        <div style="font-size:28px;">⚡</div>
         <div>
           <div class="qw-label">HAZ ESTO HOY MISMO — GRATIS</div>
           <p class="qw-text" id="rQuickWin"></p>
         </div>
       </div>
 
-      <div class="section-title">Plan de 30 días</div>
+      <div class="result-title">Plan de 30 días</div>
       <div id="rPlan" style="margin-bottom:28px;"></div>
 
-      <div class="section-title">Ideas de contenido para publicar</div>
+      <div class="result-title">Ideas de contenido para publicar</div>
       <div id="rContenido" style="margin-bottom:28px;"></div>
 
-      <div class="section-title">Mensaje promocional listo para usar</div>
-      <div class="promo-box" id="rPromo"></div>
+      <div class="result-title">Mensaje promocional listo para usar</div>
+      <div class="promo-box" id="rPromo" style="margin-bottom:28px;"></div>
 
       <div class="cta-box">
         💼 Este reporte fue generado en segundos con IA.<br>
@@ -208,6 +342,7 @@
 </div>
 
 <script>
+// ── localStorage ──
 function getKey(){return localStorage.getItem('gpa_gemini_key')||'';}
 function saveKey(){
   const k=document.getElementById('setupKey').value.trim();
@@ -219,18 +354,67 @@ function changeKey(){localStorage.removeItem('gpa_gemini_key');document.getEleme
 function showApp(){document.getElementById('setupScreen').style.display='none';document.getElementById('appScreen').style.display='block';}
 window.onload=function(){if(getKey())showApp();};
 
+// ── Checkboxes helpers ──
+function toggleCheck(label){
+  const cb=label.querySelector('input');
+  cb.checked=!cb.checked;
+  label.classList.toggle('checked',cb.checked);
+}
+function toggleMeta(label){
+  const cb=label.querySelector('input');
+  cb.checked=!cb.checked;
+  label.classList.toggle('checked',cb.checked);
+}
+function toggleOtroRedes(){
+  const cb=document.getElementById('checkOtroRedes').querySelector('input');
+  document.getElementById('otroRedesField').style.display=cb.checked?'block':'none';
+}
+function toggleNinguna(label){
+  const cb=label.querySelector('input');
+  cb.checked=!cb.checked;
+  label.classList.toggle('checked',cb.checked);
+  if(cb.checked){
+    document.querySelectorAll('#redesGrid .check-item input').forEach(i=>{i.checked=false;i.closest('.check-item').classList.remove('checked');});
+    document.getElementById('otroRedesField').style.display='none';
+  }
+}
+
+function getChecked(gridId){
+  return [...document.querySelectorAll('#'+gridId+' input[type=checkbox]:checked')].map(i=>i.value);
+}
+function getMetasChecked(){
+  return [...document.querySelectorAll('.meta-item input[type=checkbox]:checked')].map(i=>i.value);
+}
+
+// ── Form ──
 function showError(m){const b=document.getElementById('errorBox');b.textContent=m;b.style.display='block';}
 function hideError(){document.getElementById('errorBox').style.display='none';}
 
 async function generar(){
   const nombre=document.getElementById('nombre').value.trim();
   const industria=document.getElementById('industria').value;
+  const anos=document.getElementById('anos').value;
   const ciudad=document.getElementById('ciudad').value.trim();
-  const redes=document.getElementById('redes').value.trim();
   const problema=document.getElementById('problema').value.trim();
-  const objetivo=document.getElementById('objetivo').value.trim();
+  const intentado=document.getElementById('intentado').value.trim();
+  const otrasMetas=document.getElementById('otrasMetas').value.trim();
+  const presupuesto=document.getElementById('presupuesto').value;
+
+  // Redes
+  let redes=getChecked('redesGrid');
+  const otroRedes=document.getElementById('otroRedes').value.trim();
+  if(redes.includes('Otro')&&otroRedes){redes=redes.filter(r=>r!=='Otro');redes.push(otroRedes);}
+  const redesStr=redes.length?redes.join(', '):'Ninguna';
+
+  // Metas
+  let metas=getMetasChecked();
+  if(otrasMetas)metas.push(otrasMetas);
+  const metasStr=metas.length?metas.join(', '):'No especificadas';
+
   hideError();
-  if(!nombre||!industria||!problema){showError('Por favor completa: nombre del negocio, industria y problema principal.');return;}
+  if(!nombre||!industria||!anos||!problema){showError('Por favor completa: nombre del negocio, industria, años en operación y reto actual.');return;}
+  if(metas.length===0&&!otrasMetas){showError('Selecciona al menos una meta principal.');return;}
+
   const btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.textContent='Generando auditoría con IA...';
   document.getElementById('loadingMsg').style.display='block';
@@ -238,33 +422,45 @@ async function generar(){
 
   const prompt=`Actúa como un consultor experto en marketing digital y crecimiento para pequeños negocios locales, especializado en el mercado hispano de Estados Unidos.
 
-Analiza este negocio y genera una AUDITORÍA DE CRECIMIENTO completa:
+Analiza este negocio y genera una AUDITORÍA DE CRECIMIENTO completa y personalizada:
 
-Nombre del negocio: ${nombre}
-Industria: ${industria}
-Ciudad: ${ciudad||"No especificada"}
-Redes sociales actuales: ${redes||"Ninguna o no especificadas"}
-Problema principal que enfrentan: ${problema}
-Objetivo deseado: ${objetivo||"Crecer y conseguir más clientes"}
+INFORMACIÓN DEL NEGOCIO:
+- Nombre: ${nombre}
+- Industria: ${industria}
+- Años en operación: ${anos}
+- Ciudad: ${ciudad||'No especificada'}
+- Redes sociales activas: ${redesStr}
 
-Responde ÚNICAMENTE en formato JSON válido (sin markdown, sin backticks, sin texto adicional antes o después), con esta estructura exacta:
+SITUACIÓN ACTUAL:
+- Mayor reto actual: ${problema}
+- Qué han intentado sin éxito: ${intentado||'No especificado'}
+
+OBJETIVOS:
+- Metas principales: ${metasStr}
+- Presupuesto mensual disponible: ${presupuesto||'No especificado'}
+
+INSTRUCCIONES IMPORTANTES:
+- Adapta todas las recomendaciones al presupuesto disponible. Si es "Sin presupuesto" o menos de $100, enfócate en estrategias 100% gratuitas.
+- NO repitas estrategias que ya intentaron sin éxito.
+- Considera los años de operación: un negocio nuevo necesita construir desde cero; uno de varios años necesita escalar o corregir.
+- Alinea el plan de 30 días con las metas específicas del negocio.
+
+Responde ÚNICAMENTE en formato JSON válido (sin markdown, sin backticks, sin texto adicional), con esta estructura exacta:
 
 {
-  "diagnostico": "Un párrafo de 3-4 oraciones diagnosticando la situación actual del negocio",
+  "diagnostico": "Párrafo de 3-4 oraciones diagnosticando la situación actual, considerando los años en operación, lo que ya intentaron y el presupuesto disponible",
   "puntuacion_presencia_digital": 7,
-  "areas_criticas": ["área 1", "área 2", "área 3"],
+  "areas_criticas": ["área crítica 1", "área crítica 2", "área crítica 3"],
   "plan_30_dias": [
-    {"semana": "Semana 1", "accion": "descripción específica y accionable"},
-    {"semana": "Semana 2", "accion": "descripción específica y accionable"},
-    {"semana": "Semana 3", "accion": "descripción específica y accionable"},
-    {"semana": "Semana 4", "accion": "descripción específica y accionable"}
+    {"semana": "Semana 1", "accion": "Acción específica, accionable y dentro del presupuesto disponible"},
+    {"semana": "Semana 2", "accion": "Acción específica y accionable"},
+    {"semana": "Semana 3", "accion": "Acción específica y accionable"},
+    {"semana": "Semana 4", "accion": "Acción específica y accionable"}
   ],
-  "ideas_contenido": ["idea 1", "idea 2", "idea 3", "idea 4", "idea 5"],
-  "mensaje_promocional": "Copy de marketing listo para usar, máximo 280 caracteres",
-  "quick_win": "Una acción específica que el negocio puede hacer HOY MISMO sin costo"
-}
-
-Sé específico, práctico y orientado a resultados rápidos. El negocio tiene presupuesto limitado.`;
+  "ideas_contenido": ["idea de post 1 con descripción", "idea 2", "idea 3", "idea 4", "idea 5"],
+  "mensaje_promocional": "Copy de marketing listo para copiar y pegar, máximo 280 caracteres, tono cálido",
+  "quick_win": "UNA sola acción concreta que el negocio puede hacer HOY MISMO sin costo ni espera"
+}`;
 
   try{
     const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${getKey()}`,{
@@ -276,6 +472,7 @@ Sé específico, práctico y orientado a resultados rápidos. El negocio tiene p
     let text=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
     text=text.replace(/```json|```/g,'').trim();
     const r=JSON.parse(text);
+
     document.getElementById('rDiag').textContent=r.diagnostico;
     document.getElementById('rScore').textContent=r.puntuacion_presencia_digital+'/10';
     document.getElementById('rTags').innerHTML=(r.areas_criticas||[]).map(a=>`<span class="tag">${a}</span>`).join('');
@@ -289,6 +486,7 @@ Sé específico, práctico y orientado a resultados rápidos. El negocio tiene p
       <div class="content-item"><span style="color:#D9651A;font-size:16px;flex-shrink:0;">📱</span><span>${i}</span></div>`).join('');
     document.getElementById('rPromo').textContent='"'+r.mensaje_promocional+'"';
     document.getElementById('results').style.display='block';
+    document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
   }catch(err){
     showError('Error: '+err.message+'. Verifica tu API Key e intenta de nuevo.');
   }finally{
