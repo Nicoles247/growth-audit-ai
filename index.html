@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Audita Conmigo · Growth Partner AI</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -102,6 +103,12 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .promo-box{background:linear-gradient(135deg,#2B2118,#4A382A);border-radius:16px;padding:22px;color:#FDF6EC;font-size:15px;line-height:1.8;font-family:'Fraunces',serif;font-style:italic;}
 .cta-box{margin-top:32px;padding:20px;background:#FFF9F0;border:1px dashed #E8D4BC;border-radius:14px;text-align:center;font-size:13px;color:#8A7560;line-height:1.7;}
 
+.action-btns{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;}
+.btn-nueva{flex:1;padding:14px;background:#fff;color:#D9651A;border:2px solid #D9651A;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;min-width:140px;}
+.btn-nueva:hover{background:#FFF3E5;}
+.btn-pdf{flex:1;padding:14px;background:#D9651A;color:#FFF9F0;border:2px solid #D9651A;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;min-width:140px;}
+.btn-pdf:hover{background:#C0551A;}
+.btn-pdf:disabled{background:#E8D4BC;border-color:#E8D4BC;color:#8A7560;cursor:default;}
 @media(max-width:520px){
   .form-row,.check-grid,.meta-grid{grid-template-columns:1fr;}
 }
@@ -337,6 +344,10 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
         💼 Este reporte fue generado en segundos con IA.<br>
         <strong style="color:#2B2118;">¿Quieres que implementemos este plan por ti?</strong> Contáctanos para un plan mensual de crecimiento.
       </div>
+      <div class="action-btns">
+        <button class="btn-nueva" onclick="nuevaAuditoria()">🔄 Nueva Auditoría</button>
+        <button class="btn-pdf" id="btnPdf" onclick="descargarPDF()">⬇️ Descargar PDF</button>
+      </div>
     </div>
   </div>
 </div>
@@ -493,6 +504,156 @@ Responde ÚNICAMENTE en formato JSON válido (sin markdown, sin backticks, sin t
     btn.disabled=false;btn.textContent='✨ Generar Auditoría Gratis';
     document.getElementById('loadingMsg').style.display='none';
   }
+}
+
+// ── Nueva Auditoría ──
+function nuevaAuditoria(){
+  document.getElementById('nombre').value='';
+  document.getElementById('industria').value='';
+  document.getElementById('anos').value='';
+  document.getElementById('ciudad').value='';
+  document.getElementById('problema').value='';
+  document.getElementById('intentado').value='';
+  document.getElementById('otrasMetas').value='';
+  document.getElementById('presupuesto').value='';
+  document.getElementById('otroRedes').value='';
+  document.getElementById('otroRedesField').style.display='none';
+  document.querySelectorAll('.check-item input,.meta-item input,#checkNinguna input').forEach(cb=>{
+    cb.checked=false;
+    cb.closest('.check-item,.meta-item')?.classList.remove('checked');
+  });
+  document.querySelectorAll('.meta-item').forEach(m=>m.classList.remove('checked'));
+  document.getElementById('results').style.display='none';
+  hideError();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Descargar PDF ──
+async function descargarPDF(){
+  const btn=document.getElementById('btnPdf');
+  btn.disabled=true;btn.textContent='Generando PDF...';
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:'mm',format:'a4'});
+    const W=210,M=18,TW=W-M*2;
+    let y=20;
+
+    const addText=(text,size,color,bold,maxW,lineH)=>{
+      doc.setFontSize(size);
+      doc.setTextColor(...color);
+      doc.setFont('helvetica',bold?'bold':'normal');
+      const lines=doc.splitTextToSize(String(text||''),maxW||TW);
+      lines.forEach(line=>{
+        if(y>275){doc.addPage();y=20;}
+        doc.text(line,M,y);
+        y+=(lineH||size*0.45);
+      });
+    };
+    const addRect=(fillR,fillG,fillB,h)=>{
+      doc.setFillColor(fillR,fillG,fillB);
+      doc.rect(0,y-6,W,h||12,'F');
+    };
+
+    // HEADER
+    doc.setFillColor(43,33,24);
+    doc.rect(0,0,W,36,'F');
+    doc.setFontSize(10);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+    doc.text('POWERED BY GEMINI AI  ·  GROWTH PARTNER AI',M,12);
+    doc.setFontSize(22);doc.setTextColor(253,246,236);doc.setFont('helvetica','bold');
+    doc.text('Audita Conmigo',M,26);
+    y=48;
+
+    // Business name
+    const nombre=document.getElementById('nombre').value||'Negocio';
+    addText(nombre,16,[43,33,24],true,TW,8);
+    addText(new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'}),10,[138,117,96],false,TW,8);
+    y+=6;
+
+    // Score
+    const scoreEl=document.getElementById('rScore');
+    if(scoreEl&&scoreEl.textContent){
+      doc.setFillColor(43,33,24);doc.rect(M,y,TW,28,'F');
+      doc.setFontSize(10);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+      doc.text('DIAGNÓSTICO',M+4,y+8);
+      const diagText=document.getElementById('rDiag')?.textContent||'';
+      doc.setFontSize(9);doc.setTextColor(239,227,211);doc.setFont('helvetica','normal');
+      const dLines=doc.splitTextToSize(diagText,TW-8);
+      let dy=y+14;
+      dLines.slice(0,3).forEach(l=>{doc.text(l,M+4,dy);dy+=4.5;});
+      doc.setFontSize(14);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+      doc.text('Presencia digital: '+scoreEl.textContent,M+4,y+24);
+      y+=34;
+    }
+
+    // Tags
+    const tags=[...document.querySelectorAll('#rTags .tag')].map(t=>t.textContent);
+    if(tags.length){
+      addText('Áreas críticas: '+tags.join(' · '),10,[138,117,96],false,TW,7);
+      y+=4;
+    }
+
+    // Quick win
+    const qw=document.getElementById('rQuickWin')?.textContent;
+    if(qw){
+      doc.setFillColor(255,243,229);doc.rect(M,y,TW,24,'F');
+      doc.setFillColor(217,101,26);doc.rect(M,y,3,24,'F');
+      doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+      doc.text('⚡ HAZ ESTO HOY MISMO — GRATIS',M+6,y+7);
+      doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
+      const qwLines=doc.splitTextToSize(qw,TW-10);
+      let qy=y+13;qwLines.slice(0,2).forEach(l=>{doc.text(l,M+6,qy);qy+=4.5;});
+      y+=30;
+    }
+
+    // Plan
+    addText('Plan de 30 días',14,[43,33,24],true,TW,10);
+    const planItems=document.querySelectorAll('#rPlan .plan-item');
+    planItems.forEach((item,i)=>{
+      const week=item.querySelector('.plan-week')?.textContent||'';
+      const action=item.querySelector('.plan-action')?.textContent||'';
+      if(y>260){doc.addPage();y=20;}
+      doc.setFillColor(253,246,236);doc.rect(M,y,TW,18,'F');
+      doc.setFillColor(217,101,26);doc.rect(M,y,2,18,'F');
+      doc.setFontSize(9);doc.setTextColor(217,101,26);doc.setFont('helvetica','bold');
+      doc.text(String(i+1).padStart(2,'0')+'  '+week,M+5,y+7);
+      doc.setFontSize(8.5);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
+      const aLines=doc.splitTextToSize(action,TW-10);
+      let ay=y+12;aLines.slice(0,1).forEach(l=>{doc.text(l,M+5,ay);ay+=4;});
+      y+=22;
+    });
+    y+=4;
+
+    // Contenido
+    if(y>240){doc.addPage();y=20;}
+    addText('Ideas de contenido',14,[43,33,24],true,TW,10);
+    const contentItems=document.querySelectorAll('#rContenido .content-item span:last-child');
+    contentItems.forEach((item,i)=>{
+      if(y>270){doc.addPage();y=20;}
+      const lines=doc.splitTextToSize((i+1)+'. '+item.textContent,TW-4);
+      doc.setFontSize(9);doc.setTextColor(92,70,48);doc.setFont('helvetica','normal');
+      lines.slice(0,2).forEach(l=>{doc.text(l,M,y);y+=4.5;});
+      y+=2;
+    });
+    y+=4;
+
+    // Promo
+    if(y>250){doc.addPage();y=20;}
+    addText('Mensaje promocional',14,[43,33,24],true,TW,10);
+    const promo=document.getElementById('rPromo')?.textContent||'';
+    doc.setFillColor(43,33,24);doc.rect(M,y,TW,20,'F');
+    doc.setFontSize(9);doc.setTextColor(253,246,236);doc.setFont('helvetica','italic');
+    const pLines=doc.splitTextToSize(promo,TW-8);
+    let py=y+8;pLines.slice(0,3).forEach(l=>{doc.text(l,M+4,py);py+=4.5;});
+    y+=26;
+
+    // Footer
+    if(y>260){doc.addPage();y=20;}
+    doc.setFontSize(8);doc.setTextColor(184,168,144);doc.setFont('helvetica','normal');
+    doc.text('Generado por Growth Partner AI · Powered by Gemini AI · growthpartnerai.com',M,y+10);
+
+    doc.save('Auditoria-'+nombre.replace(/\s+/g,'-')+'.pdf');
+  }catch(e){alert('Error al generar PDF: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='⬇️ Descargar PDF';}
 }
 </script>
 </body>
