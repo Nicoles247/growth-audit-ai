@@ -14,10 +14,14 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 .reveal{animation:fadeUp 0.5s ease both;}
-
+/* LANG TOGGLE */
+.lang-toggle{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.35);color:#FDF6EC;font-size:12px;font-weight:700;letter-spacing:1px;padding:6px 14px;border-radius:20px;cursor:pointer;font-family:'Outfit',sans-serif;z-index:5;transition:all .15s;}
+.lang-toggle:hover{background:rgba(255,255,255,0.24);}
+.lang-toggle-setup{position:absolute;top:16px;right:16px;background:#FFF3E5;border:1px solid #F4D9BC;color:#D9651A;font-size:12px;font-weight:700;letter-spacing:1px;padding:6px 14px;border-radius:20px;cursor:pointer;font-family:'Outfit',sans-serif;z-index:5;transition:all .15s;}
+.lang-toggle-setup:hover{background:#FFE4C4;}
 /* SETUP */
 .setup-screen{max-width:480px;margin:60px auto;padding:0 24px;}
-.setup-card{background:#fff;border:1px solid #EFE3D3;border-radius:24px;padding:36px 32px;box-shadow:0 4px 32px rgba(43,33,24,0.06);text-align:center;}
+.setup-card{position:relative;background:#fff;border:1px solid #EFE3D3;border-radius:24px;padding:36px 32px;box-shadow:0 4px 32px rgba(43,33,24,0.06);text-align:center;}
 .setup-badge{display:inline-block;background:#D9651A;color:#2B2118;font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
 .setup-title{font-family:'Fraunces',serif;font-size:28px;font-weight:500;color:#2B2118;margin-bottom:8px;}
 .setup-once{font-size:13px;font-weight:700;color:#D9651A;background:#FFF3E5;border-radius:8px;padding:8px 16px;display:inline-block;margin-bottom:16px;}
@@ -27,7 +31,6 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .setup-input:focus{outline:none;border-color:#D9651A;}
 .setup-btn{width:100%;padding:15px;background:#D9651A;color:#FFF9F0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
 .setup-note{font-size:11px;color:#B8A892;margin-top:10px;}
-
 /* APP */
 .app{display:none;}
 .header{background:#2B2118;padding:40px 24px 32px;position:relative;overflow:hidden;}
@@ -36,25 +39,20 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .header-badge{display:inline-block;background:#D9651A;color:#2B2118;font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;}
 .header h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,5vw,42px);color:#FDF6EC;margin:0 0 8px;line-height:1.1;}
 .header p{color:#C9B8A6;font-size:15px;margin:0;max-width:480px;line-height:1.6;}
-
 .main{max-width:720px;margin:0 auto;padding:32px 24px 80px;}
-
 .api-bar{display:flex;justify-content:space-between;align-items:center;background:#FFF9F0;border:1px solid #E8D4BC;border-radius:12px;padding:10px 16px;margin-bottom:24px;}
 .api-bar-text{font-size:13px;font-weight:600;color:#5C4630;}
 .api-change{background:none;border:none;color:#B8A892;cursor:pointer;font-size:12px;text-decoration:underline;font-family:'Outfit',sans-serif;}
-
 .form-card{background:#fff;border:1px solid #EFE3D3;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(43,33,24,0.04);}
 .form-title{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0 0 6px;color:#2B2118;}
 .form-sub{font-size:13px;color:#8A7560;margin-bottom:24px;}
 .form-grid{display:grid;gap:20px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-
 .field-label{display:block;font-size:12px;font-weight:700;color:#8A7560;margin-bottom:8px;letter-spacing:0.8px;text-transform:uppercase;}
 .field-req{color:#D9651A;}
 .field{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;color:#2B2118;background:#fff;transition:border-color 0.2s;}
 .field-select{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;background:#fff;color:#2B2118;transition:border-color 0.2s;}
 .field-textarea{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;resize:vertical;color:#2B2118;line-height:1.6;transition:border-color 0.2s;}
-
 /* CHECKBOXES */
 .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .check-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #EFE3D3;border-radius:10px;cursor:pointer;transition:all 0.15s;user-select:none;}
@@ -63,7 +61,6 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .check-item input{width:16px;height:16px;accent-color:#D9651A;flex-shrink:0;}
 .check-item span{font-size:14px;color:#2B2118;}
 .other-field{margin-top:8px;display:none;}
-
 /* METAS */
 .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .meta-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #EFE3D3;border-radius:10px;cursor:pointer;transition:all 0.15s;user-select:none;}
@@ -71,15 +68,11 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .meta-item.checked{border-color:#D9651A;background:#FFF3E5;}
 .meta-item input{width:16px;height:16px;accent-color:#D9651A;flex-shrink:0;}
 .meta-item span{font-size:14px;color:#2B2118;}
-
 .section-divider{height:1px;background:#EFE3D3;margin:4px 0;}
-
 .error-box{margin-top:16px;padding:12px 16px;background:#FDEDE8;border:1px solid #F0BFAF;border-radius:10px;color:#B5432B;font-size:13px;display:none;}
 .submit-btn{margin-top:24px;width:100%;padding:16px;background:#D9651A;color:#FFF9F0;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
 .submit-btn:disabled{background:#E8D4BC;color:#8A7560;cursor:default;}
-
 .loading-msg{text-align:center;padding:40px 0;color:#B8A892;font-size:14px;display:none;animation:pulse 1.5s ease-in-out infinite;}
-
 /* RESULTS */
 .results{margin-top:32px;display:none;}
 .diag-card{background:#2B2118;border-radius:20px;padding:28px;margin-bottom:20px;color:#FDF6EC;}
@@ -101,7 +94,6 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .content-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #EFE3D3;border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:14px;color:#5C4630;line-height:1.6;}
 .promo-box{background:linear-gradient(135deg,#2B2118,#4A382A);border-radius:16px;padding:22px;color:#FDF6EC;font-size:15px;line-height:1.8;font-family:'Fraunces',serif;font-style:italic;}
 .cta-box{margin-top:32px;padding:20px;background:#FFF9F0;border:1px dashed #E8D4BC;border-radius:14px;text-align:center;font-size:13px;color:#8A7560;line-height:1.7;}
-
 .action-btns{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;}
 .btn-nueva{flex:1;padding:14px;background:#fff;color:#D9651A;border:2px solid #D9651A;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;min-width:140px;}
 .btn-nueva:hover{background:#FFF3E5;}
@@ -109,572 +101,824 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .btn-pdf:hover{background:#C0551A;}
 .btn-pdf:disabled{background:#E8D4BC;border-color:#E8D4BC;color:#8A7560;cursor:default;}
 @media(max-width:520px){
-  .form-row,.check-grid,.meta-grid{grid-template-columns:1fr;}
+.form-row,.check-grid,.meta-grid{grid-template-columns:1fr;}
 }
-
 @media print {
-  body { background: #fff !important; }
-  .header { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 20px 24px !important; }
-  .api-bar, .form-card, .loading-msg, .action-btns, .setup-screen { display: none !important; }
-  .main { padding: 16px 24px !important; }
-  .results { display: block !important; }
-  .diag-card { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 12px; padding: 20px !important; margin-bottom: 14px !important; }
-  .diag-label { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .diag-text { color: #EFE3D3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 12px !important; }
-  .score-circle { border-color: #D9651A !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .score-label { color: #C9B8A6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .tag { background: rgba(217,101,26,0.2) !important; color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .quick-win { background: #FFF3E5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px !important; margin-bottom: 14px !important; break-inside: avoid; }
-  .qw-label { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .result-title { font-size: 16px !important; margin: 12px 0 10px !important; }
-  .plan-item { padding: 10px 14px !important; margin-bottom: 8px !important; break-inside: avoid; }
-  .plan-num { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .plan-week { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .plan-action { font-size: 11px !important; }
-  .content-item { padding: 10px 14px !important; margin-bottom: 6px !important; font-size: 11px !important; break-inside: avoid; }
-  .promo-box { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px !important; font-size: 12px !important; margin-bottom: 14px !important; }
-  .cta-box { border: 1px dashed #E8D4BC !important; padding: 14px !important; font-size: 11px !important; }
-  .header-glow { display: none; }
-  @page { margin: 10mm; size: A4; }
+body { background: #fff !important; }
+.header { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 20px 24px !important; }
+.api-bar, .form-card, .loading-msg, .action-btns, .setup-screen { display: none !important; }
+.main { padding: 16px 24px !important; }
+.results { display: block !important; }
+.diag-card { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 12px; padding: 20px !important; margin-bottom: 14px !important; }
+.diag-label { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.diag-text { color: #EFE3D3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 12px !important; }
+.score-circle { border-color: #D9651A !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.score-label { color: #C9B8A6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.tag { background: rgba(217,101,26,0.2) !important; color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.quick-win { background: #FFF3E5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px !important; margin-bottom: 14px !important; break-inside: avoid; }
+.qw-label { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.result-title { font-size: 16px !important; margin: 12px 0 10px !important; }
+.plan-item { padding: 10px 14px !important; margin-bottom: 8px !important; break-inside: avoid; }
+.plan-num { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.plan-week { color: #D9651A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.plan-action { font-size: 11px !important; }
+.content-item { padding: 10px 14px !important; margin-bottom: 6px !important; font-size: 11px !important; break-inside: avoid; }
+.promo-box { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 16px !important; font-size: 12px !important; margin-bottom: 14px !important; }
+.cta-box { border: 1px dashed #E8D4BC !important; padding: 14px !important; font-size: 11px !important; }
+.header-glow { display: none; }
+@page { margin: 10mm; size: A4; }
 }
-
 </style>
 </head>
 <body>
 
 <!-- SETUP -->
 <div id="setupScreen" class="setup-screen">
-  <div class="setup-card">
-    <div style="font-size:48px;margin-bottom:16px;">🔍</div>
-    <div class="setup-badge">Powered by Gemini AI</div>
-    <div class="setup-title">Audita Conmigo</div>
-    <div class="setup-once">🔑 Solo configuras esto una vez</div>
-    <div class="setup-desc">
-      Tu clave se guardará en este dispositivo automáticamente.<br>
-      Consíguela gratis en <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> → "Get API Key"
-    </div>
-    <input type="password" class="setup-input" id="setupKey" placeholder="Pega tu Gemini API Key aquí..." />
-    <button class="setup-btn" onclick="saveKey()">✓ Guardar y comenzar</button>
-    <div class="setup-note">Tu clave nunca sale de tu dispositivo.</div>
-  </div>
+<div class="setup-card">
+<button class="lang-toggle-setup" id="langToggleSetup" onclick="toggleLang()">EN</button>
+<div style="font-size:48px;margin-bottom:16px;">🔍</div>
+<div class="setup-badge" id="setupBadge">Powered by Gemini AI</div>
+<div class="setup-title" id="setupTitleText">Audita Conmigo</div>
+<div class="setup-once" id="setupOnceText">🔑 Solo configuras esto una vez</div>
+<div class="setup-desc" id="setupDescText"></div>
+<input type="password" class="setup-input" id="setupKey" placeholder="Pega tu Gemini API Key aquí..." />
+<button class="setup-btn" id="setupBtnText" onclick="saveKey()">✓ Guardar y comenzar</button>
+<div class="setup-note" id="setupNoteText">Tu clave nunca sale de tu dispositivo.</div>
+</div>
 </div>
 
 <!-- APP -->
 <div id="appScreen" class="app">
-  <div class="header">
-    <div class="header-glow"></div>
-    <div class="header-inner">
-      <div class="header-badge">Powered by Gemini AI</div>
-      <h1>Audita Conmigo</h1>
-      <p>Tu negocio recibe en segundos un diagnóstico de crecimiento, un plan de 30 días y contenido listo para publicar — generado por IA, pensado para pequeños negocios.</p>
-    </div>
-  </div>
+<div class="header">
+<button class="lang-toggle" id="langToggleApp" onclick="toggleLang()">EN</button>
+<div class="header-glow"></div>
+<div class="header-inner">
+<div class="header-badge" id="headerBadgeText">Powered by Gemini AI</div>
+<h1 id="headerTitleText">Audita Conmigo</h1>
+<p id="headerDescText"></p>
+</div>
+</div>
 
-  <div class="main">
-    <div class="api-bar">
-      <span class="api-bar-text">🔑 API Key configurada ✓</span>
-      <button class="api-change" onclick="changeKey()">Cambiar</button>
-    </div>
+<div class="main">
+<div class="api-bar">
+<span class="api-bar-text" id="apiBarText">🔑 API Key configurada ✓</span>
+<button class="api-change" id="apiChangeBtn" onclick="changeKey()">Cambiar</button>
+</div>
 
-    <div class="form-card">
-      <div class="form-title">Cuéntanos sobre el negocio</div>
-      <div class="form-sub">Los campos marcados con * son obligatorios</div>
+<div class="form-card">
+<div class="form-title" id="formTitleText">Cuéntanos sobre el negocio</div>
+<div class="form-sub" id="formSubText">Los campos marcados con * son obligatorios</div>
 
-      <div class="form-grid">
+<div class="form-grid">
+<!-- NOMBRE -->
+<div>
+<label class="field-label"><span id="lblNombre">Nombre del negocio</span> <span class="field-req">*</span></label>
+<input id="nombre" class="field" placeholder="Ej: Salón Bella by Carmen" />
+</div>
 
-        <!-- NOMBRE -->
-        <div>
-          <label class="field-label">Nombre del negocio <span class="field-req">*</span></label>
-          <input id="nombre" class="field" placeholder="Ej: Salón Bella by Carmen" />
-        </div>
+<!-- INDUSTRIA + AÑOS -->
+<div class="form-row">
+<div>
+<label class="field-label"><span id="lblIndustria">Industria</span> <span class="field-req">*</span></label>
+<select id="industria" class="field field-select" onchange="toggleOtroIndustria()"></select>
+<div id="otroIndustriaField" style="display:none;margin-top:8px;">
+<input id="otroIndustria" class="field" placeholder="Especifica tu industria..." />
+</div>
+</div>
+<div>
+<label class="field-label"><span id="lblAnos">Años en operación</span> <span class="field-req">*</span></label>
+<select id="anos" class="field field-select"></select>
+</div>
+</div>
 
-        <!-- INDUSTRIA + AÑOS -->
-        <div class="form-row">
-          <div>
-            <label class="field-label">Industria <span class="field-req">*</span></label>
-            <select id="industria" class="field field-select" onchange="toggleOtroIndustria()">
-              <option value="">Selecciona...</option>
-              <option>Restaurante / Comida</option>
-              <option>Salón de belleza / Spa</option>
-              <option>Pestañas / Cejas / Estética</option>
-              <option>Uñas / Nail Tech</option>
-              <option>Lavandería</option>
-              <option>Auto servicio / Taller</option>
-              <option>Tienda / Retail</option>
-              <option>Servicios profesionales</option>
-              <option>Construcción / Remodelación</option>
-              <option>Limpieza</option>
-              <option>Otro</option>
-            </select>
-            <div id="otroIndustriaField" style="display:none;margin-top:8px;">
-              <input id="otroIndustria" class="field" placeholder="Especifica tu industria..." />
-            </div>
-          </div>
-          <div>
-            <label class="field-label">Años en operación <span class="field-req">*</span></label>
-            <select id="anos" class="field field-select">
-              <option value="">Selecciona...</option>
-              <option>Menos de 1 año</option>
-              <option>1 – 2 años</option>
-              <option>3 – 5 años</option>
-              <option>6 – 10 años</option>
-              <option>Más de 10 años</option>
-            </select>
-          </div>
-        </div>
+<!-- CIUDAD -->
+<div>
+<label class="field-label" id="lblCiudad">Ciudad</label>
+<input id="ciudad" class="field" placeholder="Ej: Columbus, OH" />
+</div>
 
-        <!-- CIUDAD -->
-        <div>
-          <label class="field-label">Ciudad</label>
-          <input id="ciudad" class="field" placeholder="Ej: Columbus, OH" />
-        </div>
+<div class="section-divider"></div>
 
-        <div class="section-divider"></div>
+<!-- REDES SOCIALES -->
+<div>
+<label class="field-label" id="lblRedes">Redes sociales activas</label>
+<div class="check-grid" id="redesGrid"></div>
+<div class="other-field" id="otroRedesField">
+<input id="otroRedes" class="field" style="margin-top:0;" placeholder="¿Cuál otra red social?" />
+</div>
+<div style="margin-top:8px;">
+<label class="check-item" id="checkNinguna" onclick="toggleNinguna(this)" style="display:inline-flex;width:auto;">
+<input type="checkbox" value="Ninguna" onchange="event.stopPropagation()"> <span id="lblNinguna">🚫 Ninguna por ahora</span>
+</label>
+</div>
+</div>
 
-        <!-- REDES SOCIALES -->
-        <div>
-          <label class="field-label">Redes sociales activas</label>
-          <div class="check-grid" id="redesGrid">
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Instagram" onchange="event.stopPropagation()"> <span>📸 Instagram</span>
-            </label>
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Facebook" onchange="event.stopPropagation()"> <span>👤 Facebook</span>
-            </label>
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="TikTok" onchange="event.stopPropagation()"> <span>🎵 TikTok</span>
-            </label>
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="WhatsApp Business" onchange="event.stopPropagation()"> <span>💬 WhatsApp Business</span>
-            </label>
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Google Business" onchange="event.stopPropagation()"> <span>🔍 Google Business</span>
-            </label>
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="YouTube" onchange="event.stopPropagation()"> <span>▶️ YouTube</span>
-            </label>
-            <label class="check-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Pinterest" onchange="event.stopPropagation()"> <span>📌 Pinterest</span>
-            </label>
-            <label class="check-item" id="checkOtroRedes" onclick="toggleCheck(this);toggleOtroRedes()">
-              <input type="checkbox" value="Otro" onchange="event.stopPropagation()"> <span>➕ Otro</span>
-            </label>
-          </div>
-          <div class="other-field" id="otroRedesField">
-            <input id="otroRedes" class="field" style="margin-top:0;" placeholder="¿Cuál otra red social?" />
-          </div>
-          <div style="margin-top:8px;">
-            <label class="check-item" id="checkNinguna" onclick="toggleNinguna(this)" style="display:inline-flex;width:auto;">
-              <input type="checkbox" value="Ninguna" onchange="event.stopPropagation()"> <span>🚫 Ninguna por ahora</span>
-            </label>
-          </div>
-        </div>
+<div class="section-divider"></div>
 
-        <div class="section-divider"></div>
+<!-- PROBLEMA PRINCIPAL -->
+<div>
+<label class="field-label"><span id="lblProblema">¿Cuál es el mayor reto actual?</span> <span class="field-req">*</span></label>
+<textarea id="problema" class="field field-textarea" rows="3" placeholder=""></textarea>
+</div>
 
-        <!-- PROBLEMA PRINCIPAL -->
-        <div>
-          <label class="field-label">¿Cuál es el mayor reto actual? <span class="field-req">*</span></label>
-          <textarea id="problema" class="field field-textarea" rows="3"
-            placeholder="Ej: Tenemos buena comida pero casi nadie nuevo nos conoce. Todo viene de recomendaciones boca a boca y necesitamos crecer."></textarea>
-        </div>
+<!-- QUÉ HAN INTENTADO -->
+<div>
+<label class="field-label" id="lblIntentado">¿Qué han intentado que no funcionó?</label>
+<textarea id="intentado" class="field field-textarea" rows="3" placeholder=""></textarea>
+</div>
 
-        <!-- QUÉ HAN INTENTADO -->
-        <div>
-          <label class="field-label">¿Qué han intentado que no funcionó?</label>
-          <textarea id="intentado" class="field field-textarea" rows="3"
-            placeholder="Ej: Probamos hacer publicidad en Facebook pero no conseguimos clientes. También intentamos publicar en Instagram pero no fuimos constantes."></textarea>
-        </div>
+<div class="section-divider"></div>
 
-        <div class="section-divider"></div>
+<!-- METAS -->
+<div>
+<label class="field-label"><span id="lblMetas">Metas principales</span> <span class="field-req">*</span></label>
+<div class="meta-grid" id="metaGrid"></div>
+<div style="margin-top:8px;">
+<input id="otrasMetas" class="field" placeholder="Otras metas (opcional)..." />
+</div>
+</div>
 
-        <!-- METAS -->
-        <div>
-          <label class="field-label">Metas principales <span class="field-req">*</span></label>
-          <div class="meta-grid">
-            <label class="meta-item" onclick="toggleMeta(this)">
-              <input type="checkbox" value="Conseguir más clientes nuevos" onchange="event.stopPropagation()"> <span>👥 Más clientes nuevos</span>
-            </label>
-            <label class="meta-item" onclick="toggleMeta(this)">
-              <input type="checkbox" value="Mejorar presencia digital y redes" onchange="event.stopPropagation()"> <span>📱 Mejor presencia digital</span>
-            </label>
-            <label class="meta-item" onclick="toggleMeta(this)">
-              <input type="checkbox" value="Automatizar procesos y mensajes" onchange="event.stopPropagation()"> <span>⚡ Automatizar procesos</span>
-            </label>
-            <label class="meta-item" onclick="toggleMeta(this)">
-              <input type="checkbox" value="Aumentar ventas e ingresos" onchange="event.stopPropagation()"> <span>💰 Aumentar ventas</span>
-            </label>
-            <label class="meta-item" onclick="toggleMeta(this)">
-              <input type="checkbox" value="Aparecer en Google y Maps" onchange="event.stopPropagation()"> <span>🔍 Aparecer en Google</span>
-            </label>
-            <label class="meta-item" onclick="toggleMeta(this)">
-              <input type="checkbox" value="Crear contenido consistente" onchange="event.stopPropagation()"> <span>🎬 Contenido consistente</span>
-            </label>
-          </div>
-          <div style="margin-top:8px;">
-            <input id="otrasMetas" class="field" placeholder="Otras metas (opcional)..." />
-          </div>
-        </div>
+<div class="section-divider"></div>
 
-        <div class="section-divider"></div>
+<!-- PRESUPUESTO -->
+<div>
+<label class="field-label" id="lblPresupuesto">Presupuesto mensual para marketing</label>
+<select id="presupuesto" class="field field-select"></select>
+</div>
+</div>
 
-        <!-- PRESUPUESTO -->
-        <div>
-          <label class="field-label">Presupuesto mensual para marketing</label>
-          <select id="presupuesto" class="field field-select">
-            <option value="">Selecciona un rango...</option>
-            <option>Sin presupuesto por ahora</option>
-            <option>Menos de $100/mes</option>
-            <option>$100 – $300/mes</option>
-            <option>$300 – $500/mes</option>
-            <option>Más de $500/mes</option>
-          </select>
-        </div>
+<div class="error-box" id="errorBox"></div>
+<button class="submit-btn" id="submitBtn" onclick="generar()">✨ Generar Auditoría Gratis</button>
+</div>
 
-      </div>
+<div class="loading-msg" id="loadingMsg">Analizando el negocio y creando tu plan personalizado...</div>
 
-      <div class="error-box" id="errorBox"></div>
-      <button class="submit-btn" id="submitBtn" onclick="generar()">✨ Generar Auditoría Gratis</button>
-    </div>
+<div class="results reveal" id="results">
+<div class="diag-card">
+<div class="diag-label" id="diagLabelText">DIAGNÓSTICO</div>
+<p class="diag-text" id="rDiag"></p>
+<div class="score-row">
+<div class="score-circle" id="rScore"></div>
+<div>
+<div class="score-label" id="scoreLabelText">Presencia digital actual</div>
+<div class="tags" id="rTags"></div>
+</div>
+</div>
+</div>
 
-    <div class="loading-msg" id="loadingMsg">Analizando el negocio y creando tu plan personalizado...</div>
+<div class="quick-win">
+<div style="font-size:28px;">⚡</div>
+<div>
+<div class="qw-label" id="qwLabelText">HAZ ESTO HOY MISMO — GRATIS</div>
+<p class="qw-text" id="rQuickWin"></p>
+</div>
+</div>
 
-    <div class="results reveal" id="results">
-      <div class="diag-card">
-        <div class="diag-label">DIAGNÓSTICO</div>
-        <p class="diag-text" id="rDiag"></p>
-        <div class="score-row">
-          <div class="score-circle" id="rScore"></div>
-          <div>
-            <div class="score-label">Presencia digital actual</div>
-            <div class="tags" id="rTags"></div>
-          </div>
-        </div>
-      </div>
+<div class="result-title" id="plan30TitleText">Plan de 30 días</div>
+<div id="rPlan" style="margin-bottom:28px;"></div>
 
-      <div class="quick-win">
-        <div style="font-size:28px;">⚡</div>
-        <div>
-          <div class="qw-label">HAZ ESTO HOY MISMO — GRATIS</div>
-          <p class="qw-text" id="rQuickWin"></p>
-        </div>
-      </div>
+<div class="result-title" id="contenidoTitleText">Ideas de contenido para publicar</div>
+<div id="rContenido" style="margin-bottom:28px;"></div>
 
-      <div class="result-title">Plan de 30 días</div>
-      <div id="rPlan" style="margin-bottom:28px;"></div>
+<div class="result-title" id="promoTitleText">Mensaje promocional listo para usar</div>
+<div class="promo-box" id="rPromo" style="margin-bottom:28px;"></div>
 
-      <div class="result-title">Ideas de contenido para publicar</div>
-      <div id="rContenido" style="margin-bottom:28px;"></div>
+<div class="cta-box" id="ctaBoxText"></div>
 
-      <div class="result-title">Mensaje promocional listo para usar</div>
-      <div class="promo-box" id="rPromo" style="margin-bottom:28px;"></div>
-
-      <div class="cta-box">
-        💼 Este reporte fue generado en segundos con IA.<br>
-        <strong style="color:#2B2118;">¿Quieres que implementemos este plan por ti?</strong> Contáctanos para un plan mensual de crecimiento.
-      </div>
-      <div class="action-btns">
-        <button class="btn-nueva" onclick="nuevaAuditoria()">🔄 Nueva Auditoría</button>
-        <button class="btn-pdf" id="btnPdf" onclick="descargarPDF()">⬇️ Guardar como PDF</button>
-      </div>
-    </div>
-  </div>
+<div class="action-btns">
+<button class="btn-nueva" id="btnNuevaText" onclick="nuevaAuditoria()">🔄 Nueva Auditoría</button>
+<button class="btn-pdf" id="btnPdf" onclick="descargarPDF()">⬇️ Guardar como PDF</button>
+</div>
+</div>
+</div>
 </div>
 
 <script>
-// ── localStorage ──
+// ══════════════════ TRANSLATIONS ══════════════════
+const T = {
+es: {
+htmlLang:"es",
+poweredBy:"Powered by Gemini AI",
+setupTitle:"Audita Conmigo",
+setupOnce:"🔑 Solo configuras esto una vez",
+setupDesc:'Tu clave se guardará en este dispositivo automáticamente.<br>Consíguela gratis en <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> → "Get API Key"',
+setupKeyPh:"Pega tu Gemini API Key aquí...",
+setupBtn:"✓ Guardar y comenzar",
+setupNote:"Tu clave nunca sale de tu dispositivo.",
+headerTitle:"Audita Conmigo",
+headerDesc:"Tu negocio recibe en segundos un diagnóstico de crecimiento, un plan de 30 días y contenido listo para publicar — generado por IA, pensado para pequeños negocios.",
+apiConfigured:"🔑 API Key configurada ✓",
+apiChange:"Cambiar",
+formTitle:"Cuéntanos sobre el negocio",
+formSub:"Los campos marcados con * son obligatorios",
+lblNombre:"Nombre del negocio",
+phNombre:"Ej: Salón Bella by Carmen",
+lblIndustria:"Industria",
+selectDefault:"Selecciona...",
+industrias:["Restaurante / Comida","Salón de belleza / Spa","Pestañas / Cejas / Estética","Uñas / Nail Tech","Lavandería","Auto servicio / Taller","Tienda / Retail","Servicios profesionales","Construcción / Remodelación","Limpieza","Otro"],
+phOtroIndustria:"Especifica tu industria...",
+lblAnos:"Años en operación",
+anos:["Menos de 1 año","1 – 2 años","3 – 5 años","6 – 10 años","Más de 10 años"],
+lblCiudad:"Ciudad",
+phCiudad:"Ej: Columbus, OH",
+lblRedes:"Redes sociales activas",
+redes:[["Instagram","📸 Instagram"],["Facebook","👤 Facebook"],["TikTok","🎵 TikTok"],["WhatsApp Business","💬 WhatsApp Business"],["Google Business","🔍 Google Business"],["YouTube","▶️ YouTube"],["Pinterest","📌 Pinterest"]],
+redesOtro:"➕ Otro",
+phOtroRedes:"¿Cuál otra red social?",
+ninguna:"🚫 Ninguna por ahora",
+lblProblema:"¿Cuál es el mayor reto actual?",
+phProblema:"Ej: Tenemos buena comida pero casi nadie nuevo nos conoce. Todo viene de recomendaciones boca a boca y necesitamos crecer.",
+lblIntentado:"¿Qué han intentado que no funcionó?",
+phIntentado:"Ej: Probamos hacer publicidad en Facebook pero no conseguimos clientes. También intentamos publicar en Instagram pero no fuimos constantes.",
+lblMetas:"Metas principales",
+metas:[["Conseguir más clientes nuevos","👥 Más clientes nuevos"],["Mejorar presencia digital y redes","📱 Mejor presencia digital"],["Automatizar procesos y mensajes","⚡ Automatizar procesos"],["Aumentar ventas e ingresos","💰 Aumentar ventas"],["Aparecer en Google y Maps","🔍 Aparecer en Google"],["Crear contenido consistente","🎬 Contenido consistente"]],
+phOtrasMetas:"Otras metas (opcional)...",
+lblPresupuesto:"Presupuesto mensual para marketing",
+selectRange:"Selecciona un rango...",
+presupuesto:["Sin presupuesto por ahora","Menos de $100/mes","$100 – $300/mes","$300 – $500/mes","Más de $500/mes"],
+errRequired:"Por favor completa: nombre del negocio, industria, años en operación y reto actual.",
+errMetas:"Selecciona al menos una meta principal.",
+submitBtn:"✨ Generar Auditoría Gratis",
+submitBtnLoading:"Generando auditoría con IA...",
+loadingMsg:"Analizando el negocio y creando tu plan personalizado...",
+diagLabel:"DIAGNÓSTICO",
+scoreLabel:"Presencia digital actual",
+qwLabel:"HAZ ESTO HOY MISMO — GRATIS",
+plan30Title:"Plan de 30 días",
+contenidoTitle:"Ideas de contenido para publicar",
+promoTitle:"Mensaje promocional listo para usar",
+ctaBox:'💼 Este reporte fue generado en segundos con IA.<br><strong style="color:#2B2118;">¿Quieres que implementemos este plan por ti?</strong> Contáctanos para un plan mensual de crecimiento.',
+btnNueva:"🔄 Nueva Auditoría",
+btnPdf:"⬇️ Guardar como PDF",
+btnPdfPreparing:"Preparando PDF...",
+errAlertKey:"Por favor pega tu API Key antes de continuar.",
+errPrefix:"Error: ",
+errSuffix:". Verifica tu API Key e intenta de nuevo.",
+promptLangName:"español",
+pdf:{
+title:"Auditoría — ",
+printBtn:"⬇️ Guardar como PDF",
+badge:"Powered by Gemini AI · Growth Partner AI",
+appName:"Audita Conmigo",
+presenceLabel:"Presencia digital actual",
+qwLabel:"⚡ Haz esto hoy mismo — gratis",
+planTitle:"Plan de 30 días",
+ideasTitle:"Ideas de contenido",
+promoTitle:"Mensaje promocional listo para usar",
+footer:"Growth Partner AI · Powered by Gemini AI · growthpartnerai.com",
+locale:"es-ES"
+}
+},
+en: {
+htmlLang:"en",
+poweredBy:"Powered by Gemini AI",
+setupTitle:"Audit With Me",
+setupOnce:"🔑 One-time setup only",
+setupDesc:'Your key is saved automatically on this device.<br>Get it free at <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> → "Get API Key"',
+setupKeyPh:"Paste your Gemini API Key here...",
+setupBtn:"✓ Save and get started",
+setupNote:"Your key never leaves your device.",
+headerTitle:"Audit With Me",
+headerDesc:"Your business gets a growth diagnosis, a 30-day plan, and ready-to-post content in seconds — powered by AI, built for small businesses.",
+apiConfigured:"🔑 API Key configured ✓",
+apiChange:"Change",
+formTitle:"Tell us about the business",
+formSub:"Fields marked with * are required",
+lblNombre:"Business name",
+phNombre:"E.g.: Bella Beauty Salon",
+lblIndustria:"Industry",
+selectDefault:"Select...",
+industrias:["Restaurant / Food","Beauty salon / Spa","Lashes / Brows / Esthetics","Nails / Nail Tech","Laundry","Auto service / Repair shop","Retail store","Professional services","Construction / Remodeling","Cleaning","Other"],
+phOtroIndustria:"Specify your industry...",
+lblAnos:"Years in business",
+anos:["Less than 1 year","1 – 2 years","3 – 5 years","6 – 10 years","More than 10 years"],
+lblCiudad:"City",
+phCiudad:"E.g.: Columbus, OH",
+lblRedes:"Active social media",
+redes:[["Instagram","📸 Instagram"],["Facebook","👤 Facebook"],["TikTok","🎵 TikTok"],["WhatsApp Business","💬 WhatsApp Business"],["Google Business","🔍 Google Business"],["YouTube","▶️ YouTube"],["Pinterest","📌 Pinterest"]],
+redesOtro:"➕ Other",
+phOtroRedes:"Which other social media?",
+ninguna:"🚫 None for now",
+lblProblema:"What's the biggest challenge right now?",
+phProblema:"E.g.: We have great food but barely anyone new finds us. Everything comes from word of mouth and we need to grow.",
+lblIntentado:"What have you tried that didn't work?",
+phIntentado:"E.g.: We tried Facebook ads but didn't get clients. We also tried posting on Instagram but weren't consistent.",
+lblMetas:"Main goals",
+metas:[["Get more new customers","👥 More new customers"],["Improve digital presence and social media","📱 Better digital presence"],["Automate processes and messages","⚡ Automate processes"],["Increase sales and revenue","💰 Increase sales"],["Show up on Google and Maps","🔍 Show up on Google"],["Create consistent content","🎬 Consistent content"]],
+phOtrasMetas:"Other goals (optional)...",
+lblPresupuesto:"Monthly marketing budget",
+selectRange:"Select a range...",
+presupuesto:["No budget for now","Less than $100/month","$100 – $300/month","$300 – $500/month","More than $500/month"],
+errRequired:"Please complete: business name, industry, years in business, and current challenge.",
+errMetas:"Select at least one main goal.",
+submitBtn:"✨ Generate Free Audit",
+submitBtnLoading:"Generating audit with AI...",
+loadingMsg:"Analyzing the business and building your personalized plan...",
+diagLabel:"DIAGNOSIS",
+scoreLabel:"Current digital presence",
+qwLabel:"DO THIS TODAY — FREE",
+plan30Title:"30-Day Plan",
+contenidoTitle:"Content ideas to post",
+promoTitle:"Ready-to-use promotional message",
+ctaBox:'💼 This report was generated in seconds with AI.<br><strong style="color:#2B2118;">Want us to implement this plan for you?</strong> Contact us for a monthly growth plan.',
+btnNueva:"🔄 New Audit",
+btnPdf:"⬇️ Save as PDF",
+btnPdfPreparing:"Preparing PDF...",
+errAlertKey:"Please paste your API Key before continuing.",
+errPrefix:"Error: ",
+errSuffix:". Check your API Key and try again.",
+promptLangName:"English",
+pdf:{
+title:"Audit — ",
+printBtn:"⬇️ Save as PDF",
+badge:"Powered by Gemini AI · Growth Partner AI",
+appName:"Audit With Me",
+presenceLabel:"Current digital presence",
+qwLabel:"⚡ Do this today — free",
+planTitle:"30-Day Plan",
+ideasTitle:"Content ideas",
+promoTitle:"Ready-to-use promotional message",
+footer:"Growth Partner AI · Powered by Gemini AI · growthpartnerai.com",
+locale:"en-US"
+}
+}
+};
+
+// ══════════════════ LANG STATE ══════════════════
+function getLang(){return localStorage.getItem('gpa_lang')||'es';}
+function setLangStorage(l){localStorage.setItem('gpa_lang',l);}
+function toggleLang(){
+const next=getLang()==='es'?'en':'es';
+setLangStorage(next);
+renderLang();
+}
+
+function renderLang(){
+const lang=getLang();
+const t=T[lang];
+document.documentElement.lang=t.htmlLang;
+document.title = lang==='es' ? "Audita Conmigo · Growth Partner AI" : "Audit With Me · Growth Partner AI";
+
+document.getElementById('langToggleSetup').textContent = lang==='es' ? 'EN' : 'ES';
+document.getElementById('langToggleApp').textContent = lang==='es' ? 'EN' : 'ES';
+
+document.getElementById('setupBadge').textContent=t.poweredBy;
+document.getElementById('setupTitleText').textContent=t.setupTitle;
+document.getElementById('setupOnceText').textContent=t.setupOnce;
+document.getElementById('setupDescText').innerHTML=t.setupDesc;
+document.getElementById('setupKey').placeholder=t.setupKeyPh;
+document.getElementById('setupBtnText').textContent=t.setupBtn;
+document.getElementById('setupNoteText').textContent=t.setupNote;
+
+document.getElementById('headerBadgeText').textContent=t.poweredBy;
+document.getElementById('headerTitleText').textContent=t.headerTitle;
+document.getElementById('headerDescText').textContent=t.headerDesc;
+
+document.getElementById('apiBarText').textContent=t.apiConfigured;
+document.getElementById('apiChangeBtn').textContent=t.apiChange;
+
+document.getElementById('formTitleText').textContent=t.formTitle;
+document.getElementById('formSubText').textContent=t.formSub;
+
+document.getElementById('lblNombre').textContent=t.lblNombre;
+document.getElementById('nombre').placeholder=t.phNombre;
+
+document.getElementById('lblIndustria').textContent=t.lblIndustria;
+buildSelect('industria', t.industrias, t.selectDefault);
+document.getElementById('otroIndustria').placeholder=t.phOtroIndustria;
+
+document.getElementById('lblAnos').textContent=t.lblAnos;
+buildSelect('anos', t.anos, t.selectDefault);
+
+document.getElementById('lblCiudad').textContent=t.lblCiudad;
+document.getElementById('ciudad').placeholder=t.phCiudad;
+
+document.getElementById('lblRedes').textContent=t.lblRedes;
+buildRedesGrid(t);
+document.getElementById('otroRedes').placeholder=t.phOtroRedes;
+document.getElementById('lblNinguna').textContent=t.ninguna;
+
+document.getElementById('lblProblema').textContent=t.lblProblema;
+document.getElementById('problema').placeholder=t.phProblema;
+
+document.getElementById('lblIntentado').textContent=t.lblIntentado;
+document.getElementById('intentado').placeholder=t.phIntentado;
+
+document.getElementById('lblMetas').textContent=t.lblMetas;
+buildMetaGrid(t);
+document.getElementById('otrasMetas').placeholder=t.phOtrasMetas;
+
+document.getElementById('lblPresupuesto').textContent=t.lblPresupuesto;
+buildSelect('presupuesto', t.presupuesto, t.selectRange);
+
+document.getElementById('submitBtn').textContent=t.submitBtn;
+document.getElementById('loadingMsg').textContent=t.loadingMsg;
+
+document.getElementById('diagLabelText').textContent=t.diagLabel;
+document.getElementById('scoreLabelText').textContent=t.scoreLabel;
+document.getElementById('qwLabelText').textContent=t.qwLabel;
+document.getElementById('plan30TitleText').textContent=t.plan30Title;
+document.getElementById('contenidoTitleText').textContent=t.contenidoTitle;
+document.getElementById('promoTitleText').textContent=t.promoTitle;
+document.getElementById('ctaBoxText').innerHTML=t.ctaBox;
+document.getElementById('btnNuevaText').textContent=t.btnNueva;
+document.getElementById('btnPdf').textContent=t.btnPdf;
+}
+
+function buildSelect(id, options, defaultLabel){
+const sel=document.getElementById(id);
+const prevValue=sel.value;
+sel.innerHTML='';
+const optDefault=document.createElement('option');
+optDefault.value='';
+optDefault.textContent=defaultLabel;
+sel.appendChild(optDefault);
+options.forEach(o=>{
+const opt=document.createElement('option');
+opt.value=o;opt.textContent=o;
+sel.appendChild(opt);
+});
+// Try to keep selection if the value still exists in the new list (same index-based language switch is not reliable across languages, so we just reset)
+sel.value='';
+}
+
+function buildRedesGrid(t){
+const grid=document.getElementById('redesGrid');
+grid.innerHTML='';
+t.redes.forEach(pair=>{
+const label=document.createElement('label');
+label.className='check-item';
+label.onclick=function(){toggleCheck(label);};
+label.innerHTML=`<input type="checkbox" value="${pair[0]}" onchange="event.stopPropagation()"> <span>${pair[1]}</span>`;
+grid.appendChild(label);
+});
+const otroLabel=document.createElement('label');
+otroLabel.className='check-item';
+otroLabel.id='checkOtroRedes';
+otroLabel.onclick=function(){toggleCheck(otroLabel);toggleOtroRedes();};
+otroLabel.innerHTML=`<input type="checkbox" value="Otro" onchange="event.stopPropagation()"> <span>${t.redesOtro}</span>`;
+grid.appendChild(otroLabel);
+document.getElementById('otroRedesField').style.display='none';
+}
+
+function buildMetaGrid(t){
+const grid=document.getElementById('metaGrid');
+grid.innerHTML='';
+t.metas.forEach(pair=>{
+const label=document.createElement('label');
+label.className='meta-item';
+label.onclick=function(){toggleMeta(label);};
+label.innerHTML=`<input type="checkbox" value="${pair[0]}" onchange="event.stopPropagation()"> <span>${pair[1]}</span>`;
+grid.appendChild(label);
+});
+}
+
+// ── localStorage (API key) ──
 function getKey(){return localStorage.getItem('gpa_gemini_key')||'';}
 function saveKey(){
-  const k=document.getElementById('setupKey').value.trim();
-  if(!k||k.length<20){alert('Por favor pega tu API Key antes de continuar.');return;}
-  localStorage.setItem('gpa_gemini_key',k);
-  showApp();
+const k=document.getElementById('setupKey').value.trim();
+const t=T[getLang()];
+if(!k||k.length<20){alert(t.errAlertKey);return;}
+localStorage.setItem('gpa_gemini_key',k);
+showApp();
 }
 function changeKey(){localStorage.removeItem('gpa_gemini_key');document.getElementById('appScreen').style.display='none';document.getElementById('setupScreen').style.display='block';}
 function showApp(){document.getElementById('setupScreen').style.display='none';document.getElementById('appScreen').style.display='block';}
-window.onload=function(){if(getKey())showApp();};
+window.onload=function(){renderLang();if(getKey())showApp();};
 
 // ── Checkboxes helpers ──
 function toggleCheck(label){
-  const cb=label.querySelector('input');
-  cb.checked=!cb.checked;
-  label.classList.toggle('checked',cb.checked);
+const cb=label.querySelector('input');
+cb.checked=!cb.checked;
+label.classList.toggle('checked',cb.checked);
 }
 function toggleMeta(label){
-  const cb=label.querySelector('input');
-  cb.checked=!cb.checked;
-  label.classList.toggle('checked',cb.checked);
+const cb=label.querySelector('input');
+cb.checked=!cb.checked;
+label.classList.toggle('checked',cb.checked);
 }
 function toggleOtroRedes(){
-  const cb=document.getElementById('checkOtroRedes').querySelector('input');
-  document.getElementById('otroRedesField').style.display=cb.checked?'block':'none';
+const cb=document.getElementById('checkOtroRedes').querySelector('input');
+document.getElementById('otroRedesField').style.display=cb.checked?'block':'none';
 }
 function toggleNinguna(label){
-  const cb=label.querySelector('input');
-  cb.checked=!cb.checked;
-  label.classList.toggle('checked',cb.checked);
-  if(cb.checked){
-    document.querySelectorAll('#redesGrid .check-item input').forEach(i=>{i.checked=false;i.closest('.check-item').classList.remove('checked');});
-    document.getElementById('otroRedesField').style.display='none';
-  }
+const cb=label.querySelector('input');
+cb.checked=!cb.checked;
+label.classList.toggle('checked',cb.checked);
+if(cb.checked){
+document.querySelectorAll('#redesGrid .check-item input').forEach(i=>{i.checked=false;i.closest('.check-item').classList.remove('checked');});
+document.getElementById('otroRedesField').style.display='none';
 }
-
+}
 function getChecked(gridId){
-  return [...document.querySelectorAll('#'+gridId+' input[type=checkbox]:checked')].map(i=>i.value);
+return [...document.querySelectorAll('#'+gridId+' input[type=checkbox]:checked')].map(i=>i.value);
 }
 function getMetasChecked(){
-  return [...document.querySelectorAll('.meta-item input[type=checkbox]:checked')].map(i=>i.value);
+return [...document.querySelectorAll('#metaGrid input[type=checkbox]:checked')].map(i=>i.value);
 }
 
 // ── Form ──
 function showError(m){const b=document.getElementById('errorBox');b.textContent=m;b.style.display='block';}
 function hideError(){document.getElementById('errorBox').style.display='none';}
 
-async function generar(){
-  const nombre=document.getElementById('nombre').value.trim();
-  const industriaRaw=document.getElementById('industria').value;
-  const otroIndustriaVal=document.getElementById('otroIndustria').value.trim();
-  const industria=industriaRaw==='Otro'&&otroIndustriaVal?otroIndustriaVal:industriaRaw;
-  const anos=document.getElementById('anos').value;
-  const ciudad=document.getElementById('ciudad').value.trim();
-  const problema=document.getElementById('problema').value.trim();
-  const intentado=document.getElementById('intentado').value.trim();
-  const otrasMetas=document.getElementById('otrasMetas').value.trim();
-  const presupuesto=document.getElementById('presupuesto').value;
-
-  // Redes
-  let redes=getChecked('redesGrid');
-  const otroRedes=document.getElementById('otroRedes').value.trim();
-  if(redes.includes('Otro')&&otroRedes){redes=redes.filter(r=>r!=='Otro');redes.push(otroRedes);}
-  const redesStr=redes.length?redes.join(', '):'Ninguna';
-
-  // Metas
-  let metas=getMetasChecked();
-  if(otrasMetas)metas.push(otrasMetas);
-  const metasStr=metas.length?metas.join(', '):'No especificadas';
-
-  hideError();
-  if(!nombre||!industria||!anos||!problema){showError('Por favor completa: nombre del negocio, industria, años en operación y reto actual.');return;}
-  if(metas.length===0&&!otrasMetas){showError('Selecciona al menos una meta principal.');return;}
-
-  const btn=document.getElementById('submitBtn');
-  btn.disabled=true;btn.textContent='Generando auditoría con IA...';
-  document.getElementById('loadingMsg').style.display='block';
-  document.getElementById('results').style.display='none';
-
-  const prompt=`Actúa como un consultor experto en marketing digital y crecimiento para pequeños negocios locales, especializado en el mercado hispano de Estados Unidos.
+function buildPrompt(lang, data){
+const t=T[lang];
+if(lang==='es'){
+return `Actúa como un consultor experto en marketing digital y crecimiento para pequeños negocios locales, especializado en el mercado hispano de Estados Unidos.
 
 Analiza este negocio y genera una AUDITORÍA DE CRECIMIENTO completa y personalizada:
 
 INFORMACIÓN DEL NEGOCIO:
-- Nombre: ${nombre}
-- Industria: ${industria}
-- Años en operación: ${anos}
-- Ciudad: ${ciudad||'No especificada'}
-- Redes sociales activas: ${redesStr}
+- Nombre: ${data.nombre}
+- Industria: ${data.industria}
+- Años en operación: ${data.anos}
+- Ciudad: ${data.ciudad||'No especificada'}
+- Redes sociales activas: ${data.redesStr}
 
 SITUACIÓN ACTUAL:
-- Mayor reto actual: ${problema}
-- Qué han intentado sin éxito: ${intentado||'No especificado'}
+- Mayor reto actual: ${data.problema}
+- Qué han intentado sin éxito: ${data.intentado||'No especificado'}
 
 OBJETIVOS:
-- Metas principales: ${metasStr}
-- Presupuesto mensual disponible: ${presupuesto||'No especificado'}
+- Metas principales: ${data.metasStr}
+- Presupuesto mensual disponible: ${data.presupuesto||'No especificado'}
 
 INSTRUCCIONES IMPORTANTES:
+- Responde completamente en ESPAÑOL.
 - Adapta todas las recomendaciones al presupuesto disponible. Si es "Sin presupuesto" o menos de $100, enfócate en estrategias 100% gratuitas.
 - NO repitas estrategias que ya intentaron sin éxito.
 - Considera los años de operación: un negocio nuevo necesita construir desde cero; uno de varios años necesita escalar o corregir.
 - Alinea el plan de 30 días con las metas específicas del negocio.
 
 Responde ÚNICAMENTE en formato JSON válido (sin markdown, sin backticks, sin texto adicional), con esta estructura exacta:
-
 {
-  "diagnostico": "Párrafo de 3-4 oraciones diagnosticando la situación actual, considerando los años en operación, lo que ya intentaron y el presupuesto disponible",
-  "puntuacion_presencia_digital": 7,
-  "areas_criticas": ["área crítica 1", "área crítica 2", "área crítica 3"],
-  "plan_30_dias": [
-    {"semana": "Semana 1", "accion": "Acción específica, accionable y dentro del presupuesto disponible"},
-    {"semana": "Semana 2", "accion": "Acción específica y accionable"},
-    {"semana": "Semana 3", "accion": "Acción específica y accionable"},
-    {"semana": "Semana 4", "accion": "Acción específica y accionable"}
-  ],
-  "ideas_contenido": ["idea de post 1 con descripción", "idea 2", "idea 3", "idea 4", "idea 5"],
-  "mensaje_promocional": "Copy de marketing listo para copiar y pegar, máximo 280 caracteres, tono cálido",
-  "quick_win": "UNA sola acción concreta que el negocio puede hacer HOY MISMO sin costo ni espera"
+"diagnostico": "Párrafo de 3-4 oraciones diagnosticando la situación actual, considerando los años en operación, lo que ya intentaron y el presupuesto disponible",
+"puntuacion_presencia_digital": 7,
+"areas_criticas": ["área crítica 1", "área crítica 2", "área crítica 3"],
+"plan_30_dias": [
+{"semana": "Semana 1", "accion": "Acción específica, accionable y dentro del presupuesto disponible"},
+{"semana": "Semana 2", "accion": "Acción específica y accionable"},
+{"semana": "Semana 3", "accion": "Acción específica y accionable"},
+{"semana": "Semana 4", "accion": "Acción específica y accionable"}
+],
+"ideas_contenido": ["idea de post 1 con descripción", "idea 2", "idea 3", "idea 4", "idea 5"],
+"mensaje_promocional": "Copy de marketing listo para copiar y pegar, máximo 280 caracteres, tono cálido",
+"quick_win": "UNA sola acción concreta que el negocio puede hacer HOY MISMO sin costo ni espera"
 }`;
+}else{
+return `Act as an expert consultant in digital marketing and growth for small local businesses in the United States.
 
-  try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${getKey()}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
-    });
-    if(!res.ok){const e=await res.json();throw new Error(e?.error?.message||`Error ${res.status}`);}
-    const data=await res.json();
-    let text=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
-    text=text.replace(/```json|```/g,'').trim();
-    const r=JSON.parse(text);
+Analyze this business and generate a complete, personalized GROWTH AUDIT:
 
-    document.getElementById('rDiag').textContent=r.diagnostico;
-    document.getElementById('rScore').textContent=r.puntuacion_presencia_digital+'/10';
-    document.getElementById('rTags').innerHTML=(r.areas_criticas||[]).map(a=>`<span class="tag">${a}</span>`).join('');
-    document.getElementById('rQuickWin').textContent=r.quick_win;
-    document.getElementById('rPlan').innerHTML=(r.plan_30_dias||[]).map((s,i)=>`
-      <div class="plan-item">
-        <div class="plan-num">${String(i+1).padStart(2,'0')}</div>
-        <div><div class="plan-week">${(s.semana||'').toUpperCase()}</div><div class="plan-action">${s.accion}</div></div>
-      </div>`).join('');
-    document.getElementById('rContenido').innerHTML=(r.ideas_contenido||[]).map(i=>`
-      <div class="content-item"><span style="color:#D9651A;font-size:16px;flex-shrink:0;">📱</span><span>${i}</span></div>`).join('');
-    document.getElementById('rPromo').textContent='"'+r.mensaje_promocional+'"';
-    document.getElementById('results').style.display='block';
-    document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(err){
-    showError('Error: '+err.message+'. Verifica tu API Key e intenta de nuevo.');
-  }finally{
-    btn.disabled=false;btn.textContent='✨ Generar Auditoría Gratis';
-    document.getElementById('loadingMsg').style.display='none';
-  }
+BUSINESS INFORMATION:
+- Name: ${data.nombre}
+- Industry: ${data.industria}
+- Years in business: ${data.anos}
+- City: ${data.ciudad||'Not specified'}
+- Active social media: ${data.redesStr}
+
+CURRENT SITUATION:
+- Biggest current challenge: ${data.problema}
+- What they've tried without success: ${data.intentado||'Not specified'}
+
+GOALS:
+- Main goals: ${data.metasStr}
+- Available monthly budget: ${data.presupuesto||'Not specified'}
+
+IMPORTANT INSTRUCTIONS:
+- Respond entirely in ENGLISH.
+- Adapt every recommendation to the available budget. If it's "No budget" or under $100, focus on 100% free strategies.
+- Do NOT repeat strategies they already tried without success.
+- Consider years in business: a new business needs to build from scratch; a business with several years needs to scale or fix what's not working.
+- Align the 30-day plan with the business's specific goals.
+
+Respond ONLY in valid JSON format (no markdown, no backticks, no extra text), with this exact structure:
+{
+"diagnostico": "3-4 sentence paragraph diagnosing the current situation, considering years in business, what they already tried, and available budget",
+"puntuacion_presencia_digital": 7,
+"areas_criticas": ["critical area 1", "critical area 2", "critical area 3"],
+"plan_30_dias": [
+{"semana": "Week 1", "accion": "Specific, actionable step within the available budget"},
+{"semana": "Week 2", "accion": "Specific, actionable step"},
+{"semana": "Week 3", "accion": "Specific, actionable step"},
+{"semana": "Week 4", "accion": "Specific, actionable step"}
+],
+"ideas_contenido": ["post idea 1 with description", "idea 2", "idea 3", "idea 4", "idea 5"],
+"mensaje_promocional": "Ready-to-copy marketing copy, max 280 characters, warm tone",
+"quick_win": "ONE concrete action the business can do TODAY at no cost and no waiting"
+}`;
+}
+}
+
+async function generar(){
+const lang=getLang();
+const t=T[lang];
+const nombre=document.getElementById('nombre').value.trim();
+const industriaRaw=document.getElementById('industria').value;
+const otroIndustriaVal=document.getElementById('otroIndustria').value.trim();
+const industria=industriaRaw==='Otro'&&otroIndustriaVal?otroIndustriaVal:industriaRaw;
+const anos=document.getElementById('anos').value;
+const ciudad=document.getElementById('ciudad').value.trim();
+const problema=document.getElementById('problema').value.trim();
+const intentado=document.getElementById('intentado').value.trim();
+const otrasMetas=document.getElementById('otrasMetas').value.trim();
+const presupuesto=document.getElementById('presupuesto').value;
+
+// Redes
+let redes=getChecked('redesGrid');
+const otroRedes=document.getElementById('otroRedes').value.trim();
+if(redes.includes('Otro')&&otroRedes){redes=redes.filter(r=>r!=='Otro');redes.push(otroRedes);}
+const redesStr=redes.length?redes.join(', '):(lang==='es'?'Ninguna':'None');
+
+// Metas
+let metas=getMetasChecked();
+if(otrasMetas)metas.push(otrasMetas);
+const metasStr=metas.length?metas.join(', '):(lang==='es'?'No especificadas':'Not specified');
+
+hideError();
+if(!nombre||!industria||!anos||!problema){showError(t.errRequired);return;}
+if(metas.length===0&&!otrasMetas){showError(t.errMetas);return;}
+
+const btn=document.getElementById('submitBtn');
+btn.disabled=true;btn.textContent=t.submitBtnLoading;
+document.getElementById('loadingMsg').style.display='block';
+document.getElementById('results').style.display='none';
+
+const prompt=buildPrompt(lang, {nombre,industria,anos,ciudad,redesStr,problema,intentado,metasStr,presupuesto});
+
+try{
+const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${getKey()}`,{
+method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
+});
+if(!res.ok){const e=await res.json();throw new Error(e?.error?.message||`Error ${res.status}`);}
+const data=await res.json();
+let text=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+text=text.replace(/```json|```/g,'').trim();
+const r=JSON.parse(text);
+
+document.getElementById('rDiag').textContent=r.diagnostico;
+document.getElementById('rScore').textContent=r.puntuacion_presencia_digital+'/10';
+document.getElementById('rTags').innerHTML=(r.areas_criticas||[]).map(a=>`<span class="tag">${a}</span>`).join('');
+document.getElementById('rQuickWin').textContent=r.quick_win;
+document.getElementById('rPlan').innerHTML=(r.plan_30_dias||[]).map((s,i)=>`
+<div class="plan-item">
+<div class="plan-num">${String(i+1).padStart(2,'0')}</div>
+<div><div class="plan-week">${(s.semana||'').toUpperCase()}</div><div class="plan-action">${s.accion}</div></div>
+</div>`).join('');
+document.getElementById('rContenido').innerHTML=(r.ideas_contenido||[]).map(i=>`
+<div class="content-item"><span style="color:#D9651A;font-size:16px;flex-shrink:0;">📱</span><span>${i}</span></div>`).join('');
+document.getElementById('rPromo').textContent='"'+r.mensaje_promocional+'"';
+document.getElementById('results').style.display='block';
+document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}catch(err){
+showError(t.errPrefix+err.message+t.errSuffix);
+}finally{
+btn.disabled=false;btn.textContent=t.submitBtn;
+document.getElementById('loadingMsg').style.display='none';
+}
 }
 
 // ── Otro industria ──
 function toggleOtroIndustria(){
-  const v=document.getElementById('industria').value;
-  const f=document.getElementById('otroIndustriaField');
-  f.style.display=(v==='Otro')?'block':'none';
-  if(v!=='Otro')document.getElementById('otroIndustria').value='';
+const v=document.getElementById('industria').value;
+const f=document.getElementById('otroIndustriaField');
+f.style.display=(v==='Otro')?'block':'none';
+if(v!=='Otro')document.getElementById('otroIndustria').value='';
 }
 
 // ── Nueva Auditoría ──
 function nuevaAuditoria(){
-  document.getElementById('nombre').value='';
-  document.getElementById('industria').value='';
-  document.getElementById('anos').value='';
-  document.getElementById('ciudad').value='';
-  document.getElementById('problema').value='';
-  document.getElementById('intentado').value='';
-  document.getElementById('otrasMetas').value='';
-  document.getElementById('presupuesto').value='';
-  document.getElementById('otroRedes').value='';
-  document.getElementById('otroIndustria').value='';
-  document.getElementById('otroIndustriaField').style.display='none';
-  document.getElementById('otroRedesField').style.display='none';
-  document.querySelectorAll('.check-item input,.meta-item input,#checkNinguna input').forEach(cb=>{
-    cb.checked=false;
-    cb.closest('.check-item,.meta-item')?.classList.remove('checked');
-  });
-  document.querySelectorAll('.meta-item').forEach(m=>m.classList.remove('checked'));
-  document.getElementById('results').style.display='none';
-  hideError();
-  window.scrollTo({top:0,behavior:'smooth'});
+document.getElementById('nombre').value='';
+document.getElementById('industria').value='';
+document.getElementById('anos').value='';
+document.getElementById('ciudad').value='';
+document.getElementById('problema').value='';
+document.getElementById('intentado').value='';
+document.getElementById('otrasMetas').value='';
+document.getElementById('presupuesto').value='';
+document.getElementById('otroRedes').value='';
+document.getElementById('otroIndustria').value='';
+document.getElementById('otroIndustriaField').style.display='none';
+document.getElementById('otroRedesField').style.display='none';
+document.querySelectorAll('.check-item input,.meta-item input,#checkNinguna input').forEach(cb=>{
+cb.checked=false;
+cb.closest('.check-item,.meta-item')?.classList.remove('checked');
+});
+document.getElementById('results').style.display='none';
+hideError();
+window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── Descargar PDF ──
 async function descargarPDF(){
-  const btn=document.getElementById('btnPdf');
-  btn.disabled=true;btn.textContent='Preparando PDF...';
-  try{
-    const nombre=document.getElementById('nombre').value||'Negocio';
-    const diag=document.getElementById('rDiag')?.textContent||'';
-    const score=document.getElementById('rScore')?.textContent||'';
-    const tags=[...document.querySelectorAll('#rTags .tag')].map(t=>t.textContent);
-    const qw=document.getElementById('rQuickWin')?.textContent||'';
-    const planItems=[...document.querySelectorAll('#rPlan .plan-item')].map(item=>({
-      week:item.querySelector('.plan-week')?.textContent||'',
-      action:item.querySelector('.plan-action')?.textContent||''
-    }));
-    const ideas=[...document.querySelectorAll('#rContenido .content-item span:last-child')].map(s=>s.textContent);
-    const promo=document.getElementById('rPromo')?.textContent||'';
-    const fecha=new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'});
+const lang=getLang();
+const t=T[lang];
+const btn=document.getElementById('btnPdf');
+btn.disabled=true;btn.textContent=t.btnPdfPreparing;
+try{
+const nombre=document.getElementById('nombre').value||(lang==='es'?'Negocio':'Business');
+const diag=document.getElementById('rDiag')?.textContent||'';
+const score=document.getElementById('rScore')?.textContent||'';
+const tags=[...document.querySelectorAll('#rTags .tag')].map(tg=>tg.textContent);
+const qw=document.getElementById('rQuickWin')?.textContent||'';
+const planItems=[...document.querySelectorAll('#rPlan .plan-item')].map(item=>({
+week:item.querySelector('.plan-week')?.textContent||'',
+action:item.querySelector('.plan-action')?.textContent||''
+}));
+const ideas=[...document.querySelectorAll('#rContenido .content-item span:last-child')].map(s=>s.textContent);
+const promo=document.getElementById('rPromo')?.textContent||'';
+const fecha=new Date().toLocaleDateString(t.pdf.locale,{year:'numeric',month:'long',day:'numeric'});
 
-    const planHTML=planItems.map((p,i)=>`
-      <div class="plan-item">
-        <div class="plan-num">${String(i+1).padStart(2,'0')}</div>
-        <div><div class="plan-week">${p.week.toUpperCase()}</div><div class="plan-action">${p.action}</div></div>
-      </div>`).join('');
+const planHTML=planItems.map((p,i)=>`
+<div class="plan-item">
+<div class="plan-num">${String(i+1).padStart(2,'0')}</div>
+<div><div class="plan-week">${p.week.toUpperCase()}</div><div class="plan-action">${p.action}</div></div>
+</div>`).join('');
 
-    const ideasHTML=ideas.map((idea,i)=>`
-      <div class="idea-item"><span class="idea-num">${i+1}.</span><span>${idea}</span></div>`).join('');
+const ideasHTML=ideas.map((idea,i)=>`
+<div class="idea-item"><span class="idea-num">${i+1}.</span><span>${idea}</span></div>`).join('');
 
-    const tagsHTML=tags.map(t=>`<span class="tag">${t}</span>`).join('');
+const tagsHTML=tags.map(tg=>`<span class="tag">${tg}</span>`).join('');
 
-    const win=window.open('','_blank');
-    win.document.write(`<!DOCTYPE html><html lang="es"><head>
+const win=window.open('','_blank');
+win.document.write(`<!DOCTYPE html><html lang="${t.htmlLang}"><head>
 <meta charset="UTF-8">
-<title>Auditoría — ${nombre}</title>
+<title>${t.pdf.title}${nombre}</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Arial',sans-serif;background:#fff;color:#2B2118;font-size:11pt;}
-  @media print{
-    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-    .no-print{display:none!important;}
-    @page{margin:15mm;}
-  }
-  .print-btn{position:fixed;top:16px;right:16px;padding:12px 24px;background:#D9651A;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;z-index:999;font-family:Arial;}
-  .header{background:#2B2118;color:#fff;padding:24px 28px 20px;margin-bottom:20px;}
-  .header-badge{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
-  .header h1{font-size:22pt;margin-bottom:4px;}
-  .header-sub{font-size:10pt;color:#C9B8A6;}
-  .biz-name{font-size:16pt;font-weight:700;color:#2B2118;margin-bottom:2px;}
-  .fecha{font-size:9pt;color:#8A7560;margin-bottom:16px;}
-  .section{margin:0 28px 16px;}
-  .diag-box{background:#2B2118;color:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;}
-  .diag-label{font-size:8pt;letter-spacing:2px;color:#D9651A;font-weight:700;margin-bottom:6px;text-transform:uppercase;}
-  .diag-text{font-size:10pt;line-height:1.7;color:#EFE3D3;margin-bottom:12px;}
-  .score-row{display:flex;align-items:center;gap:14px;}
-  .score-circle{width:52px;height:52px;border-radius:50%;border:2.5px solid #D9651A;display:flex;align-items:center;justify-content:center;font-size:13pt;font-weight:800;color:#fff;flex-shrink:0;}
-  .tags{display:flex;gap:6px;flex-wrap:wrap;}
-  .tag{background:rgba(217,101,26,0.2);color:#D9651A;border-radius:20px;padding:2px 10px;font-size:8pt;}
-  .qw-box{background:#FFF3E5;border-left:3px solid #D9651A;border-radius:6px;padding:12px 16px;margin-bottom:14px;}
-  .qw-label{font-size:8pt;letter-spacing:2px;color:#D9651A;font-weight:700;margin-bottom:5px;text-transform:uppercase;}
-  .qw-text{font-size:10pt;color:#5C4630;line-height:1.6;}
-  .section-title{font-size:13pt;font-weight:700;color:#2B2118;margin-bottom:10px;padding-bottom:4px;border-bottom:2px solid #D9651A;}
-  .plan-item{display:flex;gap:12px;margin-bottom:8px;background:#FFF9F0;border-radius:8px;padding:10px 14px;}
-  .plan-num{font-size:14pt;font-weight:800;color:#D9651A;min-width:26px;flex-shrink:0;}
-  .plan-week{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:1px;margin-bottom:3px;}
-  .plan-action{font-size:9.5pt;color:#5C4630;line-height:1.5;}
-  .idea-item{display:flex;gap:8px;margin-bottom:6px;font-size:9.5pt;color:#5C4630;line-height:1.5;}
-  .idea-num{font-weight:700;color:#D9651A;flex-shrink:0;min-width:16px;}
-  .promo-box{background:#2B2118;color:#EFE3D3;border-radius:8px;padding:14px 18px;font-style:italic;font-size:10pt;line-height:1.7;}
-  .footer{background:#2B2118;color:#D9651A;text-align:center;padding:10px;font-size:8pt;margin-top:20px;font-weight:700;letter-spacing:1px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Arial',sans-serif;background:#fff;color:#2B2118;font-size:11pt;}
+@media print{
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.no-print{display:none!important;}
+@page{margin:15mm;}
+}
+.print-btn{position:fixed;top:16px;right:16px;padding:12px 24px;background:#D9651A;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;z-index:999;font-family:Arial;}
+.header{background:#2B2118;color:#fff;padding:24px 28px 20px;margin-bottom:20px;}
+.header-badge{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.header h1{font-size:22pt;margin-bottom:4px;}
+.header-sub{font-size:10pt;color:#C9B8A6;}
+.biz-name{font-size:16pt;font-weight:700;color:#2B2118;margin-bottom:2px;}
+.fecha{font-size:9pt;color:#8A7560;margin-bottom:16px;}
+.section{margin:0 28px 16px;}
+.diag-box{background:#2B2118;color:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;}
+.diag-label{font-size:8pt;letter-spacing:2px;color:#D9651A;font-weight:700;margin-bottom:6px;text-transform:uppercase;}
+.diag-text{font-size:10pt;line-height:1.7;color:#EFE3D3;margin-bottom:12px;}
+.score-row{display:flex;align-items:center;gap:14px;}
+.score-circle{width:52px;height:52px;border-radius:50%;border:2.5px solid #D9651A;display:flex;align-items:center;justify-content:center;font-size:13pt;font-weight:800;color:#fff;flex-shrink:0;}
+.tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{background:rgba(217,101,26,0.2);color:#D9651A;border-radius:20px;padding:2px 10px;font-size:8pt;}
+.qw-box{background:#FFF3E5;border-left:3px solid #D9651A;border-radius:6px;padding:12px 16px;margin-bottom:14px;}
+.qw-label{font-size:8pt;letter-spacing:2px;color:#D9651A;font-weight:700;margin-bottom:5px;text-transform:uppercase;}
+.qw-text{font-size:10pt;color:#5C4630;line-height:1.6;}
+.section-title{font-size:13pt;font-weight:700;color:#2B2118;margin-bottom:10px;padding-bottom:4px;border-bottom:2px solid #D9651A;}
+.plan-item{display:flex;gap:12px;margin-bottom:8px;background:#FFF9F0;border-radius:8px;padding:10px 14px;}
+.plan-num{font-size:14pt;font-weight:800;color:#D9651A;min-width:26px;flex-shrink:0;}
+.plan-week{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:1px;margin-bottom:3px;}
+.plan-action{font-size:9.5pt;color:#5C4630;line-height:1.5;}
+.idea-item{display:flex;gap:8px;margin-bottom:6px;font-size:9.5pt;color:#5C4630;line-height:1.5;}
+.idea-num{font-weight:700;color:#D9651A;flex-shrink:0;min-width:16px;}
+.promo-box{background:#2B2118;color:#EFE3D3;border-radius:8px;padding:14px 18px;font-style:italic;font-size:10pt;line-height:1.7;}
+.footer{background:#2B2118;color:#D9651A;text-align:center;padding:10px;font-size:8pt;margin-top:20px;font-weight:700;letter-spacing:1px;}
 </style>
 </head><body>
-<button class="print-btn no-print" onclick="window.print()">⬇️ Guardar como PDF</button>
+<button class="print-btn no-print" onclick="window.print()">${t.pdf.printBtn}</button>
 <div class="header">
-  <div class="header-badge">Powered by Gemini AI · Growth Partner AI</div>
-  <h1>Audita Conmigo</h1>
+<div class="header-badge">${t.pdf.badge}</div>
+<h1>${t.pdf.appName}</h1>
 </div>
 <div class="section">
-  <div class="biz-name">${nombre}</div>
-  <div class="fecha">${fecha}</div>
-  <div class="diag-box">
-    <div class="diag-label">Diagnóstico</div>
-    <div class="diag-text">${diag}</div>
-    <div class="score-row">
-      <div class="score-circle">${score}</div>
-      <div>
-        <div style="font-size:9pt;color:#C9B8A6;margin-bottom:4px;">Presencia digital actual</div>
-        <div class="tags">${tagsHTML}</div>
-      </div>
-    </div>
-  </div>
-  <div class="qw-box">
-    <div class="qw-label">⚡ Haz esto hoy mismo — gratis</div>
-    <div class="qw-text">${qw}</div>
-  </div>
-  <div class="section-title" style="margin-top:16px;">Plan de 30 días</div>
-  ${planHTML}
-  <div class="section-title" style="margin-top:16px;">Ideas de contenido</div>
-  ${ideasHTML}
-  <div class="section-title" style="margin-top:16px;">Mensaje promocional listo para usar</div>
-  <div class="promo-box">${promo}</div>
+<div class="biz-name">${nombre}</div>
+<div class="fecha">${fecha}</div>
+<div class="diag-box">
+<div class="diag-label">${t.diagLabel}</div>
+<div class="diag-text">${diag}</div>
+<div class="score-row">
+<div class="score-circle">${score}</div>
+<div>
+<div style="font-size:9pt;color:#C9B8A6;margin-bottom:4px;">${t.pdf.presenceLabel}</div>
+<div class="tags">${tagsHTML}</div>
 </div>
-<div class="footer">Growth Partner AI · Powered by Gemini AI · growthpartnerai.com</div>
+</div>
+</div>
+<div class="qw-box">
+<div class="qw-label">${t.pdf.qwLabel}</div>
+<div class="qw-text">${qw}</div>
+</div>
+<div class="section-title" style="margin-top:16px;">${t.pdf.planTitle}</div>
+${planHTML}
+<div class="section-title" style="margin-top:16px;">${t.pdf.ideasTitle}</div>
+${ideasHTML}
+<div class="section-title" style="margin-top:16px;">${t.pdf.promoTitle}</div>
+<div class="promo-box">${promo}</div>
+</div>
+<div class="footer">${t.pdf.footer}</div>
 </body></html>`);
-    win.document.close();
-    setTimeout(()=>{win.focus();},300);
-  }catch(e){alert('Error: '+e.message);}
-  finally{btn.disabled=false;btn.textContent='⬇️ Descargar PDF';}
-}</script>
+win.document.close();
+setTimeout(()=>{win.focus();},300);
+}catch(e){alert('Error: '+e.message);}
+finally{btn.disabled=false;btn.textContent=t.btnPdf;}
+}
+</script>
 </body>
 </html>
