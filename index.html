@@ -484,7 +484,7 @@ document.getElementById('lblNombre').textContent=t.lblNombre;
 document.getElementById('nombre').placeholder=t.phNombre;
 
 document.getElementById('lblIndustria').textContent=t.lblIndustria;
-buildSelect('industria', t.industrias, t.selectDefault);
+buildSelect('industria', t.industrias, t.selectDefault, true);
 document.getElementById('otroIndustria').placeholder=t.phOtroIndustria;
 
 document.getElementById('lblAnos').textContent=t.lblAnos;
@@ -525,20 +525,21 @@ document.getElementById('btnNuevaText').textContent=t.btnNueva;
 document.getElementById('btnPdf').textContent=t.btnPdf;
 }
 
-function buildSelect(id, options, defaultLabel){
+function buildSelect(id, options, defaultLabel, markLastAsOther){
 const sel=document.getElementById(id);
-const prevValue=sel.value;
 sel.innerHTML='';
 const optDefault=document.createElement('option');
 optDefault.value='';
 optDefault.textContent=defaultLabel;
 sel.appendChild(optDefault);
-options.forEach(o=>{
+options.forEach((o,idx)=>{
 const opt=document.createElement('option');
-opt.value=o;opt.textContent=o;
+// The "Otro/Other" option always needs a language-independent value so
+// toggleOtroIndustria() and generar() work the same in ES and EN.
+opt.value=(markLastAsOther&&idx===options.length-1)?'__OTHER__':o;
+opt.textContent=o;
 sel.appendChild(opt);
 });
-// Try to keep selection if the value still exists in the new list (same index-based language switch is not reliable across languages, so we just reset)
 sel.value='';
 }
 
@@ -716,7 +717,7 @@ const t=T[lang];
 const nombre=document.getElementById('nombre').value.trim();
 const industriaRaw=document.getElementById('industria').value;
 const otroIndustriaVal=document.getElementById('otroIndustria').value.trim();
-const industria=industriaRaw==='Otro'&&otroIndustriaVal?otroIndustriaVal:industriaRaw;
+const industria=industriaRaw==='__OTHER__'?otroIndustriaVal:industriaRaw;
 const anos=document.getElementById('anos').value;
 const ciudad=document.getElementById('ciudad').value.trim();
 const problema=document.getElementById('problema').value.trim();
@@ -783,8 +784,8 @@ document.getElementById('loadingMsg').style.display='none';
 function toggleOtroIndustria(){
 const v=document.getElementById('industria').value;
 const f=document.getElementById('otroIndustriaField');
-f.style.display=(v==='Otro')?'block':'none';
-if(v!=='Otro')document.getElementById('otroIndustria').value='';
+f.style.display=(v==='__OTHER__')?'block':'none';
+if(v!=='__OTHER__')document.getElementById('otroIndustria').value='';
 }
 
 // ── Nueva Auditoría ──
