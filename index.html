@@ -40,14 +40,29 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .header h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,5vw,42px);color:#FDF6EC;margin:0 0 8px;line-height:1.1;}
 .header p{color:#C9B8A6;font-size:15px;margin:0;max-width:480px;line-height:1.6;}
 .main{max-width:720px;margin:0 auto;padding:32px 24px 80px;}
-.api-bar{display:flex;justify-content:space-between;align-items:center;background:#FFF9F0;border:1px solid #E8D4BC;border-radius:12px;padding:10px 16px;margin-bottom:24px;}
+.api-bar{display:flex;justify-content:space-between;align-items:center;background:#FFF9F0;border:1px solid #E8D4BC;border-radius:12px;padding:10px 16px;margin-bottom:24px;flex-wrap:wrap;gap:8px;}
+.api-bar-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .api-bar-text{font-size:13px;font-weight:600;color:#5C4630;}
-.api-change{background:none;border:none;color:#B8A892;cursor:pointer;font-size:12px;text-decoration:underline;font-family:'Outfit',sans-serif;}
+.api-change,.mode-change{background:none;border:none;color:#B8A892;cursor:pointer;font-size:12px;text-decoration:underline;font-family:'Outfit',sans-serif;}
+/* MODE SELECTOR */
+.mode-screen{max-width:640px;margin:0 auto;}
+.mode-title{font-family:'Fraunces',serif;font-weight:500;font-size:24px;color:#2B2118;margin-bottom:4px;text-align:center;}
+.mode-sub{font-size:13px;color:#8A7560;text-align:center;margin-bottom:24px;}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.mode-card{background:#fff;border:2px solid #EFE3D3;border-radius:18px;padding:22px 18px;cursor:pointer;transition:all .15s;text-align:left;}
+.mode-card:hover{border-color:#D9651A;box-shadow:0 4px 18px rgba(217,101,26,0.1);}
+.mode-card-icon{font-size:28px;margin-bottom:10px;}
+.mode-card-title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#2B2118;margin-bottom:6px;}
+.mode-card-desc{font-size:12.5px;color:#8A7560;line-height:1.6;}
+@media(max-width:560px){.mode-cards{grid-template-columns:1fr;}}
+/* FORM */
 .form-card{background:#fff;border:1px solid #EFE3D3;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(43,33,24,0.04);}
 .form-title{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0 0 6px;color:#2B2118;}
 .form-sub{font-size:13px;color:#8A7560;margin-bottom:24px;}
 .form-grid{display:grid;gap:20px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.block-header{font-size:11px;font-weight:700;letter-spacing:2px;color:#D9651A;text-transform:uppercase;padding-top:6px;border-top:2px solid #FFF3E5;margin-top:4px;}
+.block-header:first-child{border-top:none;padding-top:0;margin-top:0;}
 .field-label{display:block;font-size:12px;font-weight:700;color:#8A7560;margin-bottom:8px;letter-spacing:0.8px;text-transform:uppercase;}
 .field-req{color:#D9651A;}
 .field{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #EFE3D3;font-size:15px;color:#2B2118;background:#fff;transition:border-color 0.2s;}
@@ -61,7 +76,6 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 .check-item input{width:16px;height:16px;accent-color:#D9651A;flex-shrink:0;}
 .check-item span{font-size:14px;color:#2B2118;}
 .other-field{margin-top:8px;display:none;}
-/* METAS */
 .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .meta-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #EFE3D3;border-radius:10px;cursor:pointer;transition:all 0.15s;user-select:none;}
 .meta-item:hover{border-color:#D9651A;background:#FFF9F5;}
@@ -106,7 +120,7 @@ input::placeholder,textarea::placeholder{color:#B8A892;}
 @media print {
 body { background: #fff !important; }
 .header { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 20px 24px !important; }
-.api-bar, .form-card, .loading-msg, .action-btns, .setup-screen { display: none !important; }
+.api-bar, .form-card, .loading-msg, .action-btns, .setup-screen, .mode-screen { display: none !important; }
 .main { padding: 16px 24px !important; }
 .results { display: block !important; }
 .diag-card { background: #2B2118 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 12px; padding: 20px !important; margin-bottom: 14px !important; }
@@ -161,26 +175,45 @@ body { background: #fff !important; }
 
 <div class="main">
 <div class="api-bar">
+<div class="api-bar-left">
 <span class="api-bar-text" id="apiBarText">🔑 API Key configurada ✓</span>
+<button class="mode-change" id="modeChangeBtn" onclick="showModeScreen()" style="display:none;"></button>
+</div>
 <button class="api-change" id="apiChangeBtn" onclick="changeKey()">Cambiar</button>
 </div>
 
-<div class="form-card">
+<!-- MODE SELECTOR -->
+<div id="modeScreen" class="mode-screen">
+<div class="mode-title" id="modeTitleText">¿Qué tipo de auditoría vas a hacer?</div>
+<div class="mode-sub" id="modeSubText">Elige según el contexto</div>
+<div class="mode-cards">
+<div class="mode-card" onclick="selectMode('quick')">
+<div class="mode-card-icon">⚡</div>
+<div class="mode-card-title" id="modeQuickTitleText">Auditoría Rápida</div>
+<div class="mode-card-desc" id="modeQuickDescText">Para el link público en redes sociales.</div>
+</div>
+<div class="mode-card" onclick="selectMode('complete')">
+<div class="mode-card-icon">📋</div>
+<div class="mode-card-title" id="modeCompleteTitleText">Auditoría Completa</div>
+<div class="mode-card-desc" id="modeCompleteDescText">Para usar después de tu entrevista con el dueño.</div>
+</div>
+</div>
+</div>
+
+<!-- QUICK FORM -->
+<div id="quickFormCard" class="form-card" style="display:none;">
 <div class="form-title" id="formTitleText">Cuéntanos sobre el negocio</div>
 <div class="form-sub" id="formSubText">Los campos marcados con * son obligatorios</div>
 
 <div class="form-grid">
-<!-- NOMBRE -->
 <div>
 <label class="field-label"><span id="lblNombre">Nombre del negocio</span> <span class="field-req">*</span></label>
 <input id="nombre" class="field" placeholder="Ej: Salón Bella by Carmen" />
 </div>
-
-<!-- INDUSTRIA + AÑOS -->
 <div class="form-row">
 <div>
 <label class="field-label"><span id="lblIndustria">Industria</span> <span class="field-req">*</span></label>
-<select id="industria" class="field field-select" onchange="toggleOtroIndustria()"></select>
+<select id="industria" class="field field-select" onchange="toggleOtro('industria','otroIndustriaField')"></select>
 <div id="otroIndustriaField" style="display:none;margin-top:8px;">
 <input id="otroIndustria" class="field" placeholder="Especifica tu industria..." />
 </div>
@@ -190,16 +223,11 @@ body { background: #fff !important; }
 <select id="anos" class="field field-select"></select>
 </div>
 </div>
-
-<!-- CIUDAD -->
 <div>
 <label class="field-label" id="lblCiudad">Ciudad</label>
 <input id="ciudad" class="field" placeholder="Ej: Columbus, OH" />
 </div>
-
 <div class="section-divider"></div>
-
-<!-- REDES SOCIALES -->
 <div>
 <label class="field-label" id="lblRedes">Redes sociales activas</label>
 <div class="check-grid" id="redesGrid"></div>
@@ -207,29 +235,21 @@ body { background: #fff !important; }
 <input id="otroRedes" class="field" style="margin-top:0;" placeholder="¿Cuál otra red social?" />
 </div>
 <div style="margin-top:8px;">
-<label class="check-item" id="checkNinguna" onclick="toggleNinguna(this)" style="display:inline-flex;width:auto;">
+<label class="check-item" id="checkNinguna" onclick="toggleNinguna(this,'redesGrid','otroRedesField')" style="display:inline-flex;width:auto;">
 <input type="checkbox" value="Ninguna" onchange="event.stopPropagation()"> <span id="lblNinguna">🚫 Ninguna por ahora</span>
 </label>
 </div>
 </div>
-
 <div class="section-divider"></div>
-
-<!-- PROBLEMA PRINCIPAL -->
 <div>
 <label class="field-label"><span id="lblProblema">¿Cuál es el mayor reto actual?</span> <span class="field-req">*</span></label>
 <textarea id="problema" class="field field-textarea" rows="3" placeholder=""></textarea>
 </div>
-
-<!-- QUÉ HAN INTENTADO -->
 <div>
 <label class="field-label" id="lblIntentado">¿Qué han intentado que no funcionó?</label>
 <textarea id="intentado" class="field field-textarea" rows="3" placeholder=""></textarea>
 </div>
-
 <div class="section-divider"></div>
-
-<!-- METAS -->
 <div>
 <label class="field-label"><span id="lblMetas">Metas principales</span> <span class="field-req">*</span></label>
 <div class="meta-grid" id="metaGrid"></div>
@@ -237,18 +257,151 @@ body { background: #fff !important; }
 <input id="otrasMetas" class="field" placeholder="Otras metas (opcional)..." />
 </div>
 </div>
-
 <div class="section-divider"></div>
-
-<!-- PRESUPUESTO -->
 <div>
 <label class="field-label" id="lblPresupuesto">Presupuesto mensual para marketing</label>
 <select id="presupuesto" class="field field-select"></select>
 </div>
 </div>
 
-<div class="error-box" id="errorBox"></div>
-<button class="submit-btn" id="submitBtn" onclick="generar()">✨ Generar Auditoría Gratis</button>
+<div class="error-box" id="errorBoxQuick"></div>
+<button class="submit-btn" id="submitBtnQuick" onclick="generar('quick')">✨ Generar Auditoría Gratis</button>
+</div>
+
+<!-- COMPLETE FORM -->
+<div id="completeFormCard" class="form-card" style="display:none;">
+<div class="form-title" id="formTitleTextC">Auditoría Completa — con entrevista</div>
+<div class="form-sub" id="formSubTextC">Los campos marcados con * son obligatorios</div>
+
+<div class="form-grid">
+
+<div class="block-header" id="blk1Text">Bloque 1 — Conocer el negocio</div>
+<div>
+<label class="field-label"><span id="lblCNombre">Nombre completo del negocio</span> <span class="field-req">*</span></label>
+<input id="cNombre" class="field" placeholder="" />
+</div>
+<div class="form-row">
+<div>
+<label class="field-label"><span id="lblCIndustria">Industria</span> <span class="field-req">*</span></label>
+<select id="cIndustria" class="field field-select" onchange="toggleOtro('cIndustria','cOtroIndustriaField')"></select>
+<div id="cOtroIndustriaField" style="display:none;margin-top:8px;">
+<input id="cOtroIndustria" class="field" placeholder="" />
+</div>
+</div>
+<div>
+<label class="field-label" id="lblCCiudad">Ciudad</label>
+<input id="cCiudad" class="field" placeholder="" />
+</div>
+</div>
+<div>
+<label class="field-label" id="lblQueOfrece">¿Qué ofrece exactamente y desde cuándo?</label>
+<textarea id="cQueOfrece" class="field field-textarea" rows="2" placeholder=""></textarea>
+</div>
+<div>
+<label class="field-label" id="lblDesdeCuando">¿Desde cuándo en la ubicación/sitio actual?</label>
+<input id="cDesdeCuando" class="field" placeholder="" />
+</div>
+<div>
+<label class="field-label" id="lblClientesIdeales">¿Quiénes son sus clientes ideales?</label>
+<textarea id="cClientesIdeales" class="field field-textarea" rows="2" placeholder=""></textarea>
+</div>
+<div class="form-row">
+<div>
+<label class="field-label" id="lblEquipo">¿Trabaja sola/o o tiene equipo?</label>
+<select id="cEquipo" class="field field-select"></select>
+</div>
+<div>
+<label class="field-label" id="lblUbicacion">Ubicación física, online, o ambas</label>
+<select id="cUbicacion" class="field field-select"></select>
+</div>
+</div>
+
+<div class="block-header" id="blk2Text">Bloque 2 — Situación digital actual</div>
+<div>
+<label class="field-label" id="lblCRedes">Redes sociales activas</label>
+<div class="check-grid" id="cRedesGrid"></div>
+<div class="other-field" id="cOtroRedesField">
+<input id="cOtroRedes" class="field" style="margin-top:0;" placeholder="" />
+</div>
+<div style="margin-top:8px;">
+<label class="check-item" id="cCheckNinguna" onclick="toggleNinguna(this,'cRedesGrid','cOtroRedesField')" style="display:inline-flex;width:auto;">
+<input type="checkbox" value="Ninguna" onchange="event.stopPropagation()"> <span id="lblCNinguna">🚫 Ninguna por ahora</span>
+</label>
+</div>
+</div>
+<div class="form-row">
+<div>
+<label class="field-label" id="lblFrecuencia">Frecuencia de publicación</label>
+<select id="cFrecuencia" class="field field-select"></select>
+</div>
+<div>
+<label class="field-label" id="lblGoogleBusiness">¿Perfil de Google Business configurado?</label>
+<select id="cGoogleBusiness" class="field field-select"></select>
+</div>
+</div>
+<div class="form-row">
+<div>
+<label class="field-label" id="lblSitioWeb">¿Tiene página web?</label>
+<select id="cSitioWeb" class="field field-select"></select>
+</div>
+<div>
+<label class="field-label" id="lblApareceGoogle">Si lo buscan en Google, ¿aparece?</label>
+<select id="cApareceGoogle" class="field field-select"></select>
+</div>
+</div>
+<div>
+<label class="field-label" id="lblWhatsapp">¿Usa WhatsApp Business o normal?</label>
+<select id="cWhatsapp" class="field field-select"></select>
+</div>
+
+<div class="block-header" id="blk3Text">Bloque 3 — El problema real</div>
+<div>
+<label class="field-label"><span id="lblCProblema">¿Cuál es el mayor reto ahora mismo?</span> <span class="field-req">*</span></label>
+<textarea id="cProblema" class="field field-textarea" rows="3" placeholder=""></textarea>
+</div>
+<div>
+<label class="field-label" id="lblOrigenClientes">¿De dónde vienen sus clientes actualmente?</label>
+<textarea id="cOrigenClientes" class="field field-textarea" rows="2" placeholder=""></textarea>
+</div>
+<div>
+<label class="field-label" id="lblPredictibilidad">¿Qué tan predecible es su ingreso mes a mes?</label>
+<select id="cPredictibilidad" class="field field-select"></select>
+</div>
+<div>
+<label class="field-label" id="lblMarketingPrevio">¿Ha invertido en marketing antes? ¿Qué pasó?</label>
+<textarea id="cMarketingPrevio" class="field field-textarea" rows="2" placeholder=""></textarea>
+</div>
+<div>
+<label class="field-label" id="lblUnaCosa">Si pudiera cambiar UNA sola cosa en 30 días, ¿qué sería?</label>
+<input id="cUnaCosa" class="field" placeholder="" />
+</div>
+
+<div class="block-header" id="blk4Text">Bloque 4 — Metas y presupuesto</div>
+<div>
+<label class="field-label"><span id="lblCMetas">Metas principales</span> <span class="field-req">*</span></label>
+<div class="meta-grid" id="cMetaGrid"></div>
+<div style="margin-top:8px;">
+<input id="cOtrasMetas" class="field" placeholder="" />
+</div>
+</div>
+<div>
+<label class="field-label" id="lblMeta90">¿Cómo se ve su negocio "funcionando bien" en 90 días?</label>
+<textarea id="cMeta90" class="field field-textarea" rows="2" placeholder=""></textarea>
+</div>
+<div class="form-row">
+<div>
+<label class="field-label" id="lblCPresupuesto">Presupuesto mensual para marketing</label>
+<select id="cPresupuesto" class="field field-select"></select>
+</div>
+<div>
+<label class="field-label" id="lblTrabajadoAntes">¿Ha trabajado antes con alguien de marketing?</label>
+<select id="cTrabajadoAntes" class="field field-select"></select>
+</div>
+</div>
+</div>
+
+<div class="error-box" id="errorBoxComplete"></div>
+<button class="submit-btn" id="submitBtnComplete" onclick="generar('complete')">✨ Generar Auditoría Completa</button>
 </div>
 
 <div class="loading-msg" id="loadingMsg">Analizando el negocio y creando tu plan personalizado...</div>
@@ -309,8 +462,17 @@ headerTitle:"Audita Conmigo",
 headerDesc:"Tu negocio recibe en segundos un diagnóstico de crecimiento, un plan de 30 días y contenido listo para publicar — generado por IA, pensado para pequeños negocios.",
 apiConfigured:"🔑 API Key configurada ✓",
 apiChange:"Cambiar",
+modeChange:"← Cambiar tipo de auditoría",
+modeTitle:"¿Qué tipo de auditoría vas a hacer?",
+modeSub:"Elige según el contexto",
+modeQuickTitle:"⚡ Auditoría Rápida",
+modeQuickDesc:"Para el link público en redes sociales. El dueño del negocio la llena solo, sin entrevista previa.",
+modeCompleteTitle:"📋 Auditoría Completa",
+modeCompleteDesc:"Para usar después de tu reunión/entrevista con el dueño. Aprovecha toda la información de los 4 bloques.",
 formTitle:"Cuéntanos sobre el negocio",
 formSub:"Los campos marcados con * son obligatorios",
+formTitleC:"Auditoría Completa — con entrevista",
+formSubC:"Los campos marcados con * son obligatorios. Los demás, llénalos con lo que hayas recogido en la entrevista.",
 lblNombre:"Nombre del negocio",
 phNombre:"Ej: Salón Bella by Carmen",
 lblIndustria:"Industria",
@@ -337,8 +499,10 @@ lblPresupuesto:"Presupuesto mensual para marketing",
 selectRange:"Selecciona un rango...",
 presupuesto:["Sin presupuesto por ahora","Menos de $100/mes","$100 – $300/mes","$300 – $500/mes","Más de $500/mes"],
 errRequired:"Por favor completa: nombre del negocio, industria, años en operación y reto actual.",
+errRequiredC:"Por favor completa: nombre del negocio, industria y reto actual.",
 errMetas:"Selecciona al menos una meta principal.",
 submitBtn:"✨ Generar Auditoría Gratis",
+submitBtnC:"✨ Generar Auditoría Completa",
 submitBtnLoading:"Generando auditoría con IA...",
 loadingMsg:"Analizando el negocio y creando tu plan personalizado...",
 diagLabel:"DIAGNÓSTICO",
@@ -355,6 +519,55 @@ errAlertKey:"Por favor pega tu API Key antes de continuar.",
 errPrefix:"Error: ",
 errSuffix:". Verifica tu API Key e intenta de nuevo.",
 promptLangName:"español",
+// Complete-mode specific
+blk1:"Bloque 1 — Conocer el negocio",
+blk2:"Bloque 2 — Situación digital actual",
+blk3:"Bloque 3 — El problema real",
+blk4:"Bloque 4 — Metas y presupuesto",
+lblCNombre:"Nombre completo del negocio",
+phCNombre:"Ej: Salón Bella by Carmen LLC",
+lblCIndustria:"Industria",
+phCOtroIndustria:"Especifica la industria...",
+lblCCiudad:"Ciudad",
+phCCiudad:"Ej: Columbus, OH",
+lblQueOfrece:"¿Qué ofrece exactamente y desde cuándo?",
+phQueOfrece:"Ej: Servicio de pestañas y cejas desde 2021, empezó a domicilio y ahora tiene local propio",
+lblDesdeCuando:"¿Desde cuándo en la ubicación/sitio actual?",
+phDesdeCuando:"Ej: 8 meses en este local",
+lblClientesIdeales:"¿Quiénes son sus clientes ideales?",
+phClientesIdeales:"Ej: Mujeres 25–45 años, hispanas, que buscan un servicio de confianza y cercano",
+lblEquipo:"¿Trabaja sola/o o tiene equipo?",
+equipo:["Trabaja sola/o","Equipo pequeño (2–5 personas)","Equipo grande (6+ personas)"],
+lblUbicacion:"Ubicación física, online, o ambas",
+ubicacion:["Solo local físico","Solo online","Local físico y online"],
+lblCRedes:"Redes sociales activas",
+lblCNinguna:"🚫 Ninguna por ahora",
+lblFrecuencia:"Frecuencia de publicación",
+frecuencia:["Diario","3–4 veces por semana","1–2 veces por semana","Rara vez","Nunca"],
+lblGoogleBusiness:"¿Perfil de Google Business configurado?",
+googleBusiness:["Sí, configurado y activo","Sí, pero desactualizado","No","No sabe"],
+lblSitioWeb:"¿Tiene página web?",
+sitioWeb:["Sí, tiene página web","No, solo redes sociales","No tiene ninguna presencia web"],
+lblApareceGoogle:"Si lo buscan en Google, ¿aparece?",
+apareceGoogle:["Sí aparece","No aparece","No está seguro/a"],
+lblWhatsapp:"¿Usa WhatsApp Business o normal?",
+whatsapp:["WhatsApp Business","WhatsApp normal","No usa WhatsApp"],
+lblCProblema:"¿Cuál es el mayor reto ahora mismo?",
+phCProblema:"En sus propias palabras — lo que dijo en la entrevista",
+lblOrigenClientes:"¿De dónde vienen sus clientes actualmente?",
+phOrigenClientes:"Ej: Casi todo es boca a boca y referidos de clientas actuales",
+lblPredictibilidad:"¿Qué tan predecible es su ingreso mes a mes?",
+predictibilidad:["Muy predecible","Algo variable","Muy variable — hay meses buenos y meses malos"],
+lblMarketingPrevio:"¿Ha invertido en marketing antes? ¿Qué pasó?",
+phMarketingPrevio:"Ej: Probó anuncios de Facebook por 2 semanas, no vio resultados y lo dejó",
+lblUnaCosa:"Si pudiera cambiar UNA sola cosa en 30 días, ¿qué sería?",
+phUnaCosa:"Ej: Que la gente lo encuentre en Google al buscar 'salón de uñas cerca de mí'",
+lblCMetas:"Metas principales",
+lblMeta90:'¿Cómo se ve su negocio "funcionando bien" en 90 días?',
+phMeta90:"Ej: Agenda llena las 4 semanas, sin tener que perseguir clientes",
+lblCPresupuesto:"Presupuesto mensual para marketing",
+lblTrabajadoAntes:"¿Ha trabajado antes con alguien de marketing?",
+trabajadoAntes:["Sí","No"],
 pdf:{
 title:"Auditoría — ",
 printBtn:"⬇️ Guardar como PDF",
@@ -382,8 +595,17 @@ headerTitle:"Audit With Me",
 headerDesc:"Your business gets a growth diagnosis, a 30-day plan, and ready-to-post content in seconds — powered by AI, built for small businesses.",
 apiConfigured:"🔑 API Key configured ✓",
 apiChange:"Change",
+modeChange:"← Change audit type",
+modeTitle:"What type of audit are you doing?",
+modeSub:"Choose based on the context",
+modeQuickTitle:"⚡ Quick Audit",
+modeQuickDesc:"For the public link on social media. The business owner fills it out alone, without a prior interview.",
+modeCompleteTitle:"📋 Complete Audit",
+modeCompleteDesc:"For use after your meeting/interview with the owner. Uses everything from the 4 interview blocks.",
 formTitle:"Tell us about the business",
 formSub:"Fields marked with * are required",
+formTitleC:"Complete Audit — from interview",
+formSubC:"Fields marked with * are required. Fill the rest with what you gathered in the interview.",
 lblNombre:"Business name",
 phNombre:"E.g.: Bella Beauty Salon",
 lblIndustria:"Industry",
@@ -410,8 +632,10 @@ lblPresupuesto:"Monthly marketing budget",
 selectRange:"Select a range...",
 presupuesto:["No budget for now","Less than $100/month","$100 – $300/month","$300 – $500/month","More than $500/month"],
 errRequired:"Please complete: business name, industry, years in business, and current challenge.",
+errRequiredC:"Please complete: business name, industry, and current challenge.",
 errMetas:"Select at least one main goal.",
 submitBtn:"✨ Generate Free Audit",
+submitBtnC:"✨ Generate Complete Audit",
 submitBtnLoading:"Generating audit with AI...",
 loadingMsg:"Analyzing the business and building your personalized plan...",
 diagLabel:"DIAGNOSIS",
@@ -428,6 +652,54 @@ errAlertKey:"Please paste your API Key before continuing.",
 errPrefix:"Error: ",
 errSuffix:". Check your API Key and try again.",
 promptLangName:"English",
+blk1:"Block 1 — Know the business",
+blk2:"Block 2 — Current digital situation",
+blk3:"Block 3 — The real problem",
+blk4:"Block 4 — Goals and budget",
+lblCNombre:"Full business name",
+phCNombre:"E.g.: Bella Beauty Salon LLC",
+lblCIndustria:"Industry",
+phCOtroIndustria:"Specify the industry...",
+lblCCiudad:"City",
+phCCiudad:"E.g.: Columbus, OH",
+lblQueOfrece:"What do they offer exactly, and since when?",
+phQueOfrece:"E.g.: Lash and brow services since 2021, started as mobile and now has their own location",
+lblDesdeCuando:"How long at the current location/site?",
+phDesdeCuando:"E.g.: 8 months at this location",
+lblClientesIdeales:"Who are their ideal clients?",
+phClientesIdeales:"E.g.: Women 25–45, Hispanic, looking for a trustworthy, close-knit service",
+lblEquipo:"Do they work solo or have a team?",
+equipo:["Works solo","Small team (2–5 people)","Large team (6+ people)"],
+lblUbicacion:"Physical location, online, or both",
+ubicacion:["Physical location only","Online only","Both physical location and online"],
+lblCRedes:"Active social media",
+lblCNinguna:"🚫 None for now",
+lblFrecuencia:"Posting frequency",
+frecuencia:["Daily","3–4 times per week","1–2 times per week","Rarely","Never"],
+lblGoogleBusiness:"Google Business profile set up?",
+googleBusiness:["Yes, set up and active","Yes, but outdated","No","Not sure"],
+lblSitioWeb:"Do they have a website?",
+sitioWeb:["Yes, has a website","No, only social media","No web presence at all"],
+lblApareceGoogle:"If someone searches on Google, do they show up?",
+apareceGoogle:["Yes, shows up","No, doesn't show up","Not sure"],
+lblWhatsapp:"WhatsApp Business or regular WhatsApp?",
+whatsapp:["WhatsApp Business","Regular WhatsApp","Doesn't use WhatsApp"],
+lblCProblema:"What's the biggest challenge right now?",
+phCProblema:"In their own words — what they said in the interview",
+lblOrigenClientes:"Where do their clients currently come from?",
+phOrigenClientes:"E.g.: Almost all word of mouth and referrals from current clients",
+lblPredictibilidad:"How predictable is their monthly income?",
+predictibilidad:["Very predictable","Somewhat variable","Very variable — good months and bad months"],
+lblMarketingPrevio:"Have they invested in marketing before? What happened?",
+phMarketingPrevio:"E.g.: Tried Facebook ads for 2 weeks, saw no results, and stopped",
+lblUnaCosa:"If they could change ONE thing in the next 30 days, what would it be?",
+phUnaCosa:"E.g.: Getting found on Google when people search 'nail salon near me'",
+lblCMetas:"Main goals",
+lblMeta90:'What does the business "doing well" look like in 90 days?',
+phMeta90:"E.g.: Fully booked all 4 weeks, without having to chase clients",
+lblCPresupuesto:"Monthly marketing budget",
+lblTrabajadoAntes:"Have they worked with a marketer before?",
+trabajadoAntes:["Yes","No"],
 pdf:{
 title:"Audit — ",
 printBtn:"⬇️ Save as PDF",
@@ -453,6 +725,28 @@ setLangStorage(next);
 renderLang();
 }
 
+// ══════════════════ MODE STATE ══════════════════
+let currentMode = null; // 'quick' | 'complete'
+let isAdmin = false; // true only when the URL has ?modo=completa — controls whether the mode switcher is visible
+function showModeScreen(){
+currentMode=null;
+document.getElementById('modeScreen').style.display='block';
+document.getElementById('quickFormCard').style.display='none';
+document.getElementById('completeFormCard').style.display='none';
+document.getElementById('modeChangeBtn').style.display='none';
+document.getElementById('results').style.display='none';
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function selectMode(mode){
+currentMode=mode;
+document.getElementById('modeScreen').style.display='none';
+document.getElementById('quickFormCard').style.display=mode==='quick'?'block':'none';
+document.getElementById('completeFormCard').style.display=mode==='complete'?'block':'none';
+// Public visitors (no ?modo=completa in the URL) never see a way to switch to the interview-mode form.
+document.getElementById('modeChangeBtn').style.display = isAdmin ? 'inline' : 'none';
+document.getElementById('results').style.display='none';
+}
+
 function renderLang(){
 const lang=getLang();
 const t=T[lang];
@@ -476,44 +770,108 @@ document.getElementById('headerDescText').textContent=t.headerDesc;
 
 document.getElementById('apiBarText').textContent=t.apiConfigured;
 document.getElementById('apiChangeBtn').textContent=t.apiChange;
+document.getElementById('modeChangeBtn').textContent=t.modeChange;
 
+document.getElementById('modeTitleText').textContent=t.modeTitle;
+document.getElementById('modeSubText').textContent=t.modeSub;
+document.getElementById('modeQuickTitleText').textContent=t.modeQuickTitle;
+document.getElementById('modeQuickDescText').textContent=t.modeQuickDesc;
+document.getElementById('modeCompleteTitleText').textContent=t.modeCompleteTitle;
+document.getElementById('modeCompleteDescText').textContent=t.modeCompleteDesc;
+
+// ── QUICK FORM ──
 document.getElementById('formTitleText').textContent=t.formTitle;
 document.getElementById('formSubText').textContent=t.formSub;
-
 document.getElementById('lblNombre').textContent=t.lblNombre;
 document.getElementById('nombre').placeholder=t.phNombre;
-
 document.getElementById('lblIndustria').textContent=t.lblIndustria;
 buildSelect('industria', t.industrias, t.selectDefault, true);
 document.getElementById('otroIndustria').placeholder=t.phOtroIndustria;
-
 document.getElementById('lblAnos').textContent=t.lblAnos;
 buildSelect('anos', t.anos, t.selectDefault);
-
 document.getElementById('lblCiudad').textContent=t.lblCiudad;
 document.getElementById('ciudad').placeholder=t.phCiudad;
-
 document.getElementById('lblRedes').textContent=t.lblRedes;
-buildRedesGrid(t);
+buildCheckGrid('redesGrid', t.redes, t.redesOtro, 'toggleCheck', 'check-item');
 document.getElementById('otroRedes').placeholder=t.phOtroRedes;
 document.getElementById('lblNinguna').textContent=t.ninguna;
-
 document.getElementById('lblProblema').textContent=t.lblProblema;
 document.getElementById('problema').placeholder=t.phProblema;
-
 document.getElementById('lblIntentado').textContent=t.lblIntentado;
 document.getElementById('intentado').placeholder=t.phIntentado;
-
 document.getElementById('lblMetas').textContent=t.lblMetas;
-buildMetaGrid(t);
+buildCheckGrid('metaGrid', t.metas, null, 'toggleMeta', 'meta-item');
 document.getElementById('otrasMetas').placeholder=t.phOtrasMetas;
-
 document.getElementById('lblPresupuesto').textContent=t.lblPresupuesto;
 buildSelect('presupuesto', t.presupuesto, t.selectRange);
+document.getElementById('submitBtnQuick').textContent=t.submitBtn;
 
-document.getElementById('submitBtn').textContent=t.submitBtn;
+// ── COMPLETE FORM ──
+document.getElementById('formTitleTextC').textContent=t.formTitleC;
+document.getElementById('formSubTextC').textContent=t.formSubC;
+document.getElementById('blk1Text').textContent=t.blk1;
+document.getElementById('blk2Text').textContent=t.blk2;
+document.getElementById('blk3Text').textContent=t.blk3;
+document.getElementById('blk4Text').textContent=t.blk4;
+
+document.getElementById('lblCNombre').textContent=t.lblCNombre;
+document.getElementById('cNombre').placeholder=t.phCNombre;
+document.getElementById('lblCIndustria').textContent=t.lblCIndustria;
+buildSelect('cIndustria', t.industrias, t.selectDefault, true);
+document.getElementById('cOtroIndustria').placeholder=t.phCOtroIndustria;
+document.getElementById('lblCCiudad').textContent=t.lblCCiudad;
+document.getElementById('cCiudad').placeholder=t.phCCiudad;
+document.getElementById('lblQueOfrece').textContent=t.lblQueOfrece;
+document.getElementById('cQueOfrece').placeholder=t.phQueOfrece;
+document.getElementById('lblDesdeCuando').textContent=t.lblDesdeCuando;
+document.getElementById('cDesdeCuando').placeholder=t.phDesdeCuando;
+document.getElementById('lblClientesIdeales').textContent=t.lblClientesIdeales;
+document.getElementById('cClientesIdeales').placeholder=t.phClientesIdeales;
+document.getElementById('lblEquipo').textContent=t.lblEquipo;
+buildSelect('cEquipo', t.equipo, t.selectDefault);
+document.getElementById('lblUbicacion').textContent=t.lblUbicacion;
+buildSelect('cUbicacion', t.ubicacion, t.selectDefault);
+
+document.getElementById('lblCRedes').textContent=t.lblCRedes;
+buildCheckGrid('cRedesGrid', t.redes, t.redesOtro, 'toggleCheck', 'check-item');
+document.getElementById('cOtroRedes').placeholder=t.phOtroRedes;
+document.getElementById('lblCNinguna').textContent=t.lblCNinguna;
+document.getElementById('lblFrecuencia').textContent=t.lblFrecuencia;
+buildSelect('cFrecuencia', t.frecuencia, t.selectDefault);
+document.getElementById('lblGoogleBusiness').textContent=t.lblGoogleBusiness;
+buildSelect('cGoogleBusiness', t.googleBusiness, t.selectDefault);
+document.getElementById('lblSitioWeb').textContent=t.lblSitioWeb;
+buildSelect('cSitioWeb', t.sitioWeb, t.selectDefault);
+document.getElementById('lblApareceGoogle').textContent=t.lblApareceGoogle;
+buildSelect('cApareceGoogle', t.apareceGoogle, t.selectDefault);
+document.getElementById('lblWhatsapp').textContent=t.lblWhatsapp;
+buildSelect('cWhatsapp', t.whatsapp, t.selectDefault);
+
+document.getElementById('lblCProblema').textContent=t.lblCProblema;
+document.getElementById('cProblema').placeholder=t.phCProblema;
+document.getElementById('lblOrigenClientes').textContent=t.lblOrigenClientes;
+document.getElementById('cOrigenClientes').placeholder=t.phOrigenClientes;
+document.getElementById('lblPredictibilidad').textContent=t.lblPredictibilidad;
+buildSelect('cPredictibilidad', t.predictibilidad, t.selectDefault);
+document.getElementById('lblMarketingPrevio').textContent=t.lblMarketingPrevio;
+document.getElementById('cMarketingPrevio').placeholder=t.phMarketingPrevio;
+document.getElementById('lblUnaCosa').textContent=t.lblUnaCosa;
+document.getElementById('cUnaCosa').placeholder=t.phUnaCosa;
+
+document.getElementById('lblCMetas').textContent=t.lblCMetas;
+buildCheckGrid('cMetaGrid', t.metas, null, 'toggleMeta', 'meta-item');
+document.getElementById('cOtrasMetas').placeholder=t.phOtrasMetas;
+document.getElementById('lblMeta90').textContent=t.lblMeta90;
+document.getElementById('cMeta90').placeholder=t.phMeta90;
+document.getElementById('lblCPresupuesto').textContent=t.lblCPresupuesto;
+buildSelect('cPresupuesto', t.presupuesto, t.selectRange);
+document.getElementById('lblTrabajadoAntes').textContent=t.lblTrabajadoAntes;
+buildSelect('cTrabajadoAntes', t.trabajadoAntes, t.selectDefault);
+
+document.getElementById('submitBtnComplete').textContent=t.submitBtnC;
+
+// ── RESULTS ──
 document.getElementById('loadingMsg').textContent=t.loadingMsg;
-
 document.getElementById('diagLabelText').textContent=t.diagLabel;
 document.getElementById('scoreLabelText').textContent=t.scoreLabel;
 document.getElementById('qwLabelText').textContent=t.qwLabel;
@@ -525,6 +883,7 @@ document.getElementById('btnNuevaText').textContent=t.btnNueva;
 document.getElementById('btnPdf').textContent=t.btnPdf;
 }
 
+// ══════════════════ DOM BUILDERS ══════════════════
 function buildSelect(id, options, defaultLabel, markLastAsOther){
 const sel=document.getElementById(id);
 sel.innerHTML='';
@@ -534,8 +893,6 @@ optDefault.textContent=defaultLabel;
 sel.appendChild(optDefault);
 options.forEach((o,idx)=>{
 const opt=document.createElement('option');
-// The "Otro/Other" option always needs a language-independent value so
-// toggleOtroIndustria() and generar() work the same in ES and EN.
 opt.value=(markLastAsOther&&idx===options.length-1)?'__OTHER__':o;
 opt.textContent=o;
 sel.appendChild(opt);
@@ -543,35 +900,28 @@ sel.appendChild(opt);
 sel.value='';
 }
 
-function buildRedesGrid(t){
-const grid=document.getElementById('redesGrid');
+function buildCheckGrid(gridId, pairs, otroLabel, toggleFn, itemClass){
+const grid=document.getElementById(gridId);
 grid.innerHTML='';
-t.redes.forEach(pair=>{
+pairs.forEach(pair=>{
 const label=document.createElement('label');
-label.className='check-item';
-label.onclick=function(){toggleCheck(label);};
+label.className=itemClass;
+label.onclick=function(){window[toggleFn](label);};
 label.innerHTML=`<input type="checkbox" value="${pair[0]}" onchange="event.stopPropagation()"> <span>${pair[1]}</span>`;
 grid.appendChild(label);
 });
-const otroLabel=document.createElement('label');
-otroLabel.className='check-item';
-otroLabel.id='checkOtroRedes';
-otroLabel.onclick=function(){toggleCheck(otroLabel);toggleOtroRedes();};
-otroLabel.innerHTML=`<input type="checkbox" value="Otro" onchange="event.stopPropagation()"> <span>${t.redesOtro}</span>`;
-grid.appendChild(otroLabel);
-document.getElementById('otroRedesField').style.display='none';
+if(otroLabel){
+const otro=document.createElement('label');
+otro.className=itemClass;
+if(gridId==='redesGrid')otro.id='checkOtroRedes';
+if(gridId==='cRedesGrid')otro.id='cCheckOtroRedes';
+const fieldId = gridId==='redesGrid' ? 'otroRedesField' : 'cOtroRedesField';
+otro.onclick=function(){window[toggleFn](otro);toggleOtroRedesFor(otro.id, fieldId);};
+otro.innerHTML=`<input type="checkbox" value="Otro" onchange="event.stopPropagation()"> <span>${otroLabel}</span>`;
+grid.appendChild(otro);
+const field=document.getElementById(fieldId);
+if(field)field.style.display='none';
 }
-
-function buildMetaGrid(t){
-const grid=document.getElementById('metaGrid');
-grid.innerHTML='';
-t.metas.forEach(pair=>{
-const label=document.createElement('label');
-label.className='meta-item';
-label.onclick=function(){toggleMeta(label);};
-label.innerHTML=`<input type="checkbox" value="${pair[0]}" onchange="event.stopPropagation()"> <span>${pair[1]}</span>`;
-grid.appendChild(label);
-});
 }
 
 // ── localStorage (API key) ──
@@ -584,7 +934,14 @@ localStorage.setItem('gpa_gemini_key',k);
 showApp();
 }
 function changeKey(){localStorage.removeItem('gpa_gemini_key');document.getElementById('appScreen').style.display='none';document.getElementById('setupScreen').style.display='block';}
-function showApp(){document.getElementById('setupScreen').style.display='none';document.getElementById('appScreen').style.display='block';}
+function showApp(){
+document.getElementById('setupScreen').style.display='none';
+document.getElementById('appScreen').style.display='block';
+const params=new URLSearchParams(window.location.search);
+isAdmin = params.get('modo')==='completa';
+// Public link (no param) -> straight to Quick Audit. Your private link (?modo=completa) -> straight to Complete Audit.
+selectMode(isAdmin ? 'complete' : 'quick');
+}
 window.onload=function(){renderLang();if(getKey())showApp();};
 
 // ── Checkboxes helpers ──
@@ -598,51 +955,56 @@ const cb=label.querySelector('input');
 cb.checked=!cb.checked;
 label.classList.toggle('checked',cb.checked);
 }
-function toggleOtroRedes(){
-const cb=document.getElementById('checkOtroRedes').querySelector('input');
-document.getElementById('otroRedesField').style.display=cb.checked?'block':'none';
+function toggleOtroRedesFor(checkboxLabelId, fieldId){
+const cb=document.getElementById(checkboxLabelId).querySelector('input');
+document.getElementById(fieldId).style.display=cb.checked?'block':'none';
 }
-function toggleNinguna(label){
+function toggleOtro(selectId, fieldId){
+const v=document.getElementById(selectId).value;
+const f=document.getElementById(fieldId);
+f.style.display=(v==='__OTHER__')?'block':'none';
+}
+function toggleNinguna(label, gridId, otroFieldId){
 const cb=label.querySelector('input');
 cb.checked=!cb.checked;
 label.classList.toggle('checked',cb.checked);
 if(cb.checked){
-document.querySelectorAll('#redesGrid .check-item input').forEach(i=>{i.checked=false;i.closest('.check-item').classList.remove('checked');});
-document.getElementById('otroRedesField').style.display='none';
+document.querySelectorAll('#'+gridId+' .check-item input').forEach(i=>{i.checked=false;i.closest('.check-item').classList.remove('checked');});
+document.getElementById(otroFieldId).style.display='none';
 }
 }
 function getChecked(gridId){
 return [...document.querySelectorAll('#'+gridId+' input[type=checkbox]:checked')].map(i=>i.value);
 }
-function getMetasChecked(){
-return [...document.querySelectorAll('#metaGrid input[type=checkbox]:checked')].map(i=>i.value);
+function getMetasChecked(gridId){
+return [...document.querySelectorAll('#'+gridId+' input[type=checkbox]:checked')].map(i=>i.value);
 }
 
-// ── Form ──
-function showError(m){const b=document.getElementById('errorBox');b.textContent=m;b.style.display='block';}
-function hideError(){document.getElementById('errorBox').style.display='none';}
+// ── Form helpers ──
+function showError(boxId, m){const b=document.getElementById(boxId);b.textContent=m;b.style.display='block';}
+function hideError(boxId){document.getElementById(boxId).style.display='none';}
 
-function buildPrompt(lang, data){
-const t=T[lang];
+// ══════════════════ PROMPT BUILDERS ══════════════════
+function buildQuickPrompt(lang, d){
 if(lang==='es'){
 return `Actúa como un consultor experto en marketing digital y crecimiento para pequeños negocios locales, especializado en el mercado hispano de Estados Unidos.
 
 Analiza este negocio y genera una AUDITORÍA DE CRECIMIENTO completa y personalizada:
 
 INFORMACIÓN DEL NEGOCIO:
-- Nombre: ${data.nombre}
-- Industria: ${data.industria}
-- Años en operación: ${data.anos}
-- Ciudad: ${data.ciudad||'No especificada'}
-- Redes sociales activas: ${data.redesStr}
+- Nombre: ${d.nombre}
+- Industria: ${d.industria}
+- Años en operación: ${d.anos}
+- Ciudad: ${d.ciudad||'No especificada'}
+- Redes sociales activas: ${d.redesStr}
 
 SITUACIÓN ACTUAL:
-- Mayor reto actual: ${data.problema}
-- Qué han intentado sin éxito: ${data.intentado||'No especificado'}
+- Mayor reto actual: ${d.problema}
+- Qué han intentado sin éxito: ${d.intentado||'No especificado'}
 
 OBJETIVOS:
-- Metas principales: ${data.metasStr}
-- Presupuesto mensual disponible: ${data.presupuesto||'No especificado'}
+- Metas principales: ${d.metasStr}
+- Presupuesto mensual disponible: ${d.presupuesto||'No especificado'}
 
 INSTRUCCIONES IMPORTANTES:
 - Responde completamente en ESPAÑOL.
@@ -672,19 +1034,19 @@ return `Act as an expert consultant in digital marketing and growth for small lo
 Analyze this business and generate a complete, personalized GROWTH AUDIT:
 
 BUSINESS INFORMATION:
-- Name: ${data.nombre}
-- Industry: ${data.industria}
-- Years in business: ${data.anos}
-- City: ${data.ciudad||'Not specified'}
-- Active social media: ${data.redesStr}
+- Name: ${d.nombre}
+- Industry: ${d.industria}
+- Years in business: ${d.anos}
+- City: ${d.ciudad||'Not specified'}
+- Active social media: ${d.redesStr}
 
 CURRENT SITUATION:
-- Biggest current challenge: ${data.problema}
-- What they've tried without success: ${data.intentado||'Not specified'}
+- Biggest current challenge: ${d.problema}
+- What they've tried without success: ${d.intentado||'Not specified'}
 
 GOALS:
-- Main goals: ${data.metasStr}
-- Available monthly budget: ${data.presupuesto||'Not specified'}
+- Main goals: ${d.metasStr}
+- Available monthly budget: ${d.presupuesto||'Not specified'}
 
 IMPORTANT INSTRUCTIONS:
 - Respond entirely in ENGLISH.
@@ -711,9 +1073,126 @@ Respond ONLY in valid JSON format (no markdown, no backticks, no extra text), wi
 }
 }
 
-async function generar(){
-const lang=getLang();
-const t=T[lang];
+function buildCompletePrompt(lang, d){
+if(lang==='es'){
+return `Actúa como un consultor experto en marketing digital y crecimiento para pequeños negocios locales, especializado en el mercado hispano de Estados Unidos. Acabas de terminar una entrevista completa de descubrimiento con el dueño del negocio — tienes contexto real y detallado, no solo datos genéricos. Úsalo todo.
+
+PERFIL DEL NEGOCIO:
+- Nombre: ${d.nombre}
+- Industria: ${d.industria}
+- Ciudad: ${d.ciudad||'No especificada'}
+- Qué ofrece y desde cuándo: ${d.queOfrece||'No especificado'}
+- Tiempo en la ubicación/sitio actual: ${d.desdeCuando||'No especificado'}
+- Clientes ideales: ${d.clientesIdeales||'No especificado'}
+- Equipo: ${d.equipo||'No especificado'}
+- Ubicación física/online: ${d.ubicacion||'No especificado'}
+
+SITUACIÓN DIGITAL ACTUAL:
+- Redes sociales activas: ${d.redesStr}
+- Frecuencia de publicación: ${d.frecuencia||'No especificado'}
+- Google Business: ${d.googleBusiness||'No especificado'}
+- Página web: ${d.sitioWeb||'No especificado'}
+- ¿Aparece en Google al buscarlo?: ${d.apareceGoogle||'No especificado'}
+- WhatsApp: ${d.whatsapp||'No especificado'}
+
+EL PROBLEMA REAL (en palabras del dueño):
+- Mayor reto ahora mismo: ${d.problema}
+- De dónde vienen sus clientes hoy: ${d.origenClientes||'No especificado'}
+- Predictibilidad del ingreso mensual: ${d.predictibilidad||'No especificado'}
+- Qué ha intentado en marketing y qué pasó: ${d.marketingPrevio||'No especificado'}
+- La UNA cosa que cambiaría en 30 días: ${d.unaCosa||'No especificado'}
+
+METAS Y PRESUPUESTO:
+- Metas principales: ${d.metasStr}
+- Cómo se ve "funcionando bien" en 90 días: ${d.meta90||'No especificado'}
+- Presupuesto mensual disponible: ${d.presupuesto||'No especificado'}
+- ¿Ha trabajado antes con alguien de marketing?: ${d.trabajadoAntes||'No especificado'}
+
+INSTRUCCIONES IMPORTANTES:
+- Responde completamente en ESPAÑOL.
+- Este es un diagnóstico PROFUNDO, no genérico — haz referencia explícita a detalles concretos que el dueño mencionó (su reto en sus propias palabras, de dónde vienen sus clientes hoy, qué ya intentaron y por qué no funcionó).
+- El plan de 30 días debe ser el primer tramo hacia la visión de 90 días que describió el dueño — que se sienta como el inicio de ese camino, no una lista genérica.
+- Si ya trabajó antes con alguien de marketing sin éxito, reconócelo directamente y explica por qué este enfoque es diferente.
+- Adapta todo al presupuesto disponible. Si es "Sin presupuesto" o menos de $100, enfócate en estrategias 100% gratuitas.
+- Considera el canal de WhatsApp, el estado de Google Business y la predictibilidad del ingreso al priorizar qué atacar primero.
+
+Responde ÚNICAMENTE en formato JSON válido (sin markdown, sin backticks, sin texto adicional), con esta estructura exacta:
+{
+"diagnostico": "Párrafo de 4-5 oraciones, profundo y específico, que haga referencia directa a lo que el dueño contó en la entrevista",
+"puntuacion_presencia_digital": 7,
+"areas_criticas": ["área crítica 1", "área crítica 2", "área crítica 3"],
+"plan_30_dias": [
+{"semana": "Semana 1", "accion": "Acción específica, accionable, alineada con la meta de 90 días y dentro del presupuesto"},
+{"semana": "Semana 2", "accion": "Acción específica y accionable"},
+{"semana": "Semana 3", "accion": "Acción específica y accionable"},
+{"semana": "Semana 4", "accion": "Acción específica y accionable"}
+],
+"ideas_contenido": ["idea de post 1 con descripción", "idea 2", "idea 3", "idea 4", "idea 5"],
+"mensaje_promocional": "Copy de marketing listo para copiar y pegar, máximo 280 caracteres, tono cálido, que refleje la voz real del negocio",
+"quick_win": "UNA sola acción concreta que el negocio puede hacer HOY MISMO sin costo ni espera, idealmente relacionada con lo que el dueño dijo que cambiaría primero"
+}`;
+}else{
+return `Act as an expert consultant in digital marketing and growth for small local businesses in the United States. You just finished a full discovery interview with the business owner — you have real, detailed context, not just generic data. Use all of it.
+
+BUSINESS PROFILE:
+- Name: ${d.nombre}
+- Industry: ${d.industria}
+- City: ${d.ciudad||'Not specified'}
+- What they offer and since when: ${d.queOfrece||'Not specified'}
+- Time at current location/site: ${d.desdeCuando||'Not specified'}
+- Ideal clients: ${d.clientesIdeales||'Not specified'}
+- Team: ${d.equipo||'Not specified'}
+- Physical/online location: ${d.ubicacion||'Not specified'}
+
+CURRENT DIGITAL SITUATION:
+- Active social media: ${d.redesStr}
+- Posting frequency: ${d.frecuencia||'Not specified'}
+- Google Business: ${d.googleBusiness||'Not specified'}
+- Website: ${d.sitioWeb||'Not specified'}
+- Shows up on Google search?: ${d.apareceGoogle||'Not specified'}
+- WhatsApp: ${d.whatsapp||'Not specified'}
+
+THE REAL PROBLEM (in the owner's own words):
+- Biggest challenge right now: ${d.problema}
+- Where clients currently come from: ${d.origenClientes||'Not specified'}
+- Monthly income predictability: ${d.predictibilidad||'Not specified'}
+- What they've tried in marketing and what happened: ${d.marketingPrevio||'Not specified'}
+- The ONE thing they'd change in 30 days: ${d.unaCosa||'Not specified'}
+
+GOALS AND BUDGET:
+- Main goals: ${d.metasStr}
+- What "doing well" looks like in 90 days: ${d.meta90||'Not specified'}
+- Available monthly budget: ${d.presupuesto||'Not specified'}
+- Have they worked with a marketer before?: ${d.trabajadoAntes||'Not specified'}
+
+IMPORTANT INSTRUCTIONS:
+- Respond entirely in ENGLISH.
+- This is a DEEP diagnosis, not a generic one — reference specific details the owner mentioned (their challenge in their own words, where clients come from today, what they already tried and why it didn't work).
+- The 30-day plan should be the first stretch toward the 90-day vision the owner described — it should feel like the start of that path, not a generic checklist.
+- If they already worked with a marketer without success, acknowledge it directly and explain why this approach is different.
+- Adapt everything to the available budget. If it's "No budget" or under $100, focus on 100% free strategies.
+- Factor in the WhatsApp channel, Google Business status, and income predictability when deciding what to prioritize first.
+
+Respond ONLY in valid JSON format (no markdown, no backticks, no extra text), with this exact structure:
+{
+"diagnostico": "4-5 sentence paragraph, deep and specific, directly referencing what the owner shared in the interview",
+"puntuacion_presencia_digital": 7,
+"areas_criticas": ["critical area 1", "critical area 2", "critical area 3"],
+"plan_30_dias": [
+{"semana": "Week 1", "accion": "Specific, actionable step, aligned with the 90-day goal and within budget"},
+{"semana": "Week 2", "accion": "Specific, actionable step"},
+{"semana": "Week 3", "accion": "Specific, actionable step"},
+{"semana": "Week 4", "accion": "Specific, actionable step"}
+],
+"ideas_contenido": ["post idea 1 with description", "idea 2", "idea 3", "idea 4", "idea 5"],
+"mensaje_promocional": "Ready-to-copy marketing copy, max 280 characters, warm tone, reflecting the business's real voice",
+"quick_win": "ONE concrete action the business can do TODAY at no cost and no waiting, ideally tied to what the owner said they'd change first"
+}`;
+}
+}
+
+// ══════════════════ DATA GATHERING ══════════════════
+function gatherQuickData(lang){
 const nombre=document.getElementById('nombre').value.trim();
 const industriaRaw=document.getElementById('industria').value;
 const otroIndustriaVal=document.getElementById('otroIndustria').value.trim();
@@ -725,27 +1204,87 @@ const intentado=document.getElementById('intentado').value.trim();
 const otrasMetas=document.getElementById('otrasMetas').value.trim();
 const presupuesto=document.getElementById('presupuesto').value;
 
-// Redes
 let redes=getChecked('redesGrid');
 const otroRedes=document.getElementById('otroRedes').value.trim();
 if(redes.includes('Otro')&&otroRedes){redes=redes.filter(r=>r!=='Otro');redes.push(otroRedes);}
 const redesStr=redes.length?redes.join(', '):(lang==='es'?'Ninguna':'None');
 
-// Metas
-let metas=getMetasChecked();
+let metas=getMetasChecked('metaGrid');
 if(otrasMetas)metas.push(otrasMetas);
 const metasStr=metas.length?metas.join(', '):(lang==='es'?'No especificadas':'Not specified');
 
-hideError();
-if(!nombre||!industria||!anos||!problema){showError(t.errRequired);return;}
-if(metas.length===0&&!otrasMetas){showError(t.errMetas);return;}
+return {nombre,industria,anos,ciudad,redesStr,problema,intentado,metasStr,presupuesto,_metasCount:metas.length,_otrasMetas:otrasMetas};
+}
 
-const btn=document.getElementById('submitBtn');
+function gatherCompleteData(lang){
+const nombre=document.getElementById('cNombre').value.trim();
+const industriaRaw=document.getElementById('cIndustria').value;
+const otroIndustriaVal=document.getElementById('cOtroIndustria').value.trim();
+const industria=industriaRaw==='__OTHER__'?otroIndustriaVal:industriaRaw;
+const ciudad=document.getElementById('cCiudad').value.trim();
+const queOfrece=document.getElementById('cQueOfrece').value.trim();
+const desdeCuando=document.getElementById('cDesdeCuando').value.trim();
+const clientesIdeales=document.getElementById('cClientesIdeales').value.trim();
+const equipo=document.getElementById('cEquipo').value;
+const ubicacion=document.getElementById('cUbicacion').value;
+
+let redes=getChecked('cRedesGrid');
+const otroRedes=document.getElementById('cOtroRedes').value.trim();
+if(redes.includes('Otro')&&otroRedes){redes=redes.filter(r=>r!=='Otro');redes.push(otroRedes);}
+const redesStr=redes.length?redes.join(', '):(lang==='es'?'Ninguna':'None');
+
+const frecuencia=document.getElementById('cFrecuencia').value;
+const googleBusiness=document.getElementById('cGoogleBusiness').value;
+const sitioWeb=document.getElementById('cSitioWeb').value;
+const apareceGoogle=document.getElementById('cApareceGoogle').value;
+const whatsapp=document.getElementById('cWhatsapp').value;
+
+const problema=document.getElementById('cProblema').value.trim();
+const origenClientes=document.getElementById('cOrigenClientes').value.trim();
+const predictibilidad=document.getElementById('cPredictibilidad').value;
+const marketingPrevio=document.getElementById('cMarketingPrevio').value.trim();
+const unaCosa=document.getElementById('cUnaCosa').value.trim();
+
+const otrasMetas=document.getElementById('cOtrasMetas').value.trim();
+let metas=getMetasChecked('cMetaGrid');
+if(otrasMetas)metas.push(otrasMetas);
+const metasStr=metas.length?metas.join(', '):(lang==='es'?'No especificadas':'Not specified');
+
+const meta90=document.getElementById('cMeta90').value.trim();
+const presupuesto=document.getElementById('cPresupuesto').value;
+const trabajadoAntes=document.getElementById('cTrabajadoAntes').value;
+
+return {nombre,industria,ciudad,queOfrece,desdeCuando,clientesIdeales,equipo,ubicacion,
+redesStr,frecuencia,googleBusiness,sitioWeb,apareceGoogle,whatsapp,
+problema,origenClientes,predictibilidad,marketingPrevio,unaCosa,
+metasStr,meta90,presupuesto,trabajadoAntes,_metasCount:metas.length,_otrasMetas:otrasMetas};
+}
+
+// ══════════════════ GENERATE ══════════════════
+async function generar(mode){
+const lang=getLang();
+const t=T[lang];
+const errBoxId = mode==='quick' ? 'errorBoxQuick' : 'errorBoxComplete';
+const submitBtnId = mode==='quick' ? 'submitBtnQuick' : 'submitBtnComplete';
+hideError(errBoxId);
+
+let d, prompt;
+if(mode==='quick'){
+d=gatherQuickData(lang);
+if(!d.nombre||!d.industria||!d.anos||!d.problema){showError(errBoxId, t.errRequired);return;}
+if(d._metasCount===0&&!d._otrasMetas){showError(errBoxId, t.errMetas);return;}
+prompt=buildQuickPrompt(lang, d);
+}else{
+d=gatherCompleteData(lang);
+if(!d.nombre||!d.industria||!d.problema){showError(errBoxId, t.errRequiredC);return;}
+if(d._metasCount===0&&!d._otrasMetas){showError(errBoxId, t.errMetas);return;}
+prompt=buildCompletePrompt(lang, d);
+}
+
+const btn=document.getElementById(submitBtnId);
 btn.disabled=true;btn.textContent=t.submitBtnLoading;
 document.getElementById('loadingMsg').style.display='block';
 document.getElementById('results').style.display='none';
-
-const prompt=buildPrompt(lang, {nombre,industria,anos,ciudad,redesStr,problema,intentado,metasStr,presupuesto});
 
 try{
 const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${getKey()}`,{
@@ -773,41 +1312,35 @@ document.getElementById('rPromo').textContent='"'+r.mensaje_promocional+'"';
 document.getElementById('results').style.display='block';
 document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }catch(err){
-showError(t.errPrefix+err.message+t.errSuffix);
+showError(errBoxId, t.errPrefix+err.message+t.errSuffix);
 }finally{
-btn.disabled=false;btn.textContent=t.submitBtn;
+btn.disabled=false;btn.textContent = mode==='quick' ? t.submitBtn : t.submitBtnC;
 document.getElementById('loadingMsg').style.display='none';
 }
 }
 
-// ── Otro industria ──
-function toggleOtroIndustria(){
-const v=document.getElementById('industria').value;
-const f=document.getElementById('otroIndustriaField');
-f.style.display=(v==='__OTHER__')?'block':'none';
-if(v!=='__OTHER__')document.getElementById('otroIndustria').value='';
-}
-
 // ── Nueva Auditoría ──
 function nuevaAuditoria(){
-document.getElementById('nombre').value='';
-document.getElementById('industria').value='';
-document.getElementById('anos').value='';
-document.getElementById('ciudad').value='';
-document.getElementById('problema').value='';
-document.getElementById('intentado').value='';
-document.getElementById('otrasMetas').value='';
-document.getElementById('presupuesto').value='';
-document.getElementById('otroRedes').value='';
-document.getElementById('otroIndustria').value='';
+if(currentMode==='quick'){
+['nombre','industria','anos','ciudad','problema','intentado','otrasMetas','presupuesto','otroRedes','otroIndustria'].forEach(id=>{document.getElementById(id).value='';});
 document.getElementById('otroIndustriaField').style.display='none';
 document.getElementById('otroRedesField').style.display='none';
-document.querySelectorAll('.check-item input,.meta-item input,#checkNinguna input').forEach(cb=>{
-cb.checked=false;
-cb.closest('.check-item,.meta-item')?.classList.remove('checked');
+document.querySelectorAll('#quickFormCard .check-item input,#quickFormCard .meta-item input,#checkNinguna input').forEach(cb=>{
+cb.checked=false;cb.closest('.check-item,.meta-item')?.classList.remove('checked');
 });
+}else if(currentMode==='complete'){
+['cNombre','cIndustria','cCiudad','cQueOfrece','cDesdeCuando','cClientesIdeales','cEquipo','cUbicacion',
+'cOtroRedes','cFrecuencia','cGoogleBusiness','cSitioWeb','cApareceGoogle','cWhatsapp',
+'cProblema','cOrigenClientes','cPredictibilidad','cMarketingPrevio','cUnaCosa',
+'cOtrasMetas','cMeta90','cPresupuesto','cTrabajadoAntes','cOtroIndustria'].forEach(id=>{document.getElementById(id).value='';});
+document.getElementById('cOtroIndustriaField').style.display='none';
+document.getElementById('cOtroRedesField').style.display='none';
+document.querySelectorAll('#completeFormCard .check-item input,#completeFormCard .meta-item input,#cCheckNinguna input').forEach(cb=>{
+cb.checked=false;cb.closest('.check-item,.meta-item')?.classList.remove('checked');
+});
+}
 document.getElementById('results').style.display='none';
-hideError();
+if(currentMode)hideError(currentMode==='quick'?'errorBoxQuick':'errorBoxComplete');
 window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -818,7 +1351,8 @@ const t=T[lang];
 const btn=document.getElementById('btnPdf');
 btn.disabled=true;btn.textContent=t.btnPdfPreparing;
 try{
-const nombre=document.getElementById('nombre').value||(lang==='es'?'Negocio':'Business');
+const nombreField = currentMode==='complete' ? 'cNombre' : 'nombre';
+const nombre=document.getElementById(nombreField).value||(lang==='es'?'Negocio':'Business');
 const diag=document.getElementById('rDiag')?.textContent||'';
 const score=document.getElementById('rScore')?.textContent||'';
 const tags=[...document.querySelectorAll('#rTags .tag')].map(tg=>tg.textContent);
@@ -858,7 +1392,6 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 .header{background:#2B2118;color:#fff;padding:24px 28px 20px;margin-bottom:20px;}
 .header-badge{font-size:8pt;font-weight:700;color:#D9651A;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
 .header h1{font-size:22pt;margin-bottom:4px;}
-.header-sub{font-size:10pt;color:#C9B8A6;}
 .biz-name{font-size:16pt;font-weight:700;color:#2B2118;margin-bottom:2px;}
 .fecha{font-size:9pt;color:#8A7560;margin-bottom:16px;}
 .section{margin:0 28px 16px;}
