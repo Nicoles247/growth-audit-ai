@@ -41,6 +41,24 @@
   .ok{color:var(--taupe);font-size:14px;margin-top:10px}
   .hint{text-align:center;color:var(--stone);font-size:12.5px;margin-top:20px;line-height:1.5}
   .cfg-toggle{display:block;margin:18px auto 0;background:none;border:none;color:var(--stone);font-family:var(--sans);font-size:12.5px;text-decoration:underline;cursor:pointer}
+  .answer-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .act{flex:1;min-width:140px;padding:11px 12px;border-radius:3px;font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;transition:.15s}
+  .act.copy{background:var(--taupe);color:var(--cream);border:none}
+  .act.copy:hover{background:var(--ink-soft)}
+  .act.copy.done{background:var(--sage);color:var(--ink)}
+  .act.flag{background:transparent;color:var(--taupe);border:1.5px solid var(--line)}
+  .act.flag:hover{border-color:var(--taupe)}
+  .flagbox{margin-top:12px;padding:14px;background:var(--cream);border:1px solid var(--line);border-radius:4px}
+  .flagbox textarea{min-height:64px}
+  .flagbox .send{margin-top:10px}
+  .dash-toggle{position:relative}
+  .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:2px;background:var(--taupe);color:var(--cream);border-radius:10px;font-size:11px;font-weight:600;text-decoration:none}
+  .dash-item{border:1px solid var(--line);border-radius:4px;padding:13px 14px;margin-bottom:10px;background:var(--paper)}
+  .dash-item .dq{font-size:13px;color:var(--taupe);font-weight:600;margin-bottom:4px}
+  .dash-item .da{font-size:14px;color:var(--ink-soft);white-space:pre-wrap;margin-bottom:6px}
+  .dash-item .dn{font-size:13px;color:var(--ink);background:var(--cream);border-left:3px solid var(--sage);padding:7px 10px;border-radius:3px;margin-bottom:6px}
+  .dash-item .dmeta{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--stone)}
+  .dash-item .del{background:none;border:none;color:var(--stone);font-size:12px;text-decoration:underline;cursor:pointer;font-family:var(--sans)}
   [hidden]{display:none!important}
 </style>
 </head>
@@ -70,6 +88,15 @@
 
   <div id="answerBox" hidden>
     <div class="answer"><div class="eye">Respuesta</div><p id="answerText"></p></div>
+    <div class="answer-actions">
+      <button class="act copy" id="copyBtn">📋 Copiar respuesta</button>
+      <button class="act flag" id="flagBtn">✎ No suena como yo</button>
+    </div>
+    <div class="flagbox" id="flagForm" hidden>
+      <label for="flagNote">¿Qué le cambiarías? (opcional)</label>
+      <textarea id="flagNote" placeholder="Ej: yo no diría eso así, yo diría…"></textarea>
+      <button class="send" id="flagSave">Guardar para que Nicole lo revise</button>
+    </div>
     <div style="text-align:center"><button class="ghost" id="again">Hacer otra pregunta</button></div>
   </div>
 
@@ -81,6 +108,18 @@
     <input type="password" id="key" placeholder="AIza…">
     <button class="send" id="saveKey">Guardar clave</button>
     <div id="keyMsg"></div>
+  </div>
+
+  <button class="cfg-toggle dash-toggle" id="dashToggle">📋 Respuestas para revisar <span class="badge" id="dashCount" hidden>0</span></button>
+  <div class="card" id="dashPanel" hidden>
+    <h2>Respuestas por revisar</h2>
+    <p class="sub">Aquí quedan las respuestas que marcaste que no suenan como tú. Nicole las revisa y ajusta el asistente para que hable como vos.</p>
+    <div id="dashList"></div>
+    <p class="sub" id="dashEmpty" style="text-align:center;padding:14px 0;margin:0">Todavía no has marcado ninguna respuesta. 🎉</p>
+    <div class="answer-actions" id="dashActions" hidden>
+      <button class="act copy" id="dashCopy">📤 Copiar todo para Nicole</button>
+      <button class="act flag" id="dashClear">Borrar todas</button>
+    </div>
   </div>
 
   <p class="hint">Asistente creado por Growth Partner AI para Cosmo Latino · Barbería y Salón de Belleza</p>
@@ -131,7 +170,9 @@ PREGUNTA DEL CLIENTE:
 
 const $=id=>document.getElementById(id);
 const qEl=$('q'),sendEl=$('send'),errEl=$('err'),boxEl=$('answerBox'),ansEl=$('answerText'),keyEl=$('key');
-let busy=false;
+const copyEl=$('copyBtn');
+const FLAG_KEY="cosmo_latino_flags";
+let busy=false, lastQ="", lastA="";
 
 keyEl.value=localStorage.getItem(CFG.storageKey)||'';
 $('cfgToggle').addEventListener('click',()=>{ $('cfgPanel').hidden=!$('cfgPanel').hidden; });
@@ -172,6 +213,9 @@ async function ask(){
     const text=data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts&&data.candidates[0].content.parts[0]&&data.candidates[0].content.parts[0].text;
     if(!text) throw new Error('El asistente no devolvió respuesta. Intenta de nuevo.');
     ansEl.textContent=text.trim();
+    lastQ=q; lastA=text.trim();
+    copyEl.classList.remove('done'); copyEl.textContent='📋 Copiar respuesta';
+    $('flagForm').hidden=true; $('flagNote').value='';
   }catch(e){
     boxEl.hidden=true; show((e&&e.message)||'Algo salió mal. Intenta de nuevo.');
   }finally{
@@ -179,6 +223,77 @@ async function ask(){
   }
 }
 function show(m){ errEl.textContent=m; errEl.hidden=false; }
+
+/* ---- Copiar al portapapeles (con respaldo para iPad/Safari) ---- */
+async function copyText(str){
+  try{ await navigator.clipboard.writeText(str); return true; }
+  catch(e){
+    try{
+      const t=document.createElement('textarea');
+      t.value=str; t.style.position='fixed'; t.style.opacity='0';
+      document.body.appendChild(t); t.focus(); t.select();
+      const ok=document.execCommand('copy'); document.body.removeChild(t); return ok;
+    }catch(_){ return false; }
+  }
+}
+copyEl.addEventListener('click',async()=>{
+  const ok=await copyText(lastA);
+  copyEl.textContent = ok ? '✓ Copiado' : 'Copia manual (selecciona el texto)';
+  copyEl.classList.toggle('done',ok);
+  setTimeout(()=>{ copyEl.textContent='📋 Copiar respuesta'; copyEl.classList.remove('done'); },2200);
+});
+
+/* ---- Marcar respuesta que "no suena como ella" ---- */
+$('flagBtn').addEventListener('click',()=>{ $('flagForm').hidden=!$('flagForm').hidden; if(!$('flagForm').hidden) $('flagNote').focus(); });
+$('flagSave').addEventListener('click',()=>{
+  const flags=loadFlags();
+  flags.unshift({ q:lastQ, a:lastA, note:$('flagNote').value.trim(), ts:Date.now() });
+  saveFlags(flags);
+  $('flagForm').hidden=true; $('flagNote').value='';
+  const b=$('flagBtn'); b.textContent='✓ Guardada para revisar';
+  setTimeout(()=>{ b.textContent='✎ No suena como yo'; },2200);
+  renderDash();
+});
+
+/* ---- Almacenamiento local de las respuestas marcadas ---- */
+function loadFlags(){ try{ return JSON.parse(localStorage.getItem(FLAG_KEY))||[]; }catch(e){ return []; } }
+function saveFlags(a){ try{ localStorage.setItem(FLAG_KEY,JSON.stringify(a)); }catch(e){} }
+function fmtDate(ts){ try{ return new Date(ts).toLocaleDateString('es',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+
+function renderDash(){
+  const flags=loadFlags(), list=$('dashList'), count=$('dashCount');
+  if(flags.length){ count.textContent=flags.length; count.hidden=false; } else { count.hidden=true; }
+  $('dashEmpty').hidden=flags.length>0;
+  $('dashActions').hidden=flags.length===0;
+  list.innerHTML='';
+  flags.forEach((f,i)=>{
+    const div=document.createElement('div'); div.className='dash-item';
+    const q=document.createElement('div'); q.className='dq'; q.textContent='Pregunta: '+(f.q||'—');
+    const a=document.createElement('div'); a.className='da'; a.textContent=f.a||'';
+    div.appendChild(q); div.appendChild(a);
+    if(f.note){ const n=document.createElement('div'); n.className='dn'; n.textContent='Waldina: '+f.note; div.appendChild(n); }
+    const meta=document.createElement('div'); meta.className='dmeta';
+    const when=document.createElement('span'); when.textContent=fmtDate(f.ts);
+    const del=document.createElement('button'); del.className='del'; del.textContent='Quitar';
+    del.addEventListener('click',()=>{ const arr=loadFlags(); arr.splice(i,1); saveFlags(arr); renderDash(); });
+    meta.appendChild(when); meta.appendChild(del);
+    div.appendChild(meta); list.appendChild(div);
+  });
+}
+$('dashToggle').addEventListener('click',()=>{ $('dashPanel').hidden=!$('dashPanel').hidden; });
+$('dashCopy').addEventListener('click',async()=>{
+  const flags=loadFlags();
+  const txt='Respuestas del asistente de Cosmo Latino que no suenan como Waldina:\n\n'+
+    flags.map((f,i)=>`${i+1}. Pregunta: ${f.q}\nRespuesta: ${f.a}${f.note?`\nWaldina cambiaría: ${f.note}`:''}`).join('\n\n');
+  const ok=await copyText(txt);
+  const b=$('dashCopy'); b.textContent= ok?'✓ Copiado — pégaselo a Nicole':'Copia manual';
+  b.classList.toggle('done',ok);
+  setTimeout(()=>{ b.textContent='📤 Copiar todo para Nicole'; b.classList.remove('done'); },2600);
+});
+$('dashClear').addEventListener('click',()=>{
+  if(confirm('¿Borrar todas las respuestas marcadas? Esto no se puede deshacer.')){ saveFlags([]); renderDash(); }
+});
+renderDash();
 </script>
 </body>
 </html>
