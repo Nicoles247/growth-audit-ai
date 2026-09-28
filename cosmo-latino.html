@@ -207,7 +207,10 @@ async function ask(){
     });
     if(!res.ok){
       const e=await res.json().catch(()=>({}));
-      throw new Error((e&&e.error&&e.error.message)||'No se pudo conectar con Gemini. Revisa la clave.');
+      const raw=(e&&e.error&&e.error.message)||'';
+      if(res.status===429||/quota|exceeded|RESOURCE_EXHAUSTED|rate limit/i.test(raw)) throw new Error('__RATE__');
+      if(res.status===400&&/api.?key|API_KEY_INVALID|invalid/i.test(raw)) throw new Error('__KEY__');
+      throw new Error(raw||'No se pudo conectar con Gemini. Revisa la clave en "⚙ Configurar".');
     }
     const data=await res.json();
     const text=data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts&&data.candidates[0].content.parts[0]&&data.candidates[0].content.parts[0].text;
@@ -217,7 +220,11 @@ async function ask(){
     copyEl.classList.remove('done'); copyEl.textContent='📋 Copiar respuesta';
     $('flagForm').hidden=true; $('flagNote').value='';
   }catch(e){
-    boxEl.hidden=true; show((e&&e.message)||'Algo salió mal. Intenta de nuevo.');
+    boxEl.hidden=true;
+    const m=(e&&e.message)||'';
+    if(m==='__RATE__') show('Estamos recibiendo muchas preguntas en este momento. Espera unos segundos e intenta de nuevo. 🙏');
+    else if(m==='__KEY__'){ show('La clave de Gemini no es válida o venció. Tócala en "⚙ Configurar" aquí abajo.'); $('cfgPanel').hidden=false; }
+    else show(m||'Algo salió mal. Intenta de nuevo.');
   }finally{
     busy=false; sendEl.disabled=false; sendEl.textContent='Enviar pregunta';
   }
